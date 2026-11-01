@@ -1,6 +1,7 @@
 {
- "name": "31-Day Total Reset",
- "short_name": "Total Reset",
+ "name": "31-Day Reset by Akinwande Akinkunmi Adeniyi",
+ "short_name": "31-Day Reset",
+ "description": "A 31-day fitness and wellness tracker by Akinwande Akinkunmi Adeniyi.",
  "start_url": "./",
  "scope": "./",
  "display": "standalone",

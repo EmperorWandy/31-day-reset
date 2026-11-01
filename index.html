@@ -4,8 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#121214">
-<meta name="mobile-web-app-capable" content="yes">
-<title>Total Reset</title>
+<meta name="author" content="Akinwande Akinkunmi Adeniyi">
+<meta name="description" content="31-Day Reset: a daily fitness and wellness tracker by Akinwande Akinkunmi Adeniyi.">
+<meta name="copyright" content="© 2026 Akinwande Akinkunmi Adeniyi">
+<title>31-Day Reset by Akinwande Akinkunmi Adeniyi</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
@@ -13,11 +15,13 @@
   :root{--bg:#121214;--card:#1c1c20;--line:#2c2c32;--ink:#f3f3f3;--mute:#a0a0aa;--red:#e0262f;--red2:#ff4d55;--ok:#2fbf71;--amb:#c9971f}
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html,body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-  .wrap{max-width:640px;margin:0 auto;padding:calc(14px + env(safe-area-inset-top)) 14px calc(90px + env(safe-area-inset-bottom))}
+  .wrap{max-width:640px;margin:0 auto;padding:calc(14px + env(safe-area-inset-top)) 14px calc(70px + env(safe-area-inset-bottom))}
   h1{font-weight:800;font-size:26px;letter-spacing:.3px;margin:0;text-transform:uppercase}
   h1 span{color:var(--red2)}
-  h2{font-weight:700;font-size:16px;text-transform:uppercase;letter-spacing:.6px;margin:24px 0 10px;color:#ddd}
-  .sub{color:var(--mute);margin:2px 0 0;font-size:13px}
+  .by{color:var(--mute);font-size:12px;margin-top:2px}
+  .by b{color:var(--ink);font-weight:600}
+  h2{font-weight:700;font-size:16px;text-transform:uppercase;letter-spacing:.6px;margin:26px 0 10px;color:#ddd}
+  .sub{color:var(--mute);margin:6px 0 0;font-size:13px}
   .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px}
   .bar{height:8px;background:var(--line);border-radius:6px;overflow:hidden;margin:14px 0 10px}
   .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--red),var(--red2));width:0;transition:width .3s}
@@ -31,9 +35,9 @@
   .nav button{background:var(--card);border:1px solid var(--line);color:var(--ink);border-radius:8px;width:38px;height:34px;font-size:16px}
   .task{margin-top:10px}
   .task .top{display:flex;align-items:center;gap:10px;cursor:pointer}
-  .task .time{color:var(--mute);font-size:12px;width:52px;flex:none}
+  .task .time{color:var(--mute);font-size:12px;width:56px;flex:none}
   .task .t{flex:1;font-weight:600}
-  .task .more{color:var(--mute);font-size:12px}
+  .task .more{color:var(--mute);font-size:12px;font-weight:400}
   .task pre{white-space:pre-wrap;font:inherit;font-size:14px;color:#d6d6dc;margin:10px 0 0;padding-top:10px;border-top:1px solid var(--line);display:none}
   .task.open pre{display:block}
   .chk{width:34px;height:34px;border-radius:9px;border:2px solid #44444c;background:transparent;color:#fff;font-size:18px;flex:none}
@@ -49,118 +53,220 @@
   table{width:100%;border-collapse:collapse;font-size:13px}
   th,td{border-bottom:1px solid var(--line);padding:6px 3px;text-align:left}
   th{color:var(--mute);font-weight:500}
-  input,textarea{width:100%;background:#0d0d0f;border:1px solid var(--line);color:var(--ink);border-radius:6px;padding:7px;font:inherit;font-size:14px}
+  input,textarea{width:100%;background:#0d0d0f;border:1px solid var(--line);color:var(--ink);border-radius:6px;padding:8px;font:inherit;font-size:14px}
+  input[type=date],input[type=time]{color-scheme:dark}
   .sleep{width:72px}
   textarea{min-height:80px;resize:vertical}
+  label{display:block;font-size:13px;color:var(--mute);margin:10px 0 4px}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
   .scroll{overflow-x:auto}
   .note{color:var(--mute);font-size:12px;margin-top:6px}
   .btns{display:flex;gap:8px;flex-wrap:wrap}
-  .btn{background:var(--card);border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:9px 12px;font:inherit;font-size:14px}
-  .btn.red{background:var(--red);border-color:var(--red)}
+  .btn{background:var(--card);border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:10px 12px;font:inherit;font-size:14px;text-decoration:none;display:inline-block}
+  .btn.red{background:var(--red);border-color:var(--red);color:#fff}
+  .btn.full{width:100%;text-align:center;margin-top:8px}
+  .pill{display:inline-block;font-size:12px;padding:2px 8px;border-radius:10px;background:#2a2a30;color:var(--mute)}
+  .pill.ok{background:#163d2a;color:#7fe0aa}
   ul{margin:0;padding-left:18px;color:var(--mute);font-size:13px}
-  .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));transform:translateX(-50%);background:#2a2a30;padding:8px 14px;border-radius:20px;font-size:13px;opacity:0;transition:opacity .3s;pointer-events:none}
+  .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));transform:translateX(-50%);background:#2a2a30;padding:8px 14px;border-radius:20px;font-size:13px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:9}
   .toast.show{opacity:1}
+  .hidden{display:none!important}
+  .owner{text-align:center}
+  .owner .nm{font-weight:700;font-size:16px}
+  .owner .ti{color:var(--mute);font-size:13px}
+  .foot{color:var(--mute);font-size:11px;text-align:center;margin-top:24px;line-height:1.6}
+  .welcome h2{margin-top:6px}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <h1>31-Day <span>Total Reset</span></h1>
-  <p class="sub">1 Nov to 1 Dec 2026 &middot; workout 5:00 PM &middot; habit 9:00 PM</p>
+  <h1>31-Day <span>Reset</span></h1>
+  <div class="by">by <b id="ownerName"></b></div>
 
-  <div class="bar"><i id="bar"></i></div>
-  <div class="stats">
-    <div class="stat"><b id="sTasks">0/62</b><small>tasks</small></div>
-    <div class="stat"><b id="sDays">0</b><small>full days</small></div>
-    <div class="stat"><b id="sStreak">0</b><small>streak</small></div>
-    <div class="stat"><b id="sSleep">-</b><small>avg sleep</small></div>
+  <!-- First-time setup -->
+  <div id="setup" class="card welcome hidden" style="margin-top:16px">
+    <h2>Welcome</h2>
+    <p class="sub">Set up your 31 days. You can change these later in Settings.</p>
+    <label for="fName">Your first name</label>
+    <input id="fName" autocomplete="given-name" placeholder="e.g. Tunde">
+    <label for="fStart">Day 1 date</label>
+    <input id="fStart" type="date">
+    <div class="two">
+      <div><label for="fWt">Workout time</label><input id="fWt" type="time" value="17:00"></div>
+      <div><label for="fEt">Evening habit time</label><input id="fEt" type="time" value="21:00"></div>
+    </div>
+    <p class="note">General fitness guidance only, not medical advice. If you have a health condition, are pregnant, or have been inactive for a long time, check with a doctor before starting.</p>
+    <button class="btn red full" id="fGo">Start my 31 days</button>
   </div>
 
-  <div class="dayhead"><div class="lbl" id="lbl"></div><div class="nav"><button id="prev">&#8249;</button><button id="todayBtn">&#9679;</button><button id="next">&#8250;</button></div></div>
-  <div id="tasks"></div>
+  <div id="main" class="hidden">
+    <p class="sub" id="hello"></p>
+    <div class="bar"><i id="bar"></i></div>
+    <div class="stats">
+      <div class="stat"><b id="sTasks">0/62</b><small>tasks</small></div>
+      <div class="stat"><b id="sDays">0</b><small>full days</small></div>
+      <div class="stat"><b id="sStreak">0</b><small>streak</small></div>
+      <div class="stat"><b id="sSleep">-</b><small>avg sleep</small></div>
+    </div>
 
-  <h2>All 31 days</h2>
-  <div class="grid" id="grid"></div>
-  <p class="note">Tap a day to open it. Green: both tasks done. Amber: one.</p>
+    <div class="dayhead"><div class="lbl" id="lbl"></div><div class="nav"><button id="prev" aria-label="Previous day">&#8249;</button><button id="todayBtn" aria-label="Today">&#9679;</button><button id="next" aria-label="Next day">&#8250;</button></div></div>
+    <div id="tasks"></div>
 
-  <h2>Measurements</h2>
-  <div class="card scroll"><table id="meas"></table></div>
-  <p class="note">Same time each check, ideally in the morning before eating. Resting pulse: count 60 seconds while seated.</p>
+    <h2>All 31 days</h2>
+    <div class="grid" id="grid"></div>
+    <p class="note">Tap a day to open it. Green: both tasks done. Amber: one.</p>
 
-  <h2>Ratings (1 to 5)</h2>
-  <div class="card scroll"><table id="rate"></table></div>
+    <h2>Reminders</h2>
+    <div class="card">
+      <div><b>1. Calendar alerts</b> <span class="pill">most reliable</span></div>
+      <p class="sub">Adds a daily alert for your workout and your evening habit for all 31 days. Your phone will ring these on time even when the app is closed.</p>
+      <a class="btn red full" id="gcalW" target="_blank" rel="noopener">Add workout reminders to Google Calendar</a>
+      <a class="btn red full" id="gcalE" target="_blank" rel="noopener">Add evening reminders to Google Calendar</a>
+      <button class="btn full" id="icsBtn">Other calendar apps: download all 62 events (.ics)</button>
+      <p class="note">In Google Calendar, tap Save on each screen that opens. The .ics file includes the full instructions and alerts for every day.</p>
+    </div>
+    <div class="card" style="margin-top:10px">
+      <div><b>2. App notifications</b> <span class="pill" id="notifState">off</span></div>
+      <p class="sub">The app nudges you about today's tasks. It works best when the app is installed on your home screen. Android decides when a closed app may check in, so use calendar alerts for exact times.</p>
+      <button class="btn red full" id="notifBtn">Turn on app notifications</button>
+      <button class="btn full" id="notifTest">Send a test notification</button>
+    </div>
 
-  <h2>Day 30 reflection</h2>
-  <textarea id="refl" placeholder="3 wins, 1 challenge, 3 habits to keep in December..."></textarea>
+    <h2>Measurements</h2>
+    <div class="card scroll"><table id="meas"></table></div>
+    <p class="note">Same time each check, ideally in the morning before eating. Resting pulse: count 60 seconds while seated.</p>
 
-  <h2>Daily basics</h2>
-  <div class="card"><ul>
-    <li>Drink 2 to 3 litres of water</li>
-    <li>Eat whole, high-fibre foods</li>
-    <li>Sleep 7 to 9 hours</li>
-    <li>Keep stress in check</li>
-    <li>Missed a day? Carry on with the next one. Never miss twice in a row.</li>
-  </ul></div>
+    <h2>Ratings (1 to 5)</h2>
+    <div class="card scroll"><table id="rate"></table></div>
 
-  <h2>Backup</h2>
-  <div class="btns">
-    <button class="btn red" id="exp">Save backup file</button>
-    <button class="btn" id="impBtn">Restore from backup</button>
-    <input type="file" id="imp" accept=".json,application/json" hidden>
+    <h2>Day 30 reflection</h2>
+    <textarea id="refl" placeholder="3 wins, 1 challenge, 3 habits to keep going..."></textarea>
+
+    <h2>Daily basics</h2>
+    <div class="card"><ul>
+      <li>Drink 2 to 3 litres of water</li>
+      <li>Eat whole, high-fibre foods</li>
+      <li>Sleep 7 to 9 hours</li>
+      <li>Keep stress in check</li>
+      <li>Missed a day? Carry on with the next one. Never miss twice in a row.</li>
+    </ul></div>
+
+    <h2>Settings</h2>
+    <div class="card">
+      <label for="sName">First name</label><input id="sName">
+      <label for="sStart">Day 1 date</label><input id="sStart" type="date">
+      <div class="two">
+        <div><label for="sWt">Workout time</label><input id="sWt" type="time"></div>
+        <div><label for="sEt">Evening habit time</label><input id="sEt" type="time"></div>
+      </div>
+      <button class="btn red full" id="sSave">Save settings</button>
+      <p class="note">If you change times, add the calendar reminders again and delete the old ones.</p>
+    </div>
+
+    <h2>Backup</h2>
+    <div class="btns">
+      <button class="btn red" id="exp">Save backup file</button>
+      <button class="btn" id="impBtn">Restore from backup</button>
+      <button class="btn" id="resetBtn">Start over</button>
+      <input type="file" id="imp" accept=".json,application/json" hidden>
+    </div>
+    <div class="card hidden" id="resetConfirm" style="margin-top:10px">
+      <p class="sub" style="margin-top:0">This clears all your ticks, measurements and settings on this phone. Save a backup first if you may want them.</p>
+      <div class="btns" style="margin-top:8px"><button class="btn red" id="resetYes">Yes, clear everything</button><button class="btn" id="resetNo">Cancel</button></div>
+    </div>
+    <p class="note">Your progress is stored privately on your own phone. Nobody else, including the app's author, can see it.</p>
   </div>
-  <p class="note">Your ticks are stored on this phone only. Save a backup now and then, especially before clearing browser data.</p>
+
+  <h2>About this app</h2>
+  <div class="card owner">
+    <div class="nm" id="aboutName"></div>
+    <div class="ti" id="aboutTitle"></div>
+    <div class="ti" id="aboutContact"></div>
+    <p class="note" style="text-align:left;margin-top:12px">31-Day Reset was designed and built by <span class="own"></span>: a structured month of strength, cardio, mobility and daily wellness habits, with exact instructions for every session and simple progress checks on Day 1, 15, 27 and 31.</p>
+    <p class="note" style="text-align:left">The daily task schedule is adapted from the 31-Day Total Reset Challenge graphic by Coach Josh. All session instructions, progressions and the app itself are original work.</p>
+    <p class="note" style="text-align:left">General fitness and wellness guidance only. It is not medical advice. Stop exercising and seek help if you feel chest pain, dizziness or unusual breathlessness.</p>
+  </div>
+  <div class="foot">&copy; 2026 <span class="own"></span>. All rights reserved.<br>No part of this app may be copied, modified or redistributed without written permission.<br>Version 2.0</div>
 </div>
 <div class="toast" id="toast"></div>
 
 <script>
-var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, arm and hip circles, 10 slow squats.\n\nMain: 20 min brisk walk or easy jog at effort 5 to 6 out of 10 (you can still talk in short sentences).\n\nCool-down (5 min): easy walk, then stretch calves, thighs, hips and chest for 20 to 30 seconds each.\n\nSafety: stop and rest if you feel chest pain, dizziness or unusual breathlessness. Drink water before and after; 5 PM in Lagos is still warm."}, {"t": "Hydrate check + baseline", "d": "1. Did you drink 2 to 3 litres of water today? If not, have a glass now and fill a bottle for tomorrow morning.\n2. Record your baseline on the tracker: body weight, waist (at the navel), resting pulse (count for 60 seconds while seated), and max push-ups in one go (knees or incline allowed, just note which).\n3. Phone away 30 minutes before bed. Aim for 7 to 9 hours of sleep.\n\nTick Day 1 on the tracker."}], [{"t": "Strength (intro)", "d": "Warm-up (5 min): march on the spot, arm and hip circles, 10 slow squats.\n\nMain: 2 rounds, 10 reps each, 60 seconds rest between rounds.\n- Bodyweight squats\n- Push-ups (on a table edge if needed)\n- Glute bridges\n- Bent-over rows with a loaded backpack or filled water bottles\n- Plank 20 seconds\nGoal today is good form. Finish each set with 2 to 3 reps still in the tank.\n\nCool-down (5 min): easy walk, then stretch calves, thighs, hips and chest.\n\nSafety: stop if you feel chest pain, dizziness or unusual breathlessness. Drink water before and after."}, {"t": "Sleep routine", "d": "Sleep focus:\n- Screens off by 10 PM, lights dimmed.\n- Keep the room cool and dark (fan on, curtains drawn).\n- Set the same wake-up time for every day this month.\n- No coffee, tea or energy drinks after 2 PM tomorrow.\nTarget: 7 to 9 hours.\n\nTick Day 2 on the tracker."}], [{"t": "Brisk walk (30 min)", "d": "Main: 30 min brisk walk at effort 4 to 5 out of 10. Swing your arms and keep a pace where talking is easy but you are clearly working.\n\nBonus: a 10 minute stroll after dinner helps digestion.\n\nStretch calves and hips for 5 minutes afterwards. Take water with you."}, {"t": "Fibre check", "d": "Fibre focus (target roughly 25 to 30 g a day):\nCount how many fibre portions you had today. Easy local sources: beans (ewa), moi moi, akara, oats, unripe plantain, garden egg, ugu or efo, okra, oranges, pawpaw, guava, groundnuts.\nPlan one extra fibre portion for tomorrow. Increase fibre gradually and drink water with it, or it can cause bloating.\n\nTick Day 3 on the tracker."}], [{"t": "Lower body", "d": "Warm-up (5 min): march on the spot, leg swings, hip circles, 10 slow squats.\n\nMain: 3 rounds, 60 to 90 seconds rest between rounds.\n- 12 squats\n- 10 reverse lunges each leg\n- 15 glute bridges\n- 30 second wall sit\n- 15 calf raises\n\nCool-down (5 min): stretch thighs, hamstrings, hips and calves.\n\nSafety: stop if you feel chest pain, dizziness or unusual breathlessness. Drink water before and after."}, {"t": "Unwind (10 min)", "d": "Unwind for 10 minutes:\n1. Write tomorrow's top 3 tasks so they leave your head.\n2. Phone in another room.\n3. 4-7-8 breathing: breathe in for 4, hold for 7, breathe out slowly for 8. Repeat 4 times.\n4. Light stretch or quiet reading until bed.\n\nTick Day 4 on the tracker."}], [{"t": "Cardio (20-25 min)", "d": "Warm-up (5 min): march on the spot, arm and hip circles, easy walk.\n\nMain: 20 to 25 min brisk walk, jog or cycle at effort 6 out of 10. Add 3 pick-ups of 1 minute at a slightly faster pace, with 2 minutes easy between them.\n\nCool-down (5 min): easy walk and stretch.\n\nSafety: stop if you feel chest pain, dizziness or unusual breathlessness. Drink water before and after."}, {"t": "Hydrate check", "d": "Hydration check:\n- Did you reach 2 to 3 litres today? Pale yellow urine is a simple sign you are on track.\n- Trick for tomorrow: one glass on waking, one with each meal, one bottle finished before your 5 PM session.\n- Swap one soft drink or sweetened juice for water or zobo without added sugar.\n\nTick Day 5 on the tracker."}], [{"t": "Full body circuit", "d": "Warm-up (5 min): march on the spot, arm and hip circles, 10 slow squats.\n\nMain circuit: 3 rounds, 40 seconds work and 20 seconds rest per exercise, 2 minutes rest between rounds.\n- Squats\n- Push-ups\n- Backpack rows\n- Alternating lunges\n- Plank\n- Glute bridges\n\nCool-down (5 min): easy walk and full-body stretch.\n\nSafety: stop if you feel chest pain, dizziness or unusual breathlessness. Drink water before and after."}, {"t": "Sleep routine", "d": "Sleep focus: it is Friday, so protect your routine.\n- Keep tomorrow's wake-up time within an hour of your weekday time.\n- Screens off 30 minutes before bed.\n- Light dinner, finished 2 to 3 hours before sleep.\nTarget: 7 to 9 hours.\n\nTick Day 6 on the tracker."}], [{"t": "Mobility (25 min)", "d": "Move slowly and breathe through each position:\n- Cat-cow x 10\n- World's greatest stretch x 5 each side\n- Kneeling hip flexor stretch 45 seconds each side\n- Thoracic rotations x 10 each side\n- Standing hamstring stretch 45 seconds each side\n- Deep squat hold 3 x 30 seconds (hold a door frame if needed)\n- Child's pose 1 minute"}, {"t": "Plan and prep meals", "d": "Meal prep for the week ahead:\n1. Write Monday to Friday lunches and dinners on paper.\n2. Make a shopping list built around whole foods: beans, lentils, eggs, fish, chicken, vegetables, fruit, oats, unripe plantain, brown rice or ofada.\n3. Tomorrow, batch-cook one pot of beans or stew, boil eggs, wash and cut vegetables, and portion fruit.\nPrepared food is the easiest way to avoid snacks and fast food on busy school and tutoring days.\n\nTick Day 7 on the tracker."}], [{"t": "Upper body", "d": "Warm-up (5 min): arm circles, shoulder rolls, 10 wall push-ups, 10 slow squats.\n\nMain: 3 sets of 8 to 12 reps, 60 to 90 seconds rest.\n- Push-ups\n- Backpack or water-bottle rows\n- Pike push-ups or water-bottle shoulder press\n- Chair triceps dips\n- Superman hold 20 seconds\n\nCool-down (5 min): stretch chest, shoulders and upper back.\n\nSafety: stop if you feel chest pain, dizziness or unusual breathlessness. Drink water before and after."}, {"t": "Hydrate check", "d": "Hydration check:\n- 2 to 3 litres today? Training days in the heat need more, so add an extra glass for every 30 minutes of exercise.\n- Fill your bottle now and keep it by the bed for the morning.\n- Phone away 30 minutes before bed for 7 to 9 hours of sleep.\n\nTick Day 8 on the tracker."}], [{"t": "Zone 2 cardio (30-35 min)", "d": "Warm-up (5 min): easy walk, arm and hip circles.\n\nMain: 30 to 35 min of steady, easy cardio (brisk walk, gentle jog or cycle). Use the talk test: you should be able to speak in full sentences the whole time. If you can't, slow down. This easy pace builds your aerobic base.\n\nCool-down (5 min): easy walk and stretch.\n\nSafety: stop if you feel chest pain, dizziness or unusual breathlessness. Drink water before and after."}, {"t": "Fibre check", "d": "Fibre check:\n- Did at least two of today's meals include beans, vegetables, whole grains or fruit?\n- Tomorrow's easy upgrade: add a handful of ugu or efo to your stew, choose oats or beans for breakfast, or snack on an orange or guava instead of biscuits.\n- Drink a glass of water with each fibre-rich meal.\n\nTick Day 9 on the tracker."}], [{"t": "Lower body + core", "d": "Warm-up (5 min): march on the spot, leg swings, hip circles, 10 slow squats.\n\nLower body: 3 rounds, 60 to 90 seconds rest.\n- 15 squats\n- 12 reverse lunges each leg\n- 15 glute bridges\n- 40 second wall sit\n- 15 calf raises\n\nCore: 2 rounds.\n- Plank 30 seconds\n- Dead bug 10 each side\n- Side plank 20 seconds each side\n- Bird dog 8 each side\n\nCool-down (5 min): stretch legs, hips and lower back.\n\nSafety: stop if you feel chest pain, dizziness or unusual breathlessness. Drink water before and after."}, {"t": "Evening check-in", "d": "Daily basics check:\n- 2 to 3 litres of water?\n- Mostly whole, high-fibre foods today?\n- Stress handled? If not, take 5 slow breaths now.\n- Phone away 30 minutes before bed, 7 to 9 hours of sleep.\n\nTick Day 10 on the tracker."}], [{"t": "Brisk walk (30-40 min)", "d": "Main: 30 to 40 min brisk walk at effort 4 to 5 out of 10. Try a new route to keep it interesting.\n\nStretch calves and hips for 5 minutes afterwards. Take water with you."}, {"t": "Breathe (10 min)", "d": "Breathing practice (5 to 10 min), seated or lying down:\nBox breathing: breathe in through the nose for 4, hold for 4, breathe out for 4, hold for 4. Repeat for 5 minutes.\nThen breathe slowly through the nose for another few minutes, about 6 breaths a minute.\nRate your stress from 1 to 10 before and after and note it on the tracker.\n\nTick Day 11 on the tracker."}], [{"t": "Full body circuit", "d": "Warm-up (5 min): march on the spot, arm and hip circles, 10 slow squats.\n\nMain circuit: 3 rounds, 45 seconds work and 15 seconds rest per exercise, 2 minutes rest between rounds.\n- Squats\n- Push-ups\n- Backpack rows\n- Alternating lunges\n- Mountain climbers\n- Plank\n- Glute bridges\n\nCool-down (5 min): easy walk and full-body stretch.\n\nSafety: stop if you feel chest pain, dizziness or unusual breathlessness. Drink water before and after."}, {"t": "Sleep routine", "d": "Sleep focus:\n- How many hours did you sleep last night? Note it on the tracker.\n- If under 7, move bedtime 20 minutes earlier tonight.\n- Screens off, room dark and cool, same wake time tomorrow.\n\nTick Day 12 on the tracker."}], [{"t": "Cardio (25 min)", "d": "Warm-up (5 min): easy walk, arm and hip circles.\n\nMain: 25 min brisk walk, jog or cycle at effort 6 out of 10 (talking in short sentences only).\n\nCool-down (5 min): easy walk and stretch.\n\nSafety: stop if you feel chest pain, dizziness or unusual breathlessness. Drink water before and after."}, {"t": "Fibre check", "d": "Fibre check:\n- Aim for at least 5 portions of vegetables and fruit today. How close did you get?\n- Weekend tip: shop for garden egg, carrots, cucumber, oranges and pawpaw as ready snacks.\n- Water with every fibre-rich meal.\n\nTick Day 13 on the tracker."}], [{"t": "Recover (easy walk + mobility)", "d": "Recovery day, no hard training.\n- 15 min easy walk.\n- Then the Day 7 mobility routine: cat-cow x 10, world's greatest stretch x 5 each side, hip flexor stretch 45 seconds each side, thoracic rotations x 10 each side, hamstring stretch 45 seconds each side, deep squat hold 3 x 30 seconds, child's pose 1 minute."}, {"t": "Halfway review", "d": "Halfway review (fill in on the tracker):\n- Days completed so far, out of 14.\n- Rate from 1 to 5: energy, sleep quality, bloating, stress.\n- What got in the way on missed days?\n- Pick ONE thing to fix for Week 3 (for example, a fixed bedtime, or packing water for school).\nAlso do your meal plan and shopping list for the week.\n\nTick Day 14 on the tracker."}], [{"t": "Full body + push-up retest", "d": "Warm-up (5 min): march on the spot, arm and hip circles, 10 slow squats.\n\nRetest first: max push-ups in one go, using the same style as Day 1. Log it on the tracker. Rest 3 minutes.\n\nMain circuit: 3 rounds, 45 seconds work and 15 seconds rest, 2 minutes between rounds.\n- Squats, push-ups, backpack rows, alternating lunges, mountain climbers, plank, glute bridges\n\nCool-down (5 min): easy walk and full-body stretch.\n\nSafety: stop if you feel chest pain, dizziness or unusual breathlessness. Drink water before and after."}, {"t": "Progress log", "d": "Progress check (log on the tracker, compare with Day 1):\n- Body weight\n- Waist at the navel\n- Resting pulse (60 seconds, seated)\n- Push-up result from today\nProgress is more than the scale. Also note energy, sleep and how your clothes fit.\n\nTick Day 15 on the tracker."}], [{"t": "Cardio + core", "d": "Warm-up (5 min): easy walk, arm and hip circles.\n\nCardio: 25 min brisk walk, jog or cycle at effort 6 out of 10.\n\nCore: 3 rounds.\n- Plank 40 seconds\n- Dead bug 10 each side\n- Side plank 30 seconds each side\n- Bird dog 10 each side\n\nCool-down (5 min): stretch hips and lower back.\n\nSafety: stop if you feel chest pain, dizziness or unusual breathlessness. Drink water before and after."}, {"t": "Evening check-in", "d": "Daily basics check:\n- 2 to 3 litres of water?\n- Mostly whole, high-fibre foods today?\n- Stress handled? If not, take 5 slow breaths now.\n- Phone away 30 minutes before bed, 7 to 9 hours of sleep.\n\nTick Day 16 on the tracker."}], [{"t": "Lower body + walk", "d": "Warm-up (5 min): march on the spot, leg swings, hip circles, 10 slow squats.\n\nLower body: 4 rounds, 60 to 90 seconds rest.\n- 15 squats\n- 12 reverse lunges each leg\n- 20 glute bridges (or 10 single-leg each side)\n- 45 second wall sit\n- 20 calf raises\n\nThen: 15 min easy walk to cool down.\n\nStretch legs and hips afterwards.\n\nSafety: stop if you feel chest pain, dizziness or unusual breathlessness. Drink water before and after."}, {"t": "Evening check-in", "d": "Daily basics check:\n- 2 to 3 litres of water?\n- Mostly whole, high-fibre foods today?\n- Stress handled? If not, take 5 slow breaths now.\n- Phone away 30 minutes before bed, 7 to 9 hours of sleep.\n\nTick Day 17 on the tracker."}], [{"t": "Mobility (25 min)", "d": "Day 7 mobility routine, holding each stretch a little longer:\n- Cat-cow x 12\n- World's greatest stretch x 6 each side\n- Kneeling hip flexor stretch 60 seconds each side\n- Thoracic rotations x 10 each side\n- Standing hamstring stretch 60 seconds each side\n- Deep squat hold 3 x 40 seconds\n- Child's pose 1 minute"}, {"t": "Sleep routine", "d": "Sleep focus:\n- Note last night's hours on the tracker.\n- Tonight, try a fixed \"lights out\" time and keep it for the rest of the challenge.\n- If your mind is busy, write it down before bed rather than scrolling.\nTarget: 7 to 9 hours.\n\nTick Day 18 on the tracker."}], [{"t": "Upper body", "d": "Warm-up (5 min): arm circles, shoulder rolls, 10 wall push-ups, 10 slow squats.\n\nMain: 4 sets of 8 to 12 reps, 60 to 90 seconds rest. Lower slowly on every rep (count 3 seconds down).\n- Push-ups\n- Backpack or water-bottle rows\n- Pike push-ups or water-bottle shoulder press\n- Chair triceps dips\n- Superman hold 25 seconds\n\nCool-down (5 min): stretch chest, shoulders and upper back.\n\nSafety: stop if you feel chest pain, dizziness or unusual breathlessness. Drink water before and after."}, {"t": "Unwind (10 min)", "d": "Unwind for 10 minutes:\n1. Write 3 things that went well today.\n2. Write tomorrow's top 3 tasks.\n3. Phone in another room.\n4. 4-7-8 breathing x 4 rounds, then a light stretch.\n\nTick Day 19 on the tracker."}], [{"t": "Intervals", "d": "Warm-up (5 min): easy walk building to a light jog.\n\nIntervals: 8 rounds of\n- 30 seconds fast (effort 8 out of 10): fast run, skipping, or stair climbs\n- 90 seconds easy walk\nNew to intervals? Do 6 rounds.\n\nCool-down (5 min): easy walk and stretch.\n\nSafety: this is the hardest cardio day. Stop if you feel chest pain, dizziness or unusual breathlessness. Drink water before and after."}, {"t": "Hydrate check", "d": "Hydration check after a hard session:\n- 2 to 3 litres today, plus extra for the sweat you lost.\n- Water-rich foods help too: watermelon, cucumber, oranges.\n- Fill your bottle for tomorrow morning.\n\nTick Day 20 on the tracker."}], [{"t": "Active recovery", "d": "Active recovery, keep it easy (effort 3 to 4 out of 10):\n- 30 min easy walk or relaxed cycle\n- 10 min of the Day 7 mobility routine (cat-cow, hip flexor stretch, hamstring stretch, deep squat hold, child's pose)"}, {"t": "Fibre check + meal plan", "d": "Fibre check and weekly planning:\n- How many days this week did you hit 5 portions of vegetables and fruit?\n- Plan next week's meals and shopping list, built around beans, lentils, vegetables, fruit and whole grains.\n- Batch-cook tomorrow if you can.\n\nTick Day 21 on the tracker."}], [{"t": "Full body circuit (4 rounds)", "d": "Warm-up (5 min): march on the spot, arm and hip circles, 10 slow squats.\n\nMain circuit: 4 rounds, 45 seconds work and 15 seconds rest, 2 minutes between rounds.\n- Squats\n- Push-ups\n- Backpack rows\n- Alternating lunges\n- Mountain climbers\n- Plank\n\nCool-down (5 min): easy walk and full-body stretch.\n\nSafety: stop if you feel chest pain, dizziness or unusual breathlessness. Drink water before and after."}, {"t": "Whole foods check", "d": "Whole foods check:\n- Count today's meals that were mostly whole foods (beans, yam, rice with vegetables, fish, eggs, fruit) versus processed ones (pastries, instant noodles, soft drinks, fried snacks).\n- Pick one processed item to swap tomorrow, for example a meat pie for boiled eggs and fruit, or a soft drink for water.\n\nTick Day 22 on the tracker."}], [{"t": "Cardio (30 min)", "d": "Warm-up (5 min): easy walk, arm and hip circles.\n\nMain: 30 min brisk walk, jog or cycle at effort 6 out of 10.\n\nCool-down (5 min): easy walk and stretch.\n\nSafety: stop if you feel chest pain, dizziness or unusual breathlessness. Drink water before and after."}, {"t": "Sleep routine", "d": "Sleep focus:\n- Compare your sleep hours this week with Week 1 on the tracker.\n- Keep the same lights-out and wake-up times.\n- Screens off 30 minutes before bed.\nTarget: 7 to 9 hours.\n\nTick Day 23 on the tracker."}], [{"t": "Lower body + core", "d": "Warm-up (5 min): march on the spot, leg swings, hip circles, 10 slow squats.\n\nLower body: 4 rounds, 60 to 90 seconds rest.\n- 15 squats (try jump squats if your knees are happy)\n- 12 reverse lunges each leg\n- 10 single-leg glute bridges each side\n- 60 second wall sit\n- 20 calf raises\n\nCore: 3 rounds.\n- Plank 45 seconds\n- Dead bug 12 each side\n- Side plank 30 seconds each side\n- Bird dog 10 each side\n\nCool-down (5 min): stretch legs, hips and lower back.\n\nSafety: stop if you feel chest pain, dizziness or unusual breathlessness. Drink water before and after."}, {"t": "Evening check-in", "d": "Daily basics check:\n- 2 to 3 litres of water?\n- Mostly whole, high-fibre foods today?\n- Stress handled? If not, take 5 slow breaths now.\n- Phone away 30 minutes before bed, 7 to 9 hours of sleep.\n\nTick Day 24 on the tracker."}], [{"t": "Walk (40 min)", "d": "Main: 40 min walk at a comfortable brisk pace, effort 4 to 5 out of 10.\n\nStretch calves and hips for 5 minutes afterwards. Take water with you."}, {"t": "Digest (gut check)", "d": "Digestion focus:\n- Was your last big meal finished 2 to 3 hours before bed?\n- Did you eat slowly and stop when comfortably full?\n- A 10 minute stroll after dinner helps digestion and blood sugar.\n- Note any foods this month that left you bloated, and eat less of them.\n\nTick Day 25 on the tracker."}], [{"t": "Upper body", "d": "Warm-up (5 min): arm circles, shoulder rolls, 10 wall push-ups, 10 slow squats.\n\nMain: 4 sets, 60 to 90 seconds rest. Add 2 reps to what you did on Day 19, or use a harder version.\n- Push-ups (or feet raised on a step)\n- Backpack or water-bottle rows (add weight to the bag)\n- Pike push-ups or shoulder press\n- Chair triceps dips\n- Superman hold 30 seconds\n\nCool-down (5 min): stretch chest, shoulders and upper back.\n\nSafety: stop if you feel chest pain, dizziness or unusual breathlessness. Drink water before and after."}, {"t": "Hydrate check", "d": "Hydration check:\n- 2 to 3 litres today?\n- Has drinking water become automatic yet? If not, link it to something you already do (a glass before every lesson or tutoring session).\n- Fill your bottle for tomorrow.\n\nTick Day 26 on the tracker."}], [{"t": "Cardio stamina test", "d": "Warm-up (5 min): easy walk building to a light jog.\n\nStamina test: jog or brisk walk without stopping for as long as you can, up to 30 minutes, at a steady effort of 6 to 7 out of 10. Log the minutes (and distance if you track it) on the tracker.\n\nCool-down (5 min): easy walk and stretch.\n\nSafety: steady, not all-out. Stop if you feel chest pain, dizziness or unusual breathlessness. Drink water before and after."}, {"t": "Evening check-in", "d": "Daily basics check:\n- Stamina test result logged?\n- 2 to 3 litres of water?\n- Mostly whole, high-fibre foods today?\n- Phone away 30 minutes before bed, 7 to 9 hours of sleep.\n\nTick Day 27 on the tracker."}], [{"t": "Recover (easy walk + mobility)", "d": "Recovery day, no hard training.\n- 15 to 20 min easy walk.\n- Then the Day 7 mobility routine: cat-cow x 10, world's greatest stretch x 5 each side, hip flexor stretch 45 seconds each side, thoracic rotations x 10 each side, hamstring stretch 45 seconds each side, deep squat hold 3 x 30 seconds, child's pose 1 minute."}, {"t": "Sleep routine", "d": "Sleep focus:\n- Saturday night: keep lights-out within an hour of your usual time.\n- Aim for a full 8 hours to recover before the final push.\n- Plan next week's meals while winding down.\n\nTick Day 28 on the tracker."}], [{"t": "Full body + finisher", "d": "Warm-up (5 min): march on the spot, arm and hip circles, 10 slow squats.\n\nMain circuit: 4 rounds, 45 seconds work and 15 seconds rest, 2 minutes between rounds.\n- Squats, push-ups, backpack rows, alternating lunges, mountain climbers, plank\n\nFinisher: 5 minutes, as many rounds as possible of\n- 5 burpees (or squat thrusts without the jump)\n- 10 squats\n- 15 mountain climbers each side\nLog your rounds on the tracker.\n\nCool-down (5 min): easy walk and full-body stretch.\n\nSafety: stop if you feel chest pain, dizziness or unusual breathlessness. Drink water before and after."}, {"t": "Evening check-in", "d": "Daily basics check:\n- Finisher rounds logged?\n- 2 to 3 litres of water?\n- Mostly whole, high-fibre foods today?\n- Phone away 30 minutes before bed, 7 to 9 hours of sleep.\n\nTick Day 29 on the tracker."}], [{"t": "Cardio (30 min)", "d": "Warm-up (5 min): easy walk, arm and hip circles.\n\nMain: 30 min brisk walk, jog or cycle at effort 6 to 7 out of 10. Notice how much easier this feels than Day 1.\n\nCool-down (5 min): easy walk and stretch.\n\nSafety: stop if you feel chest pain, dizziness or unusual breathlessness. Drink water before and after."}, {"t": "Reflect", "d": "Reflection (write it on the tracker):\n- 3 wins from this month.\n- 1 thing that was hard, and why.\n- Which 3 habits will you keep going in December?\n- What would you like your next 4 weeks of training to focus on?\n\nTick Day 30 on the tracker."}], [{"t": "Move + final retest", "d": "Warm-up (5 min): march on the spot, arm and hip circles, 10 slow squats.\n\nFinal retest (log on the tracker):\n- Max push-ups in one go (same style as Day 1)\n- Longest plank hold\nRest 3 minutes.\n\nThen 20 minutes of any movement you enjoy: football, dancing, cycling, a long walk.\n\nCool-down (5 min): easy walk and stretch."}, {"t": "Final results + celebrate", "d": "Final results (log on the tracker and compare with Day 1 and Day 15):\n- Body weight\n- Waist at the navel\n- Resting pulse (60 seconds, seated)\n- Push-ups, plank, stamina test\n\nCelebrate with something that is not food: new training kit, a day out, or a match with friends. You finished.\n\nTick Day 31 on the tracker."}]];
+/* ===== Owner details: edit these lines to change what the app shows ===== */
+var OWNER = {
+  name: "Akinwande Akinkunmi Adeniyi",
+  title: "B.Sc. Ed. · MSc Exercise Physiology candidate, Department of Human Kinetics and Health Education, University of Lagos",
+  email: "akinkunmiakinwande@gmail.com"
+};
+/* ======================================================================== */
+var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, arm and hip circles, 10 slow squats.\n\nMain: 20 min brisk walk or easy jog at effort 5 to 6 out of 10 (you can still talk in short sentences).\n\nCool-down (5 min): easy walk, then stretch calves, thighs, hips and chest for 20 to 30 seconds each.\n\nSafety: stop and rest if you feel chest pain, dizziness or unusual breathlessness. Drink water before and after, and train in the shade if it is hot."}, {"t": "Hydrate check + baseline", "d": "1. Did you drink 2 to 3 litres of water today? If not, have a glass now and fill a bottle for tomorrow morning.\n2. Record your baseline on the tracker: body weight, waist (at the navel), resting pulse (count for 60 seconds while seated), and max push-ups in one go (knees or incline allowed, just note which).\n3. Phone away 30 minutes before bed. Aim for 7 to 9 hours of sleep.\n\nTick Day 1 on the tracker."}], [{"t": "Strength (intro)", "d": "Warm-up (5 min): march on the spot, arm and hip circles, 10 slow squats.\n\nMain: 2 rounds, 10 reps each, 60 seconds rest between rounds.\n- Bodyweight squats\n- Push-ups (on a table edge if needed)\n- Glute bridges\n- Bent-over rows with a loaded backpack or filled water bottles\n- Plank 20 seconds\nGoal today is good form. Finish each set with 2 to 3 reps still in the tank.\n\nCool-down (5 min): easy walk, then stretch calves, thighs, hips and chest.\n\nSafety: stop if you feel chest pain, dizziness or unusual breathlessness. Drink water before and after."}, {"t": "Sleep routine", "d": "Sleep focus:\n- Screens off by 10 PM, lights dimmed.\n- Keep the room cool and dark (fan on, curtains drawn).\n- Set the same wake-up time for every day of the challenge.\n- No coffee, tea or energy drinks after 2 PM tomorrow.\nTarget: 7 to 9 hours.\n\nTick Day 2 on the tracker."}], [{"t": "Brisk walk (30 min)", "d": "Main: 30 min brisk walk at effort 4 to 5 out of 10. Swing your arms and keep a pace where talking is easy but you are clearly working.\n\nBonus: a 10 minute stroll after dinner helps digestion.\n\nStretch calves and hips for 5 minutes afterwards. Take water with you."}, {"t": "Fibre check", "d": "Fibre focus (target roughly 25 to 30 g a day):\nCount how many fibre portions you had today. Easy local sources: beans (ewa), moi moi, akara, oats, unripe plantain, garden egg, ugu or efo, okra, oranges, pawpaw, guava, groundnuts.\nPlan one extra fibre portion for tomorrow. Increase fibre gradually and drink water with it, or it can cause bloating.\n\nTick Day 3 on the tracker."}], [{"t": "Lower body", "d": "Warm-up (5 min): march on the spot, leg swings, hip circles, 10 slow squats.\n\nMain: 3 rounds, 60 to 90 seconds rest between rounds.\n- 12 squats\n- 10 reverse lunges each leg\n- 15 glute bridges\n- 30 second wall sit\n- 15 calf raises\n\nCool-down (5 min): stretch thighs, hamstrings, hips and calves.\n\nSafety: stop if you feel chest pain, dizziness or unusual breathlessness. Drink water before and after."}, {"t": "Unwind (10 min)", "d": "Unwind for 10 minutes:\n1. Write tomorrow's top 3 tasks so they leave your head.\n2. Phone in another room.\n3. 4-7-8 breathing: breathe in for 4, hold for 7, breathe out slowly for 8. Repeat 4 times.\n4. Light stretch or quiet reading until bed.\n\nTick Day 4 on the tracker."}], [{"t": "Cardio (20-25 min)", "d": "Warm-up (5 min): march on the spot, arm and hip circles, easy walk.\n\nMain: 20 to 25 min brisk walk, jog or cycle at effort 6 out of 10. Add 3 pick-ups of 1 minute at a slightly faster pace, with 2 minutes easy between them.\n\nCool-down (5 min): easy walk and stretch.\n\nSafety: stop if you feel chest pain, dizziness or unusual breathlessness. Drink water before and after."}, {"t": "Hydrate check", "d": "Hydration check:\n- Did you reach 2 to 3 litres today? Pale yellow urine is a simple sign you are on track.\n- Trick for tomorrow: one glass on waking, one with each meal, one bottle finished before your workout.\n- Swap one soft drink or sweetened juice for water or zobo without added sugar.\n\nTick Day 5 on the tracker."}], [{"t": "Full body circuit", "d": "Warm-up (5 min): march on the spot, arm and hip circles, 10 slow squats.\n\nMain circuit: 3 rounds, 40 seconds work and 20 seconds rest per exercise, 2 minutes rest between rounds.\n- Squats\n- Push-ups\n- Backpack rows\n- Alternating lunges\n- Plank\n- Glute bridges\n\nCool-down (5 min): easy walk and full-body stretch.\n\nSafety: stop if you feel chest pain, dizziness or unusual breathlessness. Drink water before and after."}, {"t": "Sleep routine", "d": "Sleep focus: protect your routine, even on weekends.\n- Keep tomorrow's wake-up time within an hour of your weekday time.\n- Screens off 30 minutes before bed.\n- Light dinner, finished 2 to 3 hours before sleep.\nTarget: 7 to 9 hours.\n\nTick Day 6 on the tracker."}], [{"t": "Mobility (25 min)", "d": "Move slowly and breathe through each position:\n- Cat-cow x 10\n- World's greatest stretch x 5 each side\n- Kneeling hip flexor stretch 45 seconds each side\n- Thoracic rotations x 10 each side\n- Standing hamstring stretch 45 seconds each side\n- Deep squat hold 3 x 30 seconds (hold a door frame if needed)\n- Child's pose 1 minute"}, {"t": "Plan and prep meals", "d": "Meal prep for the week ahead:\n1. Write the next 5 days of lunches and dinners on paper.\n2. Make a shopping list built around whole foods: beans, lentils, eggs, fish, chicken, vegetables, fruit, oats, unripe plantain, brown rice or ofada.\n3. Tomorrow, batch-cook one pot of beans or stew, boil eggs, wash and cut vegetables, and portion fruit.\nPrepared food is the easiest way to avoid snacks and fast food on busy days.\n\nTick Day 7 on the tracker."}], [{"t": "Upper body", "d": "Warm-up (5 min): arm circles, shoulder rolls, 10 wall push-ups, 10 slow squats.\n\nMain: 3 sets of 8 to 12 reps, 60 to 90 seconds rest.\n- Push-ups\n- Backpack or water-bottle rows\n- Pike push-ups or water-bottle shoulder press\n- Chair triceps dips\n- Superman hold 20 seconds\n\nCool-down (5 min): stretch chest, shoulders and upper back.\n\nSafety: stop if you feel chest pain, dizziness or unusual breathlessness. Drink water before and after."}, {"t": "Hydrate check", "d": "Hydration check:\n- 2 to 3 litres today? Training days in the heat need more, so add an extra glass for every 30 minutes of exercise.\n- Fill your bottle now and keep it by the bed for the morning.\n- Phone away 30 minutes before bed for 7 to 9 hours of sleep.\n\nTick Day 8 on the tracker."}], [{"t": "Zone 2 cardio (30-35 min)", "d": "Warm-up (5 min): easy walk, arm and hip circles.\n\nMain: 30 to 35 min of steady, easy cardio (brisk walk, gentle jog or cycle). Use the talk test: you should be able to speak in full sentences the whole time. If you can't, slow down. This easy pace builds your aerobic base.\n\nCool-down (5 min): easy walk and stretch.\n\nSafety: stop if you feel chest pain, dizziness or unusual breathlessness. Drink water before and after."}, {"t": "Fibre check", "d": "Fibre check:\n- Did at least two of today's meals include beans, vegetables, whole grains or fruit?\n- Tomorrow's easy upgrade: add a handful of ugu or efo to your stew, choose oats or beans for breakfast, or snack on an orange or guava instead of biscuits.\n- Drink a glass of water with each fibre-rich meal.\n\nTick Day 9 on the tracker."}], [{"t": "Lower body + core", "d": "Warm-up (5 min): march on the spot, leg swings, hip circles, 10 slow squats.\n\nLower body: 3 rounds, 60 to 90 seconds rest.\n- 15 squats\n- 12 reverse lunges each leg\n- 15 glute bridges\n- 40 second wall sit\n- 15 calf raises\n\nCore: 2 rounds.\n- Plank 30 seconds\n- Dead bug 10 each side\n- Side plank 20 seconds each side\n- Bird dog 8 each side\n\nCool-down (5 min): stretch legs, hips and lower back.\n\nSafety: stop if you feel chest pain, dizziness or unusual breathlessness. Drink water before and after."}, {"t": "Evening check-in", "d": "Daily basics check:\n- 2 to 3 litres of water?\n- Mostly whole, high-fibre foods today?\n- Stress handled? If not, take 5 slow breaths now.\n- Phone away 30 minutes before bed, 7 to 9 hours of sleep.\n\nTick Day 10 on the tracker."}], [{"t": "Brisk walk (30-40 min)", "d": "Main: 30 to 40 min brisk walk at effort 4 to 5 out of 10. Try a new route to keep it interesting.\n\nStretch calves and hips for 5 minutes afterwards. Take water with you."}, {"t": "Breathe (10 min)", "d": "Breathing practice (5 to 10 min), seated or lying down:\nBox breathing: breathe in through the nose for 4, hold for 4, breathe out for 4, hold for 4. Repeat for 5 minutes.\nThen breathe slowly through the nose for another few minutes, about 6 breaths a minute.\nRate your stress from 1 to 10 before and after and note it on the tracker.\n\nTick Day 11 on the tracker."}], [{"t": "Full body circuit", "d": "Warm-up (5 min): march on the spot, arm and hip circles, 10 slow squats.\n\nMain circuit: 3 rounds, 45 seconds work and 15 seconds rest per exercise, 2 minutes rest between rounds.\n- Squats\n- Push-ups\n- Backpack rows\n- Alternating lunges\n- Mountain climbers\n- Plank\n- Glute bridges\n\nCool-down (5 min): easy walk and full-body stretch.\n\nSafety: stop if you feel chest pain, dizziness or unusual breathlessness. Drink water before and after."}, {"t": "Sleep routine", "d": "Sleep focus:\n- How many hours did you sleep last night? Note it on the tracker.\n- If under 7, move bedtime 20 minutes earlier tonight.\n- Screens off, room dark and cool, same wake time tomorrow.\n\nTick Day 12 on the tracker."}], [{"t": "Cardio (25 min)", "d": "Warm-up (5 min): easy walk, arm and hip circles.\n\nMain: 25 min brisk walk, jog or cycle at effort 6 out of 10 (talking in short sentences only).\n\nCool-down (5 min): easy walk and stretch.\n\nSafety: stop if you feel chest pain, dizziness or unusual breathlessness. Drink water before and after."}, {"t": "Fibre check", "d": "Fibre check:\n- Aim for at least 5 portions of vegetables and fruit today. How close did you get?\n- Shopping tip: buy garden egg, carrots, cucumber, oranges and pawpaw as ready snacks.\n- Water with every fibre-rich meal.\n\nTick Day 13 on the tracker."}], [{"t": "Recover (easy walk + mobility)", "d": "Recovery day, no hard training.\n- 15 min easy walk.\n- Then the Day 7 mobility routine: cat-cow x 10, world's greatest stretch x 5 each side, hip flexor stretch 45 seconds each side, thoracic rotations x 10 each side, hamstring stretch 45 seconds each side, deep squat hold 3 x 30 seconds, child's pose 1 minute."}, {"t": "Halfway review", "d": "Halfway review (fill in on the tracker):\n- Days completed so far, out of 14.\n- Rate from 1 to 5: energy, sleep quality, bloating, stress.\n- What got in the way on missed days?\n- Pick ONE thing to fix for Week 3 (for example, a fixed bedtime, or packing water for work).\nAlso do your meal plan and shopping list for the week.\n\nTick Day 14 on the tracker."}], [{"t": "Full body + push-up retest", "d": "Warm-up (5 min): march on the spot, arm and hip circles, 10 slow squats.\n\nRetest first: max push-ups in one go, using the same style as Day 1. Log it on the tracker. Rest 3 minutes.\n\nMain circuit: 3 rounds, 45 seconds work and 15 seconds rest, 2 minutes between rounds.\n- Squats, push-ups, backpack rows, alternating lunges, mountain climbers, plank, glute bridges\n\nCool-down (5 min): easy walk and full-body stretch.\n\nSafety: stop if you feel chest pain, dizziness or unusual breathlessness. Drink water before and after."}, {"t": "Progress log", "d": "Progress check (log on the tracker, compare with Day 1):\n- Body weight\n- Waist at the navel\n- Resting pulse (60 seconds, seated)\n- Push-up result from today\nProgress is more than the scale. Also note energy, sleep and how your clothes fit.\n\nTick Day 15 on the tracker."}], [{"t": "Cardio + core", "d": "Warm-up (5 min): easy walk, arm and hip circles.\n\nCardio: 25 min brisk walk, jog or cycle at effort 6 out of 10.\n\nCore: 3 rounds.\n- Plank 40 seconds\n- Dead bug 10 each side\n- Side plank 30 seconds each side\n- Bird dog 10 each side\n\nCool-down (5 min): stretch hips and lower back.\n\nSafety: stop if you feel chest pain, dizziness or unusual breathlessness. Drink water before and after."}, {"t": "Evening check-in", "d": "Daily basics check:\n- 2 to 3 litres of water?\n- Mostly whole, high-fibre foods today?\n- Stress handled? If not, take 5 slow breaths now.\n- Phone away 30 minutes before bed, 7 to 9 hours of sleep.\n\nTick Day 16 on the tracker."}], [{"t": "Lower body + walk", "d": "Warm-up (5 min): march on the spot, leg swings, hip circles, 10 slow squats.\n\nLower body: 4 rounds, 60 to 90 seconds rest.\n- 15 squats\n- 12 reverse lunges each leg\n- 20 glute bridges (or 10 single-leg each side)\n- 45 second wall sit\n- 20 calf raises\n\nThen: 15 min easy walk to cool down.\n\nStretch legs and hips afterwards.\n\nSafety: stop if you feel chest pain, dizziness or unusual breathlessness. Drink water before and after."}, {"t": "Evening check-in", "d": "Daily basics check:\n- 2 to 3 litres of water?\n- Mostly whole, high-fibre foods today?\n- Stress handled? If not, take 5 slow breaths now.\n- Phone away 30 minutes before bed, 7 to 9 hours of sleep.\n\nTick Day 17 on the tracker."}], [{"t": "Mobility (25 min)", "d": "Day 7 mobility routine, holding each stretch a little longer:\n- Cat-cow x 12\n- World's greatest stretch x 6 each side\n- Kneeling hip flexor stretch 60 seconds each side\n- Thoracic rotations x 10 each side\n- Standing hamstring stretch 60 seconds each side\n- Deep squat hold 3 x 40 seconds\n- Child's pose 1 minute"}, {"t": "Sleep routine", "d": "Sleep focus:\n- Note last night's hours on the tracker.\n- Tonight, try a fixed \"lights out\" time and keep it for the rest of the challenge.\n- If your mind is busy, write it down before bed rather than scrolling.\nTarget: 7 to 9 hours.\n\nTick Day 18 on the tracker."}], [{"t": "Upper body", "d": "Warm-up (5 min): arm circles, shoulder rolls, 10 wall push-ups, 10 slow squats.\n\nMain: 4 sets of 8 to 12 reps, 60 to 90 seconds rest. Lower slowly on every rep (count 3 seconds down).\n- Push-ups\n- Backpack or water-bottle rows\n- Pike push-ups or water-bottle shoulder press\n- Chair triceps dips\n- Superman hold 25 seconds\n\nCool-down (5 min): stretch chest, shoulders and upper back.\n\nSafety: stop if you feel chest pain, dizziness or unusual breathlessness. Drink water before and after."}, {"t": "Unwind (10 min)", "d": "Unwind for 10 minutes:\n1. Write 3 things that went well today.\n2. Write tomorrow's top 3 tasks.\n3. Phone in another room.\n4. 4-7-8 breathing x 4 rounds, then a light stretch.\n\nTick Day 19 on the tracker."}], [{"t": "Intervals", "d": "Warm-up (5 min): easy walk building to a light jog.\n\nIntervals: 8 rounds of\n- 30 seconds fast (effort 8 out of 10): fast run, skipping, or stair climbs\n- 90 seconds easy walk\nNew to intervals? Do 6 rounds.\n\nCool-down (5 min): easy walk and stretch.\n\nSafety: this is the hardest cardio day. Stop if you feel chest pain, dizziness or unusual breathlessness. Drink water before and after."}, {"t": "Hydrate check", "d": "Hydration check after a hard session:\n- 2 to 3 litres today, plus extra for the sweat you lost.\n- Water-rich foods help too: watermelon, cucumber, oranges.\n- Fill your bottle for tomorrow morning.\n\nTick Day 20 on the tracker."}], [{"t": "Active recovery", "d": "Active recovery, keep it easy (effort 3 to 4 out of 10):\n- 30 min easy walk or relaxed cycle\n- 10 min of the Day 7 mobility routine (cat-cow, hip flexor stretch, hamstring stretch, deep squat hold, child's pose)"}, {"t": "Fibre check + meal plan", "d": "Fibre check and weekly planning:\n- How many days this week did you hit 5 portions of vegetables and fruit?\n- Plan next week's meals and shopping list, built around beans, lentils, vegetables, fruit and whole grains.\n- Batch-cook tomorrow if you can.\n\nTick Day 21 on the tracker."}], [{"t": "Full body circuit (4 rounds)", "d": "Warm-up (5 min): march on the spot, arm and hip circles, 10 slow squats.\n\nMain circuit: 4 rounds, 45 seconds work and 15 seconds rest, 2 minutes between rounds.\n- Squats\n- Push-ups\n- Backpack rows\n- Alternating lunges\n- Mountain climbers\n- Plank\n\nCool-down (5 min): easy walk and full-body stretch.\n\nSafety: stop if you feel chest pain, dizziness or unusual breathlessness. Drink water before and after."}, {"t": "Whole foods check", "d": "Whole foods check:\n- Count today's meals that were mostly whole foods (beans, yam, rice with vegetables, fish, eggs, fruit) versus processed ones (pastries, instant noodles, soft drinks, fried snacks).\n- Pick one processed item to swap tomorrow, for example a meat pie for boiled eggs and fruit, or a soft drink for water.\n\nTick Day 22 on the tracker."}], [{"t": "Cardio (30 min)", "d": "Warm-up (5 min): easy walk, arm and hip circles.\n\nMain: 30 min brisk walk, jog or cycle at effort 6 out of 10.\n\nCool-down (5 min): easy walk and stretch.\n\nSafety: stop if you feel chest pain, dizziness or unusual breathlessness. Drink water before and after."}, {"t": "Sleep routine", "d": "Sleep focus:\n- Compare your sleep hours this week with Week 1 on the tracker.\n- Keep the same lights-out and wake-up times.\n- Screens off 30 minutes before bed.\nTarget: 7 to 9 hours.\n\nTick Day 23 on the tracker."}], [{"t": "Lower body + core", "d": "Warm-up (5 min): march on the spot, leg swings, hip circles, 10 slow squats.\n\nLower body: 4 rounds, 60 to 90 seconds rest.\n- 15 squats (try jump squats if your knees are happy)\n- 12 reverse lunges each leg\n- 10 single-leg glute bridges each side\n- 60 second wall sit\n- 20 calf raises\n\nCore: 3 rounds.\n- Plank 45 seconds\n- Dead bug 12 each side\n- Side plank 30 seconds each side\n- Bird dog 10 each side\n\nCool-down (5 min): stretch legs, hips and lower back.\n\nSafety: stop if you feel chest pain, dizziness or unusual breathlessness. Drink water before and after."}, {"t": "Evening check-in", "d": "Daily basics check:\n- 2 to 3 litres of water?\n- Mostly whole, high-fibre foods today?\n- Stress handled? If not, take 5 slow breaths now.\n- Phone away 30 minutes before bed, 7 to 9 hours of sleep.\n\nTick Day 24 on the tracker."}], [{"t": "Walk (40 min)", "d": "Main: 40 min walk at a comfortable brisk pace, effort 4 to 5 out of 10.\n\nStretch calves and hips for 5 minutes afterwards. Take water with you."}, {"t": "Digest (gut check)", "d": "Digestion focus:\n- Was your last big meal finished 2 to 3 hours before bed?\n- Did you eat slowly and stop when comfortably full?\n- A 10 minute stroll after dinner helps digestion and blood sugar.\n- Note any foods during the challenge that left you bloated, and eat less of them.\n\nTick Day 25 on the tracker."}], [{"t": "Upper body", "d": "Warm-up (5 min): arm circles, shoulder rolls, 10 wall push-ups, 10 slow squats.\n\nMain: 4 sets, 60 to 90 seconds rest. Add 2 reps to what you did on Day 19, or use a harder version.\n- Push-ups (or feet raised on a step)\n- Backpack or water-bottle rows (add weight to the bag)\n- Pike push-ups or shoulder press\n- Chair triceps dips\n- Superman hold 30 seconds\n\nCool-down (5 min): stretch chest, shoulders and upper back.\n\nSafety: stop if you feel chest pain, dizziness or unusual breathlessness. Drink water before and after."}, {"t": "Hydrate check", "d": "Hydration check:\n- 2 to 3 litres today?\n- Has drinking water become automatic yet? If not, link it to something you already do (a glass before every meal or meeting).\n- Fill your bottle for tomorrow.\n\nTick Day 26 on the tracker."}], [{"t": "Cardio stamina test", "d": "Warm-up (5 min): easy walk building to a light jog.\n\nStamina test: jog or brisk walk without stopping for as long as you can, up to 30 minutes, at a steady effort of 6 to 7 out of 10. Log the minutes (and distance if you track it) on the tracker.\n\nCool-down (5 min): easy walk and stretch.\n\nSafety: steady, not all-out. Stop if you feel chest pain, dizziness or unusual breathlessness. Drink water before and after."}, {"t": "Evening check-in", "d": "Daily basics check:\n- Stamina test result logged?\n- 2 to 3 litres of water?\n- Mostly whole, high-fibre foods today?\n- Phone away 30 minutes before bed, 7 to 9 hours of sleep.\n\nTick Day 27 on the tracker."}], [{"t": "Recover (easy walk + mobility)", "d": "Recovery day, no hard training.\n- 15 to 20 min easy walk.\n- Then the Day 7 mobility routine: cat-cow x 10, world's greatest stretch x 5 each side, hip flexor stretch 45 seconds each side, thoracic rotations x 10 each side, hamstring stretch 45 seconds each side, deep squat hold 3 x 30 seconds, child's pose 1 minute."}, {"t": "Sleep routine", "d": "Sleep focus:\n- Keep lights-out tonight within an hour of your usual time.\n- Aim for a full 8 hours to recover before the final push.\n- Plan next week's meals while winding down.\n\nTick Day 28 on the tracker."}], [{"t": "Full body + finisher", "d": "Warm-up (5 min): march on the spot, arm and hip circles, 10 slow squats.\n\nMain circuit: 4 rounds, 45 seconds work and 15 seconds rest, 2 minutes between rounds.\n- Squats, push-ups, backpack rows, alternating lunges, mountain climbers, plank\n\nFinisher: 5 minutes, as many rounds as possible of\n- 5 burpees (or squat thrusts without the jump)\n- 10 squats\n- 15 mountain climbers each side\nLog your rounds on the tracker.\n\nCool-down (5 min): easy walk and full-body stretch.\n\nSafety: stop if you feel chest pain, dizziness or unusual breathlessness. Drink water before and after."}, {"t": "Evening check-in", "d": "Daily basics check:\n- Finisher rounds logged?\n- 2 to 3 litres of water?\n- Mostly whole, high-fibre foods today?\n- Phone away 30 minutes before bed, 7 to 9 hours of sleep.\n\nTick Day 29 on the tracker."}], [{"t": "Cardio (30 min)", "d": "Warm-up (5 min): easy walk, arm and hip circles.\n\nMain: 30 min brisk walk, jog or cycle at effort 6 to 7 out of 10. Notice how much easier this feels than Day 1.\n\nCool-down (5 min): easy walk and stretch.\n\nSafety: stop if you feel chest pain, dizziness or unusual breathlessness. Drink water before and after."}, {"t": "Reflect", "d": "Reflection (write it on the tracker):\n- 3 wins from during the challenge.\n- 1 thing that was hard, and why.\n- Which 3 habits will you keep going next month?\n- What would you like your next 4 weeks of training to focus on?\n\nTick Day 30 on the tracker."}], [{"t": "Move + final retest", "d": "Warm-up (5 min): march on the spot, arm and hip circles, 10 slow squats.\n\nFinal retest (log on the tracker):\n- Max push-ups in one go (same style as Day 1)\n- Longest plank hold\nRest 3 minutes.\n\nThen 20 minutes of any movement you enjoy: football, dancing, cycling, a long walk.\n\nCool-down (5 min): easy walk and stretch."}, {"t": "Final results + celebrate", "d": "Final results (log on the tracker and compare with Day 1 and Day 15):\n- Body weight\n- Waist at the navel\n- Resting pulse (60 seconds, seated)\n- Push-ups, plank, stamina test\n\nCelebrate with something that is not food: new training kit, a day out, or a match with friends. You finished.\n\nTick Day 31 on the tracker."}]];
 (function(){
-  var KEY='reset31-v1';
+  var KEY='reset31-v2';
   var MEAS=[["w","Weight (kg)"],["waist","Waist (cm)"],["pulse","Resting pulse"],["push","Max push-ups"],["plank","Plank (s)"],["stam","Stamina (min)"]];
   var MCOLS=[["d1","Day 1"],["d15","Day 15"],["d27","Day 27"],["d31","Day 31"]];
   var RATES=[["energy","Energy"],["sleep","Sleep quality"],["bloat","Bloating (5 = none)"],["stress","Stress (5 = calm)"]];
   var RCOLS=[["d1","Day 1"],["d14","Day 14"],["d31","Day 31"]];
+  function $(id){ return document.getElementById(id); }
+  function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+  function toast(m){ var t=$('toast'); t.textContent=m; t.classList.add('show'); clearTimeout(toast._t); toast._t=setTimeout(function(){t.classList.remove('show');},2000); }
+  function pad(n){ return (n<10?'0':'')+n; }
+  function ymd(d){ return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); }
+  function fmt12(t){ var p=t.split(':'),h=+p[0],m=p[1]; return ((h%12)||12)+':'+m+(h<12?' AM':' PM'); }
+
+  // Owner branding
+  $('ownerName').textContent=OWNER.name; $('aboutName').textContent=OWNER.name; $('aboutTitle').textContent=OWNER.title;
+  $('aboutContact').innerHTML='Contact: <a style="color:var(--red2)" href="mailto:'+esc(OWNER.email)+'">'+esc(OWNER.email)+'</a>';
+  Array.prototype.forEach.call(document.querySelectorAll('.own'),function(e){ e.textContent=OWNER.name; });
+
+  // ---- storage (localStorage for the page, IndexedDB copy for background notifications)
   var state;
   function load(){ try{ state=JSON.parse(localStorage.getItem(KEY))||null; }catch(e){ state=null; }
     if(!state||typeof state!=='object') state={};
     ['days','meas','rate'].forEach(function(k){ if(!state[k]||typeof state[k]!=='object') state[k]={}; });
     if(typeof state.refl!=='string') state.refl=''; }
-  function save(){ try{ localStorage.setItem(KEY,JSON.stringify(state)); }catch(e){ toast('Could not save on this browser'); } }
+  function idb(){ return new Promise(function(res,rej){ if(!('indexedDB' in window)) return rej(); var r=indexedDB.open('reset31',1); r.onupgradeneeded=function(){ r.result.createObjectStore('kv'); }; r.onsuccess=function(){ res(r.result); }; r.onerror=function(){ rej(r.error); }; }); }
+  function mirror(){ idb().then(function(db){ var t=db.transaction('kv','readwrite'); t.objectStore('kv').put({cfg:state.cfg||null,days:state.days},'state'); }).catch(function(){}); }
+  function save(){ try{ localStorage.setItem(KEY,JSON.stringify(state)); }catch(e){ toast('Could not save on this browser'); } mirror(); }
   load();
 
-  var start=new Date(2026,10,1);
-  function curDay(){ var n=new Date(); return Math.floor((new Date(n.getFullYear(),n.getMonth(),n.getDate())-start)/86400000)+1; }
-  var sel=Math.min(31,Math.max(1,curDay()));
-  var openKey=null;
-
-  function $(id){ return document.getElementById(id); }
-  function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+  function startDate(){ var p=(state.cfg&&state.cfg.start||'').split('-'); return p.length===3?new Date(+p[0],+p[1]-1,+p[2]):new Date(); }
+  function curDay(){ var n=new Date(); return Math.floor((new Date(n.getFullYear(),n.getMonth(),n.getDate())-startDate())/86400000)+1; }
+  function dateOf(n){ var s=startDate(); return new Date(s.getFullYear(),s.getMonth(),s.getDate()+n-1); }
+  function dateLabel(n){ return dateOf(n).toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'}); }
   function dd(n){ if(!state.days[n]) state.days[n]={w:false,e:false,s:''}; return state.days[n]; }
-  function dateOf(n){ return new Date(2026,10,n).toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'}); }
-  function toast(m){ var t=$('toast'); t.textContent=m; t.classList.add('show'); clearTimeout(toast._t); toast._t=setTimeout(function(){t.classList.remove('show');},1800); }
 
+  var sel=1, openKey=null;
+
+  // ---- setup
+  function showSetup(){ $('setup').classList.remove('hidden'); $('main').classList.add('hidden'); $('fStart').value=ymd(new Date()); }
+  $('fGo').onclick=function(){
+    if(!$('fStart').value){ toast('Choose your Day 1 date'); return; }
+    state.cfg={name:$('fName').value.trim(),start:$('fStart').value,wt:$('fWt').value||'17:00',et:$('fEt').value||'21:00'};
+    save(); boot(); toast('You are set. Add your reminders below.');
+  };
+
+  // ---- main screen
   function renderDay(){
     var c=curDay(), d=dd(sel), p=PLAN[sel-1];
     var tag= sel===c?'Today':(sel<c?'Past':'Coming up');
-    $('lbl').textContent=tag+': Day '+sel+' · '+dateOf(sel);
+    $('lbl').textContent=tag+': Day '+sel+' \u00b7 '+dateLabel(sel);
     var h='';
-    [['w','5:00 PM',p[0]],['e','9:00 PM',p[1]]].forEach(function(x){
+    [['w',fmt12(state.cfg.wt),p[0]],['e',fmt12(state.cfg.et),p[1]]].forEach(function(x){
       var k=x[0], open=(openKey===sel+k)||(openKey===null&&k==='w'&&sel===c&&!d.w);
-      h+='<div class="card task'+(open?' open':'')+'" data-k="'+k+'"><div class="top"><span class="time">'+x[1]+'</span><span class="t">'+esc(x[2].t)+'<br><span class="more">'+(open?'Hide details':'Show details')+'</span></span><button class="chk'+(d[k]?' on':'')+'" data-k="'+k+'">'+(d[k]?'&#10003;':'')+'</button></div><pre>'+esc(x[2].d)+'</pre></div>';
+      h+='<div class="card task'+(open?' open':'')+'" data-k="'+k+'"><div class="top"><span class="time">'+x[1]+'</span><span class="t">'+esc(x[2].t)+'<br><span class="more">'+(open?'Hide details':'Show details')+'</span></span><button class="chk'+(d[k]?' on':'')+'" aria-label="Mark done">'+(d[k]?'&#10003;':'')+'</button></div><pre>'+esc(x[2].d)+'</pre></div>';
     });
     h+='<div class="card sleeprow"><span>Hours slept last night</span><input class="sleep" type="number" inputmode="decimal" step="0.5" min="0" max="14" id="sl" value="'+esc(d.s)+'"></div>';
     $('tasks').innerHTML=h;
     Array.prototype.forEach.call(document.querySelectorAll('#tasks .task'),function(el){
       var k=el.getAttribute('data-k');
       el.querySelector('.top').onclick=function(ev){
-        if(ev.target.classList.contains('chk')){ dd(sel)[k]=!dd(sel)[k]; save(); if(dd(sel)[k]) toast(dd(sel).w&&dd(sel).e?'Day '+sel+' complete':'Nice work'); renderAll(); return; }
+        if(ev.target.classList.contains('chk')){ dd(sel)[k]=!dd(sel)[k]; save(); if(dd(sel)[k]) toast(dd(sel).w&&dd(sel).e?'Day '+sel+' complete. Well done!':'Nice work'); renderAll(); return; }
         openKey = el.classList.contains('open') ? sel+'none' : sel+k; renderDay();
       };
     });
     $('sl').onchange=function(e){ dd(sel).s=e.target.value; save(); renderStats(); };
   }
-
   function renderGrid(){
-    var h='', c=curDay();
+    var h='';
     for(var n=1;n<=31;n++){
       var d=state.days[n]||{}, cls=(d.w&&d.e)?' full':((d.w||d.e)?' half':'');
       h+='<div class="day'+cls+(n===sel?' cur':'')+'" data-n="'+n+'"><b>'+n+'</b>'+esc(PLAN[n-1][0].t.split(/[ :(]/)[0])+'</div>';
@@ -168,7 +274,6 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
     $('grid').innerHTML=h;
     Array.prototype.forEach.call($('grid').children,function(el){ el.onclick=function(){ sel=+el.getAttribute('data-n'); openKey=null; renderAll(); window.scrollTo({top:0,behavior:'smooth'}); }; });
   }
-
   function renderStats(){
     var t=0,f=0,sl=[],st=0,c=Math.min(31,curDay());
     for(var n=1;n<=31;n++){ var d=state.days[n]||{}; t+=(d.w?1:0)+(d.e?1:0); if(d.w&&d.e) f++; if(d.s!==''&&d.s!=null&&!isNaN(+d.s)) sl.push(+d.s); }
@@ -176,43 +281,143 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
     $('sTasks').textContent=t+'/62'; $('sDays').textContent=f; $('sStreak').textContent=st;
     $('sSleep').textContent=sl.length?(sl.reduce(function(a,b){return a+b;},0)/sl.length).toFixed(1)+'h':'-';
     $('bar').style.width=(t/62*100)+'%';
+    var c2=curDay(), nm=state.cfg.name?(', '+state.cfg.name):'';
+    $('hello').textContent = c2<1 ? 'Hello'+nm+'. Your challenge starts on '+dateLabel(1)+'.' : (c2>31 ? 'Well done'+nm+'. Your 31 days are complete.' : 'Hello'+nm+'. Day '+c2+' of 31: '+dateLabel(1)+' to '+dateLabel(31)+'.');
   }
-
   function table(id,rows,cols,store){
     var h='<tr><th></th>'+cols.map(function(c){return '<th>'+c[1]+'</th>';}).join('')+'</tr>';
     rows.forEach(function(r){ h+='<tr><th>'+r[1]+'</th>'+cols.map(function(c){ return '<td><input inputmode="decimal" data-c="'+c[0]+'" data-r="'+r[0]+'" value="'+esc((store[c[0]]||{})[r[0]])+'"></td>'; }).join('')+'</tr>'; });
     $(id).innerHTML=h;
     Array.prototype.forEach.call($(id).querySelectorAll('input'),function(i){ i.onchange=function(){ var c=i.getAttribute('data-c'); if(!store[c]) store[c]={}; store[c][i.getAttribute('data-r')]=i.value; save(); toast('Saved'); }; });
   }
-
   function renderForms(){
     table('meas',MEAS,MCOLS,state.meas); table('rate',RATES,RCOLS,state.rate);
-    $('refl').value=state.refl; }
+    $('refl').value=state.refl;
+    $('sName').value=state.cfg.name||''; $('sStart').value=state.cfg.start; $('sWt').value=state.cfg.wt; $('sEt').value=state.cfg.et;
+    renderCal(); renderNotif();
+  }
   $('refl').onchange=function(){ state.refl=$('refl').value; save(); toast('Saved'); };
-
   function renderAll(){ renderDay(); renderGrid(); renderStats(); }
 
   $('prev').onclick=function(){ if(sel>1){ sel--; openKey=null; renderAll(); } };
   $('next').onclick=function(){ if(sel<31){ sel++; openKey=null; renderAll(); } };
   $('todayBtn').onclick=function(){ sel=Math.min(31,Math.max(1,curDay())); openKey=null; renderAll(); };
 
+  $('sSave').onclick=function(){
+    if(!$('sStart').value){ toast('Choose your Day 1 date'); return; }
+    state.cfg={name:$('sName').value.trim(),start:$('sStart').value,wt:$('sWt').value||'17:00',et:$('sEt').value||'21:00'};
+    save(); sel=Math.min(31,Math.max(1,curDay())); renderForms(); renderAll(); scheduleInApp(); toast('Settings saved');
+  };
+
+  // ---- calendar reminders
+  function stamp(d,t){ return d.getFullYear()+pad(d.getMonth()+1)+pad(d.getDate())+'T'+t.replace(':','')+'00'; }
+  function addMin(t,m){ var p=t.split(':'),x=(+p[0])*60+(+p[1])+m; x=((x%1440)+1440)%1440; return pad(Math.floor(x/60))+':'+pad(x%60); }
+  function gcal(title,t,len,details){
+    var d=dateOf(1), tz='';
+    try{ tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''; }catch(e){}
+    var u='https://calendar.google.com/calendar/render?action=TEMPLATE'+
+      '&text='+encodeURIComponent(title)+
+      '&dates='+stamp(d,t)+'/'+stamp(d,addMin(t,len))+
+      (tz?'&ctz='+encodeURIComponent(tz):'')+
+      '&recur='+encodeURIComponent('RRULE:FREQ=DAILY;COUNT=31')+
+      '&details='+encodeURIComponent(details+'\n\nOpen the app for today\'s exact instructions: '+location.href.split('#')[0]);
+    return u;
+  }
+  function renderCal(){
+    $('gcalW').href=gcal('31-Day Reset: workout',state.cfg.wt,45,'Time for today\'s 31-Day Reset workout.');
+    $('gcalE').href=gcal('31-Day Reset: evening habit',state.cfg.et,15,'Time for today\'s 31-Day Reset evening habit and check-in.');
+  }
+  function icsEsc(s){ return String(s).replace(/\\/g,'\\\\').replace(/;/g,'\\;').replace(/,/g,'\\,').replace(/\r?\n/g,'\\n'); }
+  function fold(l){ var o='',i=0; while(l.length-i>73){ o+=l.slice(i,i+73)+'\r\n '; i+=73; } return o+l.slice(i); }
+  $('icsBtn').onclick=function(){
+    var L=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//'+OWNER.name+'//31-Day Reset//EN','CALSCALE:GREGORIAN','METHOD:PUBLISH'];
+    var now=new Date(), dtstamp=now.getUTCFullYear()+pad(now.getUTCMonth()+1)+pad(now.getUTCDate())+'T'+pad(now.getUTCHours())+pad(now.getUTCMinutes())+'00Z';
+    for(var n=1;n<=31;n++){
+      [['w',state.cfg.wt,45,[30,0]],['e',state.cfg.et,15,[0]]].forEach(function(s){
+        var p=PLAN[n-1][s[0]==='w'?0:1], d=dateOf(n);
+        L.push('BEGIN:VEVENT','UID:reset31-'+ymd(dateOf(1))+'-'+n+s[0]+'@31dayreset','DTSTAMP:'+dtstamp,
+          'DTSTART:'+stamp(d,s[1]),'DTEND:'+stamp(d,addMin(s[1],s[2])),
+          fold('SUMMARY:'+icsEsc('Reset Day '+n+': '+p.t)),
+          fold('DESCRIPTION:'+icsEsc('31-Day Reset by '+OWNER.name+'\n\n'+p.d)));
+        s[3].forEach(function(m){ L.push('BEGIN:VALARM','ACTION:DISPLAY','DESCRIPTION:'+icsEsc('Reset Day '+n+': '+p.t),'TRIGGER:-PT'+m+'M','END:VALARM'); });
+        L.push('END:VEVENT');
+      });
+    }
+    L.push('END:VCALENDAR');
+    var blob=new Blob([L.join('\r\n')],{type:'text/calendar'}), a=document.createElement('a');
+    a.href=URL.createObjectURL(blob); a.download='31-day-reset.ics'; document.body.appendChild(a); a.click(); a.remove();
+    toast('Calendar file saved. Open it to add the events.');
+  };
+
+  // ---- app notifications
+  var timers=[];
+  function swReg(){ return ('serviceWorker' in navigator)?navigator.serviceWorker.ready:Promise.reject(); }
+  function notify(title,body,tag){
+    return swReg().then(function(r){ return r.showNotification(title,{body:body,tag:tag,icon:'icon-192.png',badge:'icon-192.png',data:{url:'./'}}); });
+  }
+  function renderNotif(){
+    var p=('Notification' in window)?Notification.permission:'unsupported';
+    $('notifState').textContent= p==='granted'?'on':(p==='denied'?'blocked':(p==='unsupported'?'not supported':'off'));
+    $('notifState').className='pill'+(p==='granted'?' ok':'');
+    $('notifBtn').classList.toggle('hidden',p==='granted');
+    $('notifTest').classList.toggle('hidden',p!=='granted');
+  }
+  function scheduleInApp(){
+    timers.forEach(clearTimeout); timers=[];
+    if(!('Notification' in window)||Notification.permission!=='granted'||!state.cfg) return;
+    var n=curDay(); if(n<1||n>31) return;
+    [['w',state.cfg.wt,0],['e',state.cfg.et,1]].forEach(function(s){
+      var p=s[1].split(':'), at=new Date(); at.setHours(+p[0],+p[1],0,0);
+      var ms=at-new Date();
+      if(ms>0 && ms<86400000) timers.push(setTimeout(function(){
+        if(!dd(n)[s[0]]) notify('Day '+n+': '+PLAN[n-1][s[2]].t,'Time for this now. Tap to open today\'s instructions.','reset-'+n+s[0]);
+      },ms));
+    });
+  }
+  function regPeriodic(){
+    swReg().then(function(r){
+      if(!r.periodicSync) return;
+      return navigator.permissions.query({name:'periodic-background-sync'}).then(function(st){
+        if(st.state==='granted') return r.periodicSync.register('reset31-daily',{minInterval:6*60*60*1000});
+      });
+    }).catch(function(){});
+  }
+  $('notifBtn').onclick=function(){
+    if(!('Notification' in window)){ toast('This browser does not support notifications'); return; }
+    Notification.requestPermission().then(function(p){
+      renderNotif();
+      if(p==='granted'){ scheduleInApp(); regPeriodic(); notify('31-Day Reset','Notifications are on. You will get nudges about today\'s tasks.','reset-on'); }
+      else toast('Notifications were not allowed. You can change this in your phone settings.');
+    });
+  };
+  $('notifTest').onclick=function(){ var n=Math.min(31,Math.max(1,curDay())); notify('Day '+n+': '+PLAN[n-1][0].t,'This is a test reminder from your 31-Day Reset app.','reset-test').catch(function(){ toast('Install the app first, then try again'); }); };
+
+  // ---- backup
   $('exp').onclick=function(){
-    var blob=new Blob([JSON.stringify(state,null,1)],{type:'application/json'});
-    var a=document.createElement('a'); a.href=URL.createObjectURL(blob);
-    a.download='total-reset-backup-'+new Date().toISOString().slice(0,10)+'.json';
+    var blob=new Blob([JSON.stringify(state,null,1)],{type:'application/json'}), a=document.createElement('a');
+    a.href=URL.createObjectURL(blob); a.download='31-day-reset-backup-'+ymd(new Date())+'.json';
     document.body.appendChild(a); a.click(); a.remove(); toast('Backup saved to Downloads');
   };
   $('impBtn').onclick=function(){ $('imp').click(); };
   $('imp').onchange=function(e){
     var f=e.target.files[0]; if(!f) return; var r=new FileReader();
-    r.onload=function(){ try{ var s=JSON.parse(r.result); if(!s||typeof s!=='object'||!s.days) throw 0; localStorage.setItem(KEY,JSON.stringify(s)); load(); renderForms(); renderAll(); toast('Backup restored'); }catch(x){ toast('That file is not a valid backup'); } };
+    r.onload=function(){ try{ var s=JSON.parse(r.result); if(!s||typeof s!=='object'||!s.days) throw 0; localStorage.setItem(KEY,JSON.stringify(s)); load(); mirror(); boot(); toast('Backup restored'); }catch(x){ toast('That file is not a valid backup'); } };
     r.readAsText(f); e.target.value='';
   };
+  $('resetBtn').onclick=function(){ $('resetConfirm').classList.remove('hidden'); };
+  $('resetNo').onclick=function(){ $('resetConfirm').classList.add('hidden'); };
+  $('resetYes').onclick=function(){ try{ localStorage.removeItem(KEY); }catch(e){} load(); mirror(); $('resetConfirm').classList.add('hidden'); boot(); };
 
-  document.addEventListener('visibilitychange',function(){ if(!document.hidden){ renderAll(); } });
-  renderForms(); renderAll();
+  function boot(){
+    if(!state.cfg||!state.cfg.start){ showSetup(); return; }
+    $('setup').classList.add('hidden'); $('main').classList.remove('hidden');
+    sel=Math.min(31,Math.max(1,curDay())); openKey=null;
+    renderForms(); renderAll(); scheduleInApp(); mirror();
+  }
+  document.addEventListener('visibilitychange',function(){ if(!document.hidden&&state.cfg){ renderAll(); scheduleInApp(); } });
 
-  if('serviceWorker' in navigator && location.protocol==='https:'){ navigator.serviceWorker.register('sw.js').catch(function(){}); }
+  if('serviceWorker' in navigator && location.protocol==='https:'){ navigator.serviceWorker.register('sw.js').then(regPeriodic).catch(function(){}); }
+  boot();
 })();
 </script>
 </body>
