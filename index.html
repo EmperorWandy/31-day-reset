@@ -4,13 +4,16 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#121214">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="31-Day Reset">
 <meta name="author" content="Akinwande Akinkunmi Adeniyi">
 <meta name="description" content="31-Day Reset: a daily fitness and wellness tracker by Akinwande Akinkunmi Adeniyi.">
 <meta name="copyright" content="© 2026 Akinwande Akinkunmi Adeniyi">
 <title>31-Day Reset by Akinwande Akinkunmi Adeniyi</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png">
-<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-180.png">
 <style>
   :root{--bg:#121214;--card:#1c1c20;--line:#2c2c32;--ink:#f3f3f3;--mute:#a0a0aa;--red:#e0262f;--red2:#ff4d55;--ok:#2fbf71;--amb:#c9971f}
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -82,6 +85,12 @@
 <div class="wrap">
   <h1>31-Day <span>Reset</span></h1>
   <div class="by">by <b id="ownerName"></b></div>
+
+  <div id="installCard" class="card hidden" style="margin-top:14px;border-color:var(--red)">
+    <b>Install this app</b>
+    <p class="sub" id="installText"></p>
+    <button class="btn red full hidden" id="installBtn">Install 31-Day Reset</button>
+  </div>
 
   <!-- First-time setup -->
   <div id="setup" class="card welcome hidden" style="margin-top:16px">
@@ -186,7 +195,7 @@
     <p class="note" style="text-align:left">The daily task schedule is adapted from the 31-Day Total Reset Challenge graphic by Coach Josh. All session instructions, progressions and the app itself are original work.</p>
     <p class="note" style="text-align:left">General fitness and wellness guidance only. It is not medical advice. Stop exercising and seek help if you feel chest pain, dizziness or unusual breathlessness.</p>
   </div>
-  <div class="foot">&copy; 2026 <span class="own"></span>. All rights reserved.<br>No part of this app may be copied, modified or redistributed without written permission.<br>Version 2.0</div>
+  <div class="foot">&copy; 2026 <span class="own"></span>. All rights reserved.<br>No part of this app may be copied, modified or redistributed without written permission.<br>Version 2.1</div>
 </div>
 <div class="toast" id="toast"></div>
 
@@ -211,6 +220,24 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
   function pad(n){ return (n<10?'0':'')+n; }
   function ymd(d){ return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); }
   function fmt12(t){ var p=t.split(':'),h=+p[0],m=p[1]; return ((h%12)||12)+':'+m+(h<12?' AM':' PM'); }
+
+  // Device detection
+  var IOS=/iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+  var STANDALONE=(window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true;
+  var deferredPrompt=null;
+  function renderInstall(){
+    var card=$('installCard');
+    if(STANDALONE){ card.classList.add('hidden'); return; }
+    if(IOS){
+      $('installText').innerHTML='On iPhone: open this page in <b>Safari</b>, tap the <b>Share</b> button (square with an up arrow), scroll down and tap <b>Add to Home Screen</b>, then <b>Add</b>. Open the app from your home screen from then on. Notifications only work once it is installed.';
+      card.classList.remove('hidden');
+    } else if(deferredPrompt){
+      $('installText').textContent='Add the app to your home screen so it opens like a normal app, works offline and can send notifications.';
+      $('installBtn').classList.remove('hidden'); card.classList.remove('hidden');
+    }
+  }
+  window.addEventListener('beforeinstallprompt',function(e){ e.preventDefault(); deferredPrompt=e; renderInstall(); });
+  window.addEventListener('appinstalled',function(){ deferredPrompt=null; $('installCard').classList.add('hidden'); });
 
   // Owner branding
   $('ownerName').textContent=OWNER.name; $('aboutName').textContent=OWNER.name; $('aboutTitle').textContent=OWNER.title;
@@ -329,6 +356,7 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
   }
   function icsEsc(s){ return String(s).replace(/\\/g,'\\\\').replace(/;/g,'\\;').replace(/,/g,'\\,').replace(/\r?\n/g,'\\n'); }
   function fold(l){ var o='',i=0; while(l.length-i>73){ o+=l.slice(i,i+73)+'\r\n '; i+=73; } return o+l.slice(i); }
+  $('installBtn').onclick=function(){ if(!deferredPrompt) return; deferredPrompt.prompt(); deferredPrompt.userChoice.then(function(){ deferredPrompt=null; $('installCard').classList.add('hidden'); }); };
   $('icsBtn').onclick=function(){
     var L=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//'+OWNER.name+'//31-Day Reset//EN','CALSCALE:GREGORIAN','METHOD:PUBLISH'];
     var now=new Date(), dtstamp=now.getUTCFullYear()+pad(now.getUTCMonth()+1)+pad(now.getUTCDate())+'T'+pad(now.getUTCHours())+pad(now.getUTCMinutes())+'00Z';
@@ -345,8 +373,10 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
     }
     L.push('END:VCALENDAR');
     var blob=new Blob([L.join('\r\n')],{type:'text/calendar'}), a=document.createElement('a');
-    a.href=URL.createObjectURL(blob); a.download='31-day-reset.ics'; document.body.appendChild(a); a.click(); a.remove();
-    toast('Calendar file saved. Open it to add the events.');
+    a.href=URL.createObjectURL(blob);
+    if(IOS){ a.target='_blank'; toast('Tap Add All to put the reminders in your Calendar'); }
+    else { a.download='31-day-reset.ics'; toast('Calendar file saved. Open it to add the events.'); }
+    document.body.appendChild(a); a.click(); a.remove();
   };
 
   // ---- app notifications
@@ -356,11 +386,12 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
     return swReg().then(function(r){ return r.showNotification(title,{body:body,tag:tag,icon:'icon-192.png',badge:'icon-192.png',data:{url:'./'}}); });
   }
   function renderNotif(){
-    var p=('Notification' in window)?Notification.permission:'unsupported';
-    $('notifState').textContent= p==='granted'?'on':(p==='denied'?'blocked':(p==='unsupported'?'not supported':'off'));
+    var p=('Notification' in window)?Notification.permission:(IOS&&!STANDALONE?'install first':'unsupported');
+    $('notifState').textContent= p==='granted'?'on':(p==='denied'?'blocked':(p==='unsupported'?'not supported':(p==='install first'?'install first':'off')));
     $('notifState').className='pill'+(p==='granted'?' ok':'');
     $('notifBtn').classList.toggle('hidden',p==='granted');
     $('notifTest').classList.toggle('hidden',p!=='granted');
+    if(IOS) $('icsBtn').textContent='iPhone Calendar: add all 62 events with alerts';
   }
   function scheduleInApp(){
     timers.forEach(clearTimeout); timers=[];
@@ -383,6 +414,7 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
     }).catch(function(){});
   }
   $('notifBtn').onclick=function(){
+    if(IOS&&!STANDALONE){ toast('First add the app to your Home Screen, then open it from there'); return; }
     if(!('Notification' in window)){ toast('This browser does not support notifications'); return; }
     Notification.requestPermission().then(function(p){
       renderNotif();
@@ -417,6 +449,7 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
   document.addEventListener('visibilitychange',function(){ if(!document.hidden&&state.cfg){ renderAll(); scheduleInApp(); } });
 
   if('serviceWorker' in navigator && location.protocol==='https:'){ navigator.serviceWorker.register('sw.js').then(regPeriodic).catch(function(){}); }
+  renderInstall();
   boot();
 })();
 </script>
