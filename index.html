@@ -95,6 +95,22 @@
   .day.full{background:var(--c);border-color:var(--c);color:#fff}
   .day.full b,.day.full i{color:#fff}
   .day.cur{outline:2px solid #fff;outline-offset:1px}
+  .day.prot{border:2px dashed var(--c)}
+  .day.prot i{color:#7fd3ff}
+  .hero .pass{position:relative;z-index:1;margin-top:10px;font-size:12.5px;display:flex;align-items:center;gap:6px}
+  .hero .pass svg{width:16px;height:16px;flex:none}
+  .snote{margin-top:14px;border-radius:16px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start;font-size:13.5px}
+  .snote.save{background:rgba(46,174,232,.13);border:1px solid #2eaee8}
+  .snote.reset{background:rgba(255,159,26,.12);border:1px solid #ff9f1a}
+  .snote .si{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex:none;color:#fff}
+  .snote.save .si{background:#2eaee8}
+  .snote.reset .si{background:#ff9f1a}
+  .snote .tx{flex:1}
+  .snote .tx b{display:block;font-size:14.5px;margin-bottom:2px}
+  .snote .acts{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+  .snote .acts button{border:0;border-radius:10px;padding:7px 11px;font-size:12.5px;font-weight:700;cursor:pointer}
+  .snote .acts .p{background:#fff;color:#1a1b30}
+  .snote .acts .d{background:transparent;color:var(--mute);border:1px solid var(--line)}
   .legend{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
   .chip{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:20px;padding:3px 9px}
   .chip:before{content:"";width:8px;height:8px;border-radius:50%;background:var(--c)}
@@ -342,8 +358,10 @@
         <div><b id="sStreak">0</b><small>day streak</small></div>
         <div><b id="sSleep">-</b><small>avg sleep</small></div>
       </div>
+      <div class="pass hidden" id="passLine"></div>
       <button class="startbtn hidden" id="heroStart"></button>
     </div>
+    <div id="snote"></div>
 
     <div class="card gs hidden" id="gs">
       <div style="display:flex;justify-content:space-between;align-items:center"><b>Getting started</b><button class="link" id="gsHide" style="font-size:12px">Hide</button></div>
@@ -356,9 +374,9 @@
     <h2>Your 31 days</h2>
     <div class="grid" id="grid"></div>
     <div class="legend">
-      <span class="chip" style="--c:var(--str)">Strength</span><span class="chip" style="--c:var(--car)">Cardio</span><span class="chip" style="--c:var(--rec)">Mobility and recovery</span><span class="chip" style="--c:var(--gold)">Final test</span>
+      <span class="chip" style="--c:var(--str)">Strength</span><span class="chip" style="--c:var(--car)">Cardio</span><span class="chip" style="--c:var(--rec)">Mobility and recovery</span><span class="chip" style="--c:var(--gold)">Final test</span><span class="chip" style="--c:#2eaee8">Catch-up day used</span>
     </div>
-    <p class="note">Tap a day to open it. A solid tile means both tasks are done.</p>
+    <p class="note">Tap a day to open it. A solid tile means both tasks are done. A dashed tile with a shield is a missed day your weekly catch-up day covered.</p>
 
     <h2 id="remindH">Reminders</h2>
     <div class="card">
@@ -432,7 +450,7 @@
     <p class="note" style="text-align:left">The daily task schedule is adapted from the 31-Day Total Reset Challenge graphic by Coach Josh. All session instructions, progressions and the app itself are original work.</p>
     <p class="note" style="text-align:left">General fitness and wellness guidance only. It is not medical advice. Stop exercising and seek help if you feel chest pain, dizziness or unusual breathlessness.</p>
   </div>
-  <div class="foot">&copy; 2026 <span class="own"></span>. All rights reserved.<br>No part of this app may be copied, modified or redistributed without written permission.<br>Version 3.1</div>
+  <div class="foot">&copy; 2026 <span class="own"></span>. All rights reserved.<br>No part of this app may be copied, modified or redistributed without written permission.<br>Version 3.2</div>
 </div>
 
 <div class="modal hidden" id="help"><div class="card">
@@ -445,7 +463,7 @@
   <h3>Check-in days</h3><p>On Day 1, 14, 15, 27, 30 and 31 a gold note tells you what to record and takes you straight there.</p>
   <h3>Reminders</h3><p>Calendar alerts are the most reliable: they ring at your set times even when the app is closed. App notifications are an extra nudge.</p>
   <h3>Why can't I change the exercises?</h3><p>The plan gets a little harder each week and covers your whole body over 31 days. Following it in order is what gets results.</p>
-  <h3>Missed a day?</h3><p>Carry on with the next day. Never miss two in a row.</p>
+  <h3>Missed a day? Catch-up days</h3><p>Life happens. Each week you get one catch-up day: if you miss a day, it is covered automatically and your streak stays alive. It cannot cover two misses in a row, so never miss twice. You can also go back and complete a missed day's tasks later. If your streak does reset, just start again: your best streak is always saved.</p>
   <h3>Your data</h3><p>Everything stays on your own phone. Use <b>Save backup file</b> now and then.</p>
   <h3>Safety</h3><p>Stop if you feel chest pain, dizziness or unusual breathlessness. Check with a doctor first if you have a health condition.</p>
 </div></div>
@@ -489,6 +507,7 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
     breathe:'<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/>',
     check:'<path d="M5 12l4 4 10-10"/>',
     clip:'<path d="M9 4h6v3H9zM7 5H5v16h14V5h-2M8 13l2 2 4-4"/>',
+    shield:'<path d="M12 3l7 3v5c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6l7-3z"/>',
     trophy:'<path d="M8 4h8v5a4 4 0 0 1-8 0V4zM8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4M12 13v4M8 20h8"/>'
   };
   function icon(n,size){ return '<svg class="i" viewBox="0 0 24 24"'+(size?' style="width:'+size+'px;height:'+size+'px"':'')+'>'+(IC[n]||IC.check)+'</svg>'; }
@@ -627,7 +646,7 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
     each('#tasks .task',function(el){
       var k=el.getAttribute('data-k');
       el.querySelector('.top').onclick=function(ev){
-        if(ev.target.classList.contains('chk')){ dd(sel)[k]=!dd(sel)[k]; save(); if(dd(sel)[k]) toast(dd(sel).w&&dd(sel).e?'Day '+sel+' complete. Well done!':'Nice work. Keep going!'); renderAll(); return; }
+        if(ev.target.classList.contains('chk')){ dd(sel)[k]=!dd(sel)[k]; save(); if(dd(sel)[k]) { var s2=streakInfo().streak; toast(dd(sel).w&&dd(sel).e?('Day '+sel+' complete. '+(s2>1?s2+'-day streak!':'Well done!')):'Nice work. Keep going!'); } renderAll(); return; }
         openKey = el.classList.contains('open') ? sel+'none' : sel+k; renderDay();
       };
     });
@@ -635,11 +654,48 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
     var fb=document.querySelector('#tasks .flag button'); if(fb) fb.onclick=function(){ goTo(fb.getAttribute('data-go')); };
     each('#tasks .tstart',function(b){ b.onclick=function(){ gwOpen(+b.getAttribute('data-start')); }; });
   }
+  // ---- forgiving streak: one catch-up day per week covers a missed day, but never two misses in a row
+  function isFull(n){ var d=state.days[n]||{}; return !!(d.w&&d.e); }
+  function streakInfo(){
+    var cur=Math.min(31,curDay()), used={}, prot={}, run=0, best=0, lastBreak=0;
+    for(var n=1;n<=cur;n++){
+      if(isFull(n)) run++;
+      else if(n<cur){
+        var wk=Math.floor((n-1)/7), prevOk=(n===1)||isFull(n-1);
+        if(!used[wk]&&prevOk){ used[wk]=true; prot[n]=true; }
+        else { run=0; lastBreak=n; }
+      }
+      if(run>best) best=run;
+    }
+    var cw=Math.floor((Math.max(1,cur)-1)/7);
+    return {streak:run,best:best,prot:prot,passLeft:!used[cw],lastBreak:lastBreak,cur:cur};
+  }
+  function renderStreakNote(){
+    var si=streakInfo(), cur=si.cur, box=$('snote'), today=ymd(new Date()), f=flags(), h='';
+    var pl=$('passLine');
+    if(cur>=1&&cur<=31){
+      pl.innerHTML=icon('shield')+(si.passLeft?'1 catch-up day left this week':'Catch-up day used this week, so don\'t miss today')+(si.best>1?' &middot; best streak '+si.best:'');
+      pl.classList.remove('hidden');
+    } else pl.classList.add('hidden');
+    var type='';
+    if(cur>=2&&si.prot[cur-1]) type='save';
+    else if(cur>=2&&si.streak===0&&si.lastBreak>=cur-2&&si.lastBreak>0) type='reset';
+    if(!type||f.noteOff===today+type){ box.innerHTML=''; return; }
+    if(type==='save') h='<div class="snote save"><div class="si">'+icon('shield')+'</div><div class="tx"><b>Your streak is safe</b>Yesterday was missed, so this week\'s catch-up day covered it'+(si.streak?' and kept your '+si.streak+'-day streak':'')+'. Finish today\'s two tasks to keep going. Remember: never miss two in a row.<div class="acts"><button class="p" data-y="1">Do yesterday\'s workout too</button><button class="d" data-x="1">Got it</button></div></div></div>';
+    else h='<div class="snote reset"><div class="si">'+icon('pulse')+'</div><div class="tx"><b>Fresh start</b>Your streak has reset, and that is okay. Everyone misses days. '+(si.best>0?'Your best so far is '+si.best+(si.best===1?' day':' days')+'. ':'')+'Complete today\'s two tasks to start a new one.<div class="acts"><button class="p" data-t="1">Start today\'s workout</button><button class="d" data-x="1">Got it</button></div></div></div>';
+    box.innerHTML=h;
+    each('#snote [data-x]',function(b){ b.onclick=function(){ f.noteOff=today+type; save(); box.innerHTML=''; }; });
+    each('#snote [data-y]',function(b){ b.onclick=function(){ sel=cur-1; openKey=(cur-1)+'w'; renderAll(); goTo('tasks'); }; });
+    each('#snote [data-t]',function(b){ b.onclick=function(){ gwOpen(cur); }; });
+  }
+
   function renderGrid(){
+    var si=streakInfo();
     var h='';
     for(var n=1;n<=31;n++){
       var d=state.days[n]||{}, cat=CAT[wcat(PLAN[n-1][0].t)], full=d.w&&d.e;
-      h+='<div class="day'+(full?' full':'')+(n===sel?' cur':'')+'" style="--c:'+cat.c+'" data-n="'+n+'"><b>'+n+'</b>'+esc(PLAN[n-1][0].t.split(/[ :(]/)[0])+'<i>'+(full?'&#10003;':(d.w?'&#9679;':'&#9675;')+(d.e?'&#9679;':'&#9675;'))+'</i></div>';
+      var pr=!full&&si.prot[n];
+      h+='<div class="day'+(full?' full':'')+(pr?' prot':'')+(n===sel?' cur':'')+'" style="--c:'+cat.c+'" data-n="'+n+'"><b>'+n+'</b>'+esc(PLAN[n-1][0].t.split(/[ :(]/)[0])+'<i>'+(full?'&#10003;':(pr?'&#128737;':(d.w?'&#9679;':'&#9675;')+(d.e?'&#9679;':'&#9675;')))+'</i></div>';
     }
     $('grid').innerHTML=h;
     each('#grid .day',function(el){ el.onclick=function(){ sel=+el.getAttribute('data-n'); openKey=null; renderAll(); window.scrollTo({top:0,behavior:'smooth'}); }; });
@@ -647,7 +703,7 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
   function renderStats(){
     var t=0,f=0,sl=[],st=0,c=Math.min(31,curDay());
     for(var n=1;n<=31;n++){ var d=state.days[n]||{}; t+=(d.w?1:0)+(d.e?1:0); if(d.w&&d.e) f++; if(d.s!==''&&d.s!=null&&!isNaN(+d.s)) sl.push(+d.s); }
-    for(var m=c;m>=1;m--){ var x=state.days[m]||{}; if(x.w&&x.e) st++; else if(m===c) continue; else break; }
+    var si=streakInfo(); st=si.streak;
     $('sTasks').textContent=t+'/62'; $('sDays').textContent=f; $('sStreak').textContent=st;
     $('sSleep').textContent=sl.length?(sl.reduce(function(a,b){return a+b;},0)/sl.length).toFixed(1)+'h':'-';
     $('bar').style.width=(t/62*100)+'%';
@@ -696,7 +752,7 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
   }
   $('gsHide').onclick=function(){ flags().gsHidden=true; save(); renderGS(); toast('Help is always under "? Help" at the top'); };
 
-  function renderAll(){ renderDay(); renderGrid(); renderStats(); renderGS(); }
+  function renderAll(){ renderDay(); renderGrid(); renderStats(); renderGS(); renderStreakNote(); }
   $('prev').onclick=function(){ if(sel>1){ sel--; openKey=null; renderAll(); } };
   $('next').onclick=function(){ if(sel<31){ sel++; openKey=null; renderAll(); } };
   $('todayBtn').onclick=function(){ sel=Math.min(31,Math.max(1,curDay())); openKey=null; renderAll(); };
