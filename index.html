@@ -219,6 +219,8 @@
   .how{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;text-align:left;font-size:14px;color:#dcdef0;margin-top:14px}
   .how b{color:var(--ink)}
   .how p{margin:6px 0 0}
+  .how-h{display:flex;align-items:center;justify-content:space-between;gap:8px}
+  .hear{background:var(--card2);border:1px solid var(--line);color:var(--ink);border-radius:16px;padding:5px 10px;font-size:12px;font-weight:600;cursor:pointer;flex:none}
   .gw-next{color:var(--mute);font-size:13px;margin-top:14px}
   .gw-next b{color:var(--ink)}
   .gw-ctl{display:flex;gap:10px;padding:12px 16px 16px;max-width:640px;width:100%;margin:0 auto}
@@ -545,14 +547,14 @@
     <p class="note" style="text-align:left">The daily task schedule is adapted from the 31-Day Total Reset Challenge graphic by Coach Josh. All session instructions, progressions and the app itself are original work.</p>
     <p class="note" style="text-align:left">General fitness and wellness guidance only. It is not medical advice. Stop exercising and seek help if you feel chest pain, dizziness or unusual breathlessness.</p>
   </div>
-  <div class="foot">&copy; 2026 <span class="own"></span>. All rights reserved.<br>No part of this app may be copied, modified or redistributed without written permission.<br>Version 4.0</div>
+  <div class="foot">&copy; 2026 <span class="own"></span>. All rights reserved.<br>No part of this app may be copied, modified or redistributed without written permission.<br>Version 4.1</div>
 </div>
 
 <div class="modal hidden" id="help"><div class="card">
   <div style="display:flex;justify-content:space-between;align-items:center"><b style="font-size:17px">How to use 31-Day Reset</b><button class="btn" id="helpClose" style="padding:6px 12px">Close</button></div>
   <button class="btn grad full" id="tourBtn" style="margin-top:12px">Replay the welcome tour</button>
   <h3>Your daily routine</h3><p>Every day has two tasks: a workout and an evening habit, at the times you chose. Tap a task to read exactly what to do, then tap <b>Mark done</b>.</p>
-  <h3>Guided workouts</h3><p>Tap <b>Start today's workout</b>. The app shows one move at a time with a countdown, rest timers and a voice coach, and keeps your screen on. Each move shows how to do it, plus an easier and a harder version. On test days it saves your results for you. When you finish, the workout is ticked off automatically.</p>
+  <h3>Guided workouts</h3><p>Tap <b>Start today's workout</b>. The app shows one move at a time with a countdown, rest timers and a voice coach that reads out how to do each move, and keeps your screen on. Tap <b>Hear it</b> to replay the instructions with the easier and harder versions. Each move shows how to do it, plus an easier and a harder version. On test days it saves your results for you. When you finish, the workout is ticked off automatically.</p>
   <h3>Your if-then plan</h3><p>Decide where you will train and what you will do when life gets in the way. Edit it any time from the plan card or Settings.</p>
   <h3>Badges and certificate</h3><p>Earn badges for your first day and at 7, 14 and 21 full days. Finish Day 31 to unlock a personalised certificate you can save and share.</p>
   <h3>Exercise pictures</h3><p>In a guided workout, a moving figure shows each exercise from start to finish. During rests it shows the next move so you can get ready.</p>
@@ -1248,8 +1250,8 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
   function voiceOn(){ return flags().voice!==false; }
   function loadVoices(){ try{ voices=speechSynthesis.getVoices()||[]; }catch(e){} }
   if('speechSynthesis' in window){ loadVoices(); try{ speechSynthesis.onvoiceschanged=loadVoices; }catch(e){} }
-  function speak(t){
-    if(!voiceOn()||!('speechSynthesis' in window)) return;
+  function speak(t,force){
+    if((!voiceOn()&&!force)||!('speechSynthesis' in window)) return;
     try{ speechSynthesis.cancel(); var u=new SpeechSynthesisUtterance(t); var v=voices.filter(function(x){return /en-(GB|NG)/i.test(x.lang);})[0]||voices.filter(function(x){return /^en/i.test(x.lang);})[0]; if(v) u.voice=v; u.lang=v?v.lang:'en-GB'; u.rate=1; speechSynthesis.speak(u); }catch(e){}
   }
   function beep(f,d){
@@ -1261,7 +1263,7 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
   function mmss(s){ s=Math.max(0,Math.ceil(s)); return Math.floor(s/60)+':'+pad(s%60); }
   function phColor(s){ if(!s) return '#ff7a2f'; if(s.k==='rest') return '#2eaee8'; if(s.ph==='Warm-up') return '#1dd1a1'; if(s.ph==='Cool-down') return '#5f7cff'; return CAT[wcat(PLAN[G.day-1][0].t)].c; }
   function nextName(i){ for(var j=i+1;j<G.steps.length;j++){ if(G.steps[j].k!=='rest') return G.steps[j].n; } return 'Finish'; }
-  function amount(s){ return s.k==='r'?s.reps+' reps':(s.k==='t'?(s.s>=120?Math.round(s.s/60)+' minutes':s.s+' seconds'):''); }
+  function amount(s){ return s.k==='r'?(/each|Day/.test(s.reps)?s.reps:s.reps+' reps'):(s.k==='t'?(s.s>=120?Math.round(s.s/60)+' minutes':s.s+' seconds'):''); }
 
   function gwOpen(day){
     G.day=day; G.steps=SESSIONS[day-1]; G.i=-1; G.running=false; G.rpe=0; clearInterval(G.tick);
@@ -1282,9 +1284,16 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
     var C=2*Math.PI*90, off=C*(1-Math.max(0,Math.min(1,frac)));
     return '<div class="ring"><svg viewBox="0 0 200 200"><circle class="bg" cx="100" cy="100" r="90"/><circle class="fg" id="gwRing" cx="100" cy="100" r="90" style="stroke:'+c+'" stroke-dasharray="'+C.toFixed(1)+'" stroke-dashoffset="'+off.toFixed(1)+'"/></svg><div class="num"><span id="gwNum">'+big+'</span><small id="gwSmall">'+(small||'')+'</small></div></div>';
   }
+  function howSpeech(n,full){
+    var c=cueFor(n); if(!c) return '';
+    var t=' '+c[1];
+    if(full){ if(c[2]) t+=' Easier option: '+c[2]; if(c[3]) t+=' Harder option: '+c[3]; }
+    return t;
+  }
+  function wireHear(){ each('#gwBody [data-hear]',function(b){ b.onclick=function(){ speak(b.getAttribute('data-hear')+'.'+howSpeech(b.getAttribute('data-hear'),true),true); }; }); }
   function howBox(n){
     var c=cueFor(n); if(!c) return '';
-    return '<div class="how"><b>How to do it</b><p>'+c[1]+'</p>'+(c[2]?'<p><b style="color:#1dd1a1">Easier:</b> '+c[2]+'</p>':'')+(c[3]?'<p><b style="color:#ff7a2f">Harder:</b> '+c[3]+'</p>':'')+'</div>';
+    return '<div class="how"><div class="how-h"><b>How to do it</b><button class="hear" data-hear="'+esc(n)+'">&#128266; Hear it</button></div><p>'+c[1]+'</p>'+(c[2]?'<p><b style="color:#1dd1a1">Easier:</b> '+c[2]+'</p>':'')+(c[3]?'<p><b style="color:#ff7a2f">Harder:</b> '+c[3]+'</p>':'')+'</div>';
   }
   function ctl(btns){ $('gwCtl').innerHTML=btns.map(function(b){ return '<button class="btn '+(b[2]||'')+'" data-a="'+b[0]+'">'+b[1]+'</button>'; }).join(''); each('#gwCtl button',function(el){ el.onclick=function(){ gwAction(el.getAttribute('data-a')); }; }); }
 
@@ -1311,31 +1320,36 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
       body.innerHTML=head+'<div class="gw-name">'+esc(s.k==='rest'?'Rest':s.n)+'</div>'+(s.x?'<div class="gw-x">'+esc(s.x)+'</div>':'')+(s.k==='rest'?'<div class="figlbl">Get ready for: <b>'+esc(nextName(G.i))+'</b></div>':'')+'<div class="fig" id="gwFig"></div>'+ring(1,mmss(s.s),s.k==='rest'?'breathe':'',c)+(s.k==='rest'?'':howBox(s.n))+nxt;
       figMount($('gwFig'),s.k==='rest'?nextName(G.i):s.n,s.k==='rest'?'#7fd3ff':c);
       ctl(s.k==='rest'?[['back','&#8249;','sm'],['add','+15s',''],['next','Skip rest','grad']]:[['back','&#8249;','sm'],['pause','Pause',''],['next','Skip &#8250;','grad']]);
-      speak(s.k==='rest'?'Rest, '+s.s+' seconds. Next, '+nextName(G.i)+'.':s.n+', '+amount(s)+'.');
+      speak(s.k==='rest'?'Rest, '+s.s+' seconds. Next, '+nextName(G.i)+'.'+(s.s>=30?howSpeech(nextName(G.i)):''):s.n+', '+amount(s)+'.'+howSpeech(s.n));
+      wireHear();
       G.tick=setInterval(gwTick,200);
     } else if(s.k==='r'){
       body.innerHTML=head+'<div class="gw-name">'+esc(s.n)+'</div>'+(s.x?'<div class="gw-x">'+esc(s.x)+'</div>':'')+'<div class="fig" id="gwFig"></div><div class="reps" style="color:'+c+'">'+esc(s.reps)+'<small>reps, at your own pace</small></div>'+howBox(s.n)+nxt;
       ctl([['back','&#8249;','sm'],['next','Done &#10003;','grad']]);
       figMount($('gwFig'),s.n,c);
-      speak(s.n+', '+s.reps+' reps. Tap done when you finish.');
+      speak(s.n+', '+(/each/.test(s.reps)?s.reps:(/Day 19/.test(s.reps)?'two more reps than on Day 19':s.reps+' reps'))+'.'+howSpeech(s.n)+' Tap done when you finish.');
+      wireHear();
     } else if(s.k==='num'){
       var cur=(state.meas[s.log[0]]||{})[s.log[1]]||'';
       body.innerHTML=head+'<div class="gw-name">'+esc(s.n)+'</div><div class="gw-x">'+esc(s.x)+'</div><div class="fig" id="gwFig"></div><input class="gw-in" id="gwIn" type="number" inputmode="numeric" min="0" placeholder="0" value="'+esc(cur)+'"><div class="gw-x" style="margin-top:6px">How many did you do?</div>'+howBox(s.n)+nxt;
       ctl([['back','&#8249;','sm'],['saveNum','Save and continue','grad']]);
       figMount($('gwFig'),s.n,c);
-      speak(s.n+'. '+s.x+' Then enter your number.');
+      speak(s.n+'. '+s.x+howSpeech(s.n)+' Then enter your number.');
+      wireHear();
     } else if(s.k==='up'){
       G.upStart=0; G.upVal=null;
       body.innerHTML=head+'<div class="gw-name">'+esc(s.n)+'</div><div class="gw-x">'+esc(s.x)+'</div><div class="fig" id="gwFig"></div>'+ring(0,'0:00','tap Start',c)+howBox(s.n)+nxt;
       ctl([['back','&#8249;','sm'],['upStart','Start','grad']]);
       figMount($('gwFig'),s.n,c);
-      speak(s.n+'. '+s.x);
+      speak(s.n+'. '+s.x+howSpeech(s.n));
+      wireHear();
     } else if(s.k==='amrap'){
       G.am=0; G.remain=s.s; G.endAt=Date.now()+s.s*1000; G.running=true;
       body.innerHTML=head+'<div class="gw-name">'+esc(s.n)+'</div><div class="gw-x">'+esc(s.x)+'</div><div class="fig" id="gwFig"></div>'+ring(1,mmss(s.s),'<span id="gwAm">0</span> rounds',c)+howBox(s.n)+nxt;
       ctl([['back','&#8249;','sm'],['am','+1 round','grad']]);
       figMount($('gwFig'),s.n,c);
-      speak('Finisher. Five minutes, as many rounds as you can. Go!');
+      speak('Finisher. Five minutes, as many rounds as you can.'+howSpeech('Finisher')+' Go!');
+      wireHear();
       G.tick=setInterval(gwTick,200);
     }
   }
