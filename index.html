@@ -154,6 +154,20 @@
   .gwarn{background:#3a1f26;border:1px solid #ff4757;border-radius:12px;padding:10px 12px;font-size:13px;margin-top:10px}
   .goalpill{display:flex;align-items:center;gap:8px;font-size:13px;margin:0 0 10px;padding:8px 12px;border-radius:12px;background:color-mix(in srgb,var(--c) 16%,transparent);border:1px solid color-mix(in srgb,var(--c) 45%,transparent)}
   .goalpill b{color:var(--c)}
+  .lg{display:flex;gap:12px;align-items:center;padding:9px 0;border-bottom:1px solid #2c2e4d}
+  .lg:last-child{border-bottom:0}
+  .lg-d{flex:none;width:58px;text-align:center}
+  .lg-d b{display:block;font-size:20px}
+  .lg-d small{font-size:11px;opacity:.7}
+  .lg-t b{display:block;font-size:14px}
+  .lg-t span{font-size:12.5px;opacity:.8}
+  .wk{display:grid;grid-template-columns:58px 1fr 72px;gap:10px;align-items:center;font-size:12.5px;margin:7px 0}
+  .wk b{text-align:right}
+  .wk-b{height:10px;border-radius:6px;background:#2c2e4d;overflow:hidden}
+  .wk-b i{display:block;height:100%;background:#7b8cff;border-radius:6px}
+  .gpsl{text-align:center;font-size:13.5px;margin:10px auto 0;padding:7px 12px;border-radius:12px;background:#16304a;color:#bfe3ff;max-width:300px}
+  .gpsopt{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;font-weight:500}
+  .gpsopt input{width:20px;height:20px;flex:none;margin-top:1px}
   /* onboarding */
   .onb{position:fixed;inset:0;z-index:7;background:var(--bg);display:flex;flex-direction:column;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}
   .ob-top{display:flex;align-items:center;justify-content:space-between;padding:12px 16px 4px;max-width:640px;width:100%;margin:0 auto}
@@ -531,6 +545,10 @@
     <div id="charts"></div>
     <div id="history"></div>
 
+    <h2 id="logH">Workout log</h2>
+    <p class="sub" style="margin:-4px 0 8px">Filled in for you when you finish a guided workout: time, effort and GPS distance.</p>
+    <div id="wlog"></div>
+
     <h2 id="reflH">Day 30 reflection</h2>
     <textarea id="refl" placeholder="3 wins, 1 challenge, 3 habits to keep going..."></textarea>
 
@@ -595,14 +613,14 @@
     <p class="note" style="text-align:left">The daily task schedule is adapted from the 31-Day Total Reset Challenge graphic by Coach Josh. All session instructions, progressions and the app itself are original work.</p>
     <p class="note" style="text-align:left">General fitness and wellness guidance only. It is not medical advice. Stop exercising and seek help if you feel chest pain, dizziness or unusual breathlessness.</p>
   </div>
-  <div class="foot">&copy; 2026 <span class="own"></span>. All rights reserved.<br>No part of this app may be copied, modified or redistributed without written permission.<br>Version 6.0</div>
+  <div class="foot">&copy; 2026 <span class="own"></span>. All rights reserved.<br>No part of this app may be copied, modified or redistributed without written permission.<br>Version 6.1</div>
 </div>
 
 <div class="modal hidden" id="help"><div class="card">
   <div style="display:flex;justify-content:space-between;align-items:center"><b style="font-size:17px">How to use 31-Day Reset</b><button class="btn" id="helpClose" style="padding:6px 12px">Close</button></div>
   <button class="btn grad full" id="tourBtn" style="margin-top:12px">Replay the welcome tour</button>
   <h3>Your daily routine</h3><p>Every day has two tasks: a workout and an evening habit, at the times you chose. Tap a task to read exactly what to do, then tap <b>Mark done</b>.</p>
-  <h3>Guided workouts</h3><p>Tap <b>Start today's workout</b>. The app shows one move at a time with a countdown, rest timers and a voice coach that reads out how to do each move, and keeps your screen on. Tap <b>Hear it</b> to replay the instructions with the easier and harder versions. Each move shows how to do it, plus an easier and a harder version. On test days it saves your results for you. When you finish, the workout is ticked off automatically.</p>
+  <h3>Guided workouts</h3><p>Tap <b>Start today's workout</b>. The app shows one move at a time with a countdown, rest timers and a voice coach that reads out how to do each move, and keeps your screen on. Tap <b>Hear it</b> to replay the instructions with the easier and harder versions. Each move shows how to do it, plus an easier and a harder version. On test days it saves your results for you. When you finish, the workout is ticked off automatically and added to your workout log with the time it took and how hard it felt. Tick <b>Measure my distance with GPS</b> before an outdoor walk or run to record distance as well.</p>
   <h3>Your if-then plan</h3><p>Decide where you will train and what you will do when life gets in the way. Edit it any time from the plan card or Settings.</p>
   <h3>Badges and certificate</h3><p>Earn badges for your first day and at 7, 14 and 21 full days. Finish Day 31 to unlock a personalised certificate you can save and share.</p>
   <h3>Your coaches</h3><p>Ezinne and Abeo are Nigerian English voices. By default the app picks one of them at random for each workout. Choose a favourite, or switch to your phone's own voice, under Settings.</p>
@@ -962,7 +980,7 @@ var PLAN = PLAN_GEN;
   }
   $('gsHide').onclick=function(){ flags().gsHidden=true; save(); renderGS(); toast('Help is always under "? Help" at the top'); };
 
-  function renderAll(){ renderDay(); renderGrid(); renderStats(); renderGS(); renderStreakNote(); renderPlanCard(); renderBadges(); checkBadges(); renderBuddy(); renderRound(); renderCharts(); renderHistory(); }
+  function renderAll(){ renderDay(); renderGrid(); renderStats(); renderGS(); renderStreakNote(); renderPlanCard(); renderBadges(); checkBadges(); renderBuddy(); renderRound(); renderCharts(); renderHistory(); renderLog(); }
   $('prev').onclick=function(){ if(sel>1){ sel--; openKey=null; renderAll(); } };
   $('next').onclick=function(){ if(sel<31){ sel++; openKey=null; renderAll(); } };
   $('todayBtn').onclick=function(){ sel=Math.min(31,Math.max(1,curDay())); openKey=null; renderAll(); };
@@ -1047,7 +1065,7 @@ var PLAN = PLAN_GEN;
   // ---- app notifications (30 minutes before workout, and at evening time)
   var timers=[];
   function swReg(){ return ('serviceWorker' in navigator)?navigator.serviceWorker.ready:Promise.reject(); }
-  function notify(title,body,tag){ return swReg().then(function(r){ return r.showNotification(title,{body:body,tag:tag,icon:'icon-192.png',badge:'icon-192.png',data:{url:'./'}}); }); }
+  function notify(title,body,tag,mark){ return swReg().then(function(r){ var o={body:body,tag:tag,icon:'icon-192.png',badge:'icon-192.png',data:{url:'./'}}; if(mark){ o.data.n=mark[0]; o.data.k=mark[1]; o.actions=[{action:'done',title:mark[1]==='e'?'Mark done':'I did it'}]; } return r.showNotification(title,o); }); }
   function renderNotif(){
     var p=('Notification' in window)?Notification.permission:(IOS&&!STANDALONE?'install first':'unsupported');
     var txt= p==='granted'?'on':(p==='denied'?'blocked':(p==='unsupported'?'not supported':(p==='install first'?'install first':'off')));
@@ -1062,10 +1080,10 @@ var PLAN = PLAN_GEN;
     var p=PLAN[n-1];
     [['w',addMin(state.cfg.wt,-30),'Workout in 30 minutes','Day '+n+': '+p[0].t+' at '+fmt12(state.cfg.wt)+(whereText()?', '+whereText():'')+'. Time to get ready.'],
      ['w',state.cfg.wt,'Workout time','Day '+n+': '+p[0].t+'. Tap for today\'s instructions.'],
-     ['e',state.cfg.et,'Evening habit','Day '+n+': '+p[1].t+'. Tap to tick it off.']].forEach(function(s,ix){
+     ['e',state.cfg.et,'Evening habit','Day '+n+': '+p[1].t+'. Done it? Tap Mark done.']].forEach(function(s,ix){
       var hm=s[1].split(':'), at=new Date(); at.setHours(+hm[0],+hm[1],0,0);
       var ms=at-new Date();
-      if(ms>0&&ms<86400000) timers.push(setTimeout(function(){ if(!dd(n)[s[0]]) notify(s[2],s[3],'reset-'+n+'-'+ix); },ms));
+      if(ms>0&&ms<86400000) timers.push(setTimeout(function(){ if(!dd(n)[s[0]]) notify(s[2],s[3],'reset-'+n+'-'+ix,ix>0?[n,s[0]]:null); },ms));
     });
   }
   function regPeriodic(){
@@ -1592,13 +1610,48 @@ var PLAN = PLAN_GEN;
   function amount(s){ return s.k==='r'?(/each|Day/.test(s.reps)?s.reps:s.reps+' reps'):(s.k==='t'?(s.s>=120?Math.round(s.s/60)+' minutes':s.s+' seconds'):''); }
 
   function gwOpen(day){
-    G.day=day; G.steps=SESSIONS[day-1]; G.i=-1; G.running=false; G.rpe=0; G.coach=null; G.intro=false; clearInterval(G.tick);
+    G.day=day; G.steps=SESSIONS[day-1]; G.i=-1; G.running=false; G.rpe=0; G.coach=null; G.intro=false; G.gpsTest=0; clearInterval(G.tick);
     var pv=sessionCoach(); if(pv){ var all=[introSeg(pv)]; G.steps.forEach(function(st,ix){ all=all.concat(stepSpeech(st,ix,G.steps)); }); prefetchClips(all,pv); }
     $('gwTitle').textContent='Day '+day+': '+PLAN[day-1][0].t;
     $('gw').classList.remove('hidden'); document.body.style.overflow='hidden';
     renderSnd(); gwRender();
   }
-  function gwClose(){ figStop(); stopAudio(); clearInterval(G.tick); G.running=false; wakeOff(); try{ speechSynthesis.cancel(); }catch(e){} $('gw').classList.add('hidden'); document.body.style.overflow=''; }
+
+  // ---- GPS distance (outdoor walks, jogs and tests; only while the workout screen is open)
+  var GPS={on:false,id:null,last:null,m:0,stepM:0,acc:null};
+  function isMove(st){ if(!st||(st.k!=='t'&&st.k!=='up')) return false; var n=(st.n||'').toLowerCase(); return /walk|jog|cardio|cycle|run|^fast|stamina|pace|pick-up|1 km|minute test/.test(n)&&!/dance|stair|heel-to-toe|spot/.test(n); }
+  function hasMove(){ return G.steps.some(isMove); }
+  function gpsOk(){ return 'geolocation' in navigator; }
+  function hav(a,b){ var R=6371000, r=Math.PI/180, dl=(b.lat-a.lat)*r, dn=(b.lon-a.lon)*r, x=Math.sin(dl/2)*Math.sin(dl/2)+Math.cos(a.lat*r)*Math.cos(b.lat*r)*Math.sin(dn/2)*Math.sin(dn/2); return 2*R*Math.asin(Math.sqrt(x)); }
+  function moving(){ var st=G.steps[G.i]; if(!isMove(st)) return false; return st.k==='t'?G.running:(G.upStart>0&&G.upVal==null); }
+  function gpsStart(){
+    if(GPS.on||!gpsOk()) return; GPS.on=true; GPS.m=0; GPS.stepM=0; GPS.last=null; GPS.acc=null;
+    try{ GPS.id=navigator.geolocation.watchPosition(gpsFix,function(e){ GPS.acc=-1; gpsShow(); },{enableHighAccuracy:true,maximumAge:0,timeout:20000}); }catch(e){ GPS.on=false; }
+  }
+  function gpsStop(){ if(GPS.id!=null){ try{ navigator.geolocation.clearWatch(GPS.id); }catch(e){} } GPS.id=null; GPS.on=false; GPS.last=null; }
+  function gpsFix(p){
+    var c=p.coords, pt={lat:c.latitude,lon:c.longitude,t:p.timestamp||Date.now()}; GPS.acc=c.accuracy;
+    if(c.accuracy>35){ gpsShow(); return; }
+    if(GPS.last&&moving()){
+      var d=hav(GPS.last,pt), dt=Math.max(0.5,(pt.t-GPS.last.t)/1000);
+      if(d>=2&&d/dt<9){ GPS.m+=d; GPS.stepM+=d; }
+      else if(d<2){ gpsShow(); return; }
+    }
+    GPS.last=pt; gpsShow();
+    var st=G.steps[G.i];
+    if(st&&st.k==='up'&&st.log&&st.log[1]==='km'&&G.upStart>0&&G.upVal==null&&GPS.stepM>=1000){ upStop(); }
+  }
+  function gpsLine(st){ if(!GPS.on||!isMove(st)) return; var r=document.querySelector('#gwBody .how'); var d=document.createElement('div'); d.className='gpsl'; d.id='gpsL'; if(r) r.parentNode.insertBefore(d,r); else $('gwBody').appendChild(d); gpsShow(); }
+  function gpsShow(){
+    var el=$('gpsL'); if(!el) return;
+    if(GPS.acc===-1){ el.textContent='GPS: no signal. Check location is on for this app.'; return; }
+    if(GPS.acc==null||GPS.acc>35){ el.textContent='GPS: finding your position'+(GPS.acc?' (±'+Math.round(GPS.acc)+' m)':'')+'...'; return; }
+    var st=G.steps[G.i], txt='GPS: '+(GPS.stepM/1000).toFixed(2)+' km this step';
+    if(st&&st.k==='up'&&st.log&&st.log[1]==='km') txt='GPS: '+Math.round(GPS.stepM)+' m of 1,000 m. It stops by itself at 1 km.';
+    else if(st&&st.n==='12 minute test') txt='GPS: '+Math.round(GPS.stepM)+' m so far';
+    el.textContent=txt+(GPS.m>GPS.stepM+5?' · '+(GPS.m/1000).toFixed(2)+' km today':'');
+  }
+  function gwClose(){ gpsStop(); figStop(); stopAudio(); clearInterval(G.tick); G.running=false; wakeOff(); try{ speechSynthesis.cancel(); }catch(e){} $('gw').classList.add('hidden'); document.body.style.overflow=''; }
   function renderSnd(){ $('gwSnd').innerHTML=voiceOn()?'&#128266;':'&#128263;'; }
   $('gwSnd').onclick=function(){ flags().voice=!voiceOn(); save(); renderSnd(); toast(voiceOn()?'Voice coach on':'Voice coach off'); };
   $('gwClose').onclick=function(){
@@ -1658,17 +1711,21 @@ var PLAN = PLAN_GEN;
         '<div class="how" style="margin-top:18px"><b>Today</b><p>'+(cnt.w?'Warm-up: '+cnt.w+' moves<br>':'')+'Main session: '+cnt.m+' steps'+(cnt.c?'<br>Cool-down: '+cnt.c+' moves':'')+'</p></div>'+
         (LV?'<div class="how"><b>Round '+(LV+1)+': one level up</b><p>Extra rounds or sets and longer holds are built in. Use the Harder version of each move where you can.</p></div>':'')+
         (planSentence()?'<div class="how"><b>Your plan</b><p>'+esc(planSentence())+'</p></div>':'')+
+        (hasMove()&&gpsOk()?'<div class="how"><label class="gpsopt"><input type="checkbox" id="gpsChk"'+(flags().gps?' checked':'')+'><span><b>Measure my distance with GPS</b><br>For outdoor walks and runs. It records distance and pace by itself'+(G.steps.some(function(x){ return x.log&&(x.log[1]==='km'||x.log[1]==='dist'); })?', stops the 1 km test at 1 km and fills in your 12 minute distance':'')+'. Keep the app open on screen.</span></label></div>':'')+
         '<div class="how"><b>Before you start</b><p>Change the coach voice or speed any time in Settings.</p><p>Put your phone where you can see it and turn the volume up. The app will talk you through each move, count down and beep before every change.</p><p>Stop if you feel chest pain, dizziness or unusual breathlessness. Have water nearby.</p></div>';
       ctl([['start','&#9654; Start','grad']]);
+      var gc=$('gpsChk'); if(gc) gc.onchange=function(){ flags().gps=gc.checked; save(); if(gc.checked){ try{ navigator.geolocation.getCurrentPosition(function(){},function(){ toast('Location is blocked. Allow it in your browser settings to use GPS.'); },{enableHighAccuracy:true,timeout:15000}); }catch(e){} } };
       return;
     }
     if(G.i>=n){ gwFinish(); return; }
+    GPS.stepM=0;
     var s=G.steps[G.i], c=phColor(s), head='<div class="gw-ph" style="background:'+c+'">'+(s.k==='rest'?'Rest':s.ph)+'</div>'+(s.g?'<div class="gw-g">'+s.g+'</div>':'');
     var nxt='<div class="gw-next">Next: <b>'+esc(nextName(G.i))+'</b></div>';
     if(s.k==='t'||s.k==='rest'){
       G.remain=s.s; G.endAt=Date.now()+s.s*1000; G.running=true;
       body.innerHTML=head+'<div class="gw-name">'+esc(s.k==='rest'?'Rest':s.n)+'</div>'+(s.x?'<div class="gw-x">'+esc(s.x)+'</div>':'')+(s.k==='rest'?'<div class="figlbl">Get ready for: <b>'+esc(nextName(G.i))+'</b></div>':'')+'<div class="fig" id="gwFig"></div>'+ring(1,mmss(s.s),s.k==='rest'?'breathe':'',c)+(s.k==='rest'?'':howBox(s.n))+nxt;
       figMount($('gwFig'),s.k==='rest'?nextName(G.i):s.n,s.k==='rest'?'#7fd3ff':c);
+      gpsLine(s);
       ctl(s.k==='rest'?[['back','&#8249;','sm'],['add','+15s',''],['next','Skip rest','grad']]:[['back','&#8249;','sm'],['pause','Pause',''],['next','Skip &#8250;','grad']]);
       sayStep(s);
       wireHear();
@@ -1680,8 +1737,9 @@ var PLAN = PLAN_GEN;
       sayStep(s);
       wireHear();
     } else if(s.k==='num'){
-      var cur=(state.meas[s.log[0]]||{})[s.log[1]]||'';
-      body.innerHTML=head+'<div class="gw-name">'+esc(s.n)+'</div><div class="gw-x">'+esc(s.x)+'</div><div class="fig" id="gwFig"></div><input class="gw-in" id="gwIn" type="number" inputmode="'+(s.neg?'text':'numeric')+'"'+(s.neg?'':' min="0"')+' placeholder="0" value="'+esc(cur)+'"><div class="gw-x" style="margin-top:6px">'+esc(s.q||'How many did you do?')+'</div>'+howBox(s.n)+nxt;
+      var cur=(state.meas[s.log[0]]||{})[s.log[1]]||'', gpsPre=false;
+      if(s.log[1]==='dist'&&G.gpsTest){ cur=String(G.gpsTest); gpsPre=true; }
+      body.innerHTML=head+'<div class="gw-name">'+esc(s.n)+'</div><div class="gw-x">'+esc(s.x)+'</div><div class="fig" id="gwFig"></div><input class="gw-in" id="gwIn" type="number" inputmode="'+(s.neg?'text':'numeric')+'"'+(s.neg?'':' min="0"')+' placeholder="0" value="'+esc(cur)+'"><div class="gw-x" style="margin-top:6px">'+esc(s.q||'How many did you do?')+'</div>'+(gpsPre?'<div class="gpsl">Measured by GPS. Change it if it looks wrong, then save.</div>':'')+howBox(s.n)+nxt;
       ctl([['back','&#8249;','sm'],['saveNum','Save and continue','grad']]);
       figMount($('gwFig'),s.n,c);
       sayStep(s);
@@ -1691,6 +1749,7 @@ var PLAN = PLAN_GEN;
       body.innerHTML=head+'<div class="gw-name">'+esc(s.n)+'</div><div class="gw-x">'+esc(s.x)+'</div><div class="fig" id="gwFig"></div>'+ring(0,'0:00','tap Start',c)+howBox(s.n)+nxt;
       ctl([['back','&#8249;','sm'],['upStart','Start','grad']]);
       figMount($('gwFig'),s.n,c);
+      gpsLine(s);
       sayStep(s);
       wireHear();
     } else if(s.k==='amrap'){
@@ -1725,6 +1784,7 @@ var PLAN = PLAN_GEN;
     if(rem<=0){
       clearInterval(G.tick); G.running=false; beep(990,0.35); buzz([120,60,120]);
       if(s.k==='amrap'){ gwAmrapDone(); return; }
+      if(s.n==='12 minute test'&&GPS.on&&GPS.stepM>50) G.gpsTest=Math.round(GPS.stepM);
       G.i++; gwRender();
     }
   }
@@ -1747,8 +1807,8 @@ var PLAN = PLAN_GEN;
   function logMeas(log,val){ if(val===''||val==null) return; if(!state.meas[log[0]]) state.meas[log[0]]={}; state.meas[log[0]][log[1]]=String(val); save(); renderForms(); renderGS(); }
   function gwAction(a){
     var s=G.steps[G.i];
-    if(a==='start'){ G.intro=true; try{ if(!actx) actx=new (window.AudioContext||window.webkitAudioContext)(); if(actx.resume) actx.resume(); }catch(e){} wakeOn(); G.t0=Date.now(); G.i=0; gwRender(); return; }
-    if(a==='next'){ G.i++; gwRender(); return; }
+    if(a==='start'){ if(flags().gps&&hasMove()) gpsStart(); G.intro=true; try{ if(!actx) actx=new (window.AudioContext||window.webkitAudioContext)(); if(actx.resume) actx.resume(); }catch(e){} wakeOn(); G.t0=Date.now(); G.i=0; gwRender(); return; }
+    if(a==='next'){ if(s&&s.n==='12 minute test'&&GPS.on&&GPS.stepM>50) G.gpsTest=Math.round(GPS.stepM); G.i++; gwRender(); return; }
     if(a==='back'){ var j=G.i-1; while(j>0&&G.steps[j].k==='rest') j--; G.i=Math.max(0,j); gwRender(); return; }
     if(a==='pause'){
       if(G.running){ G.running=false; G.remain=(G.endAt-Date.now())/1000; ctl([['back','&#8249;','sm'],['pause','Resume','grad'],['next','Skip &#8250;','']]); speak('Paused.'); }
@@ -1765,10 +1825,10 @@ var PLAN = PLAN_GEN;
   }
   function gwFinish(){
     var day=G.day, mins=Math.max(1,Math.round((Date.now()-G.t0)/60000));
-    dd(day).w=true; dd(day).wmin=mins; save(); wakeOff();
+    dd(day).w=true; dd(day).wmin=mins; if(GPS.on&&GPS.m>=50) dd(day).km=Math.round(GPS.m/10)/100; gpsStop(); save(); wakeOff();
     $('gwBar').style.width='100%';
     speak('Workout complete. Well done!'); buzz([150,80,150,80,300]);
-    $('gwBody').innerHTML='<div class="done-art">'+icon('trophy',64)+'</div><div class="gw-name">Workout complete!</div><div class="gw-x">Day '+day+' workout done in '+mins+' minutes. It has been ticked off for you.</div>'+
+    $('gwBody').innerHTML='<div class="done-art">'+icon('trophy',64)+'</div><div class="gw-name">Workout complete!</div><div class="gw-x">Day '+day+' workout done in '+mins+' minutes'+(dd(day).km?', '+dd(day).km+' km by GPS':'')+'. It has been ticked off and added to your workout log.</div>'+
       '<div class="how" style="margin-top:18px"><b>How hard was that?</b><div class="rpe">'+[[1,'Very easy'],[2,'Easy'],[3,'Just right'],[4,'Hard'],[5,'Very hard']].map(function(r){ return '<button data-r="'+r[0]+'"><b>'+r[0]+'</b>'+r[1]+'</button>'; }).join('')+'</div><p id="rpeMsg" style="min-height:20px"></p></div>';
     each('.rpe button',function(b){ b.onclick=function(){
       var r=+b.getAttribute('data-r'); dd(day).rpe=r; save();
@@ -2001,6 +2061,28 @@ var PLAN = PLAN_GEN;
     el.innerHTML='<div class="ctip">Tap a point or bar to see its value.</div>'+h;
     tipWire(el);
   }
+
+  // =================== WORKOUT LOG ===================
+  var RPEW=['','very easy','easy','just right','hard','very hard'];
+  function renderLog(){
+    var el=$('wlog'); if(!el||!state.cfg) return;
+    var cur=Math.min(31,Math.max(1,curDay())), weeks=[], rows=[], tot={min:0,km:0,n:0};
+    for(var w=0;w<5;w++){ var a=w*7+1, z=Math.min(31,a+6), wk={min:0,km:0,n:0,est:false,a:a,z:z};
+      for(var n=a;n<=z;n++){ var d=state.days[n]; if(!d||!d.w) continue; wk.n++; if(d.wmin) wk.min+=d.wmin; else { wk.min+=estMin(n); wk.est=true; } if(d.km) wk.km+=d.km; }
+      tot.min+=wk.min; tot.km+=wk.km; tot.n+=wk.n; if(a<=cur) weeks.push(wk); }
+    for(var n2=31;n2>=1;n2--){ var d2=state.days[n2]; if(!d2||!d2.w) continue;
+      var bits=[d2.wmin?d2.wmin+' min':'about '+estMin(n2)+' min (ticked by hand)'];
+      if(d2.rpe) bits.push('effort '+d2.rpe+'/5, '+RPEW[d2.rpe]);
+      if(d2.km) bits.push(fmtN(d2.km)+' km');
+      if(d2.fin) bits.push(d2.fin+' finisher rounds');
+      rows.push('<div class="lg"><div class="lg-d"><b>'+n2+'</b><small>'+esc(dateLabel(n2))+'</small></div><div class="lg-t"><b>'+esc(PLAN[n2-1][0].t)+'</b><span>'+bits.join(' &middot; ')+'</span></div></div>'); }
+    if(!rows.length){ el.innerHTML='<div class="mc"><p class="sub" style="margin:0">Nothing yet. Finish a guided workout and it appears here by itself.</p></div>'; return; }
+    var maxm=Math.max.apply(null,weeks.map(function(w){ return w.min; }).concat([150]));
+    var bars=weeks.map(function(w,i){ return '<div class="wk"><span>Week '+(i+1)+'</span><div class="wk-b"><i style="width:'+Math.round(w.min/maxm*100)+'%"></i></div><b>'+(w.est?'~':'')+w.min+' min</b></div>'; }).join('');
+    el.innerHTML='<div class="mc"><div class="mc-h"><b>Active minutes</b><span>'+tot.n+' workouts &middot; '+tot.min+' min'+(tot.km?' &middot; '+fmtN(tot.km)+' km':'')+'</span></div>'+bars+
+      '<p class="note" style="margin:8px 0 0">The health target is at least 150 minutes a week. ~ means some days were ticked by hand, so their time is estimated.</p></div>'+
+      '<div class="mc">'+rows.join('')+'</div>';
+  }
   // =================== WORKOUT BUDDY ===================
   function waLink(t){ return 'https://wa.me/?text='+encodeURIComponent(t); }
   function renderBuddy(){
@@ -2072,6 +2154,14 @@ var PLAN = PLAN_GEN;
   $('vTest').onclick=function(){ var v=previewCoach(); speak(v?[introSeg(v),'Squats, 12 reps.',howSeg('Squats')]:'Squats, 12 reps. '+howSeg('Squats'),true,v||undefined); };
   renderCoachPick();
   renderVoicePick();
+
+  // ticks made from notification buttons are queued by the service worker
+  function applyPending(){
+    idb().then(function(db){ return new Promise(function(res){ var t=db.transaction('kv','readwrite'), st=t.objectStore('kv'), q=st.get('pending');
+      q.onsuccess=function(){ var l=q.result||[]; if(l.length) st.put([],'pending'); res(l); }; q.onerror=function(){ res([]); }; }); })
+    .then(function(l){ if(!l||!l.length) return; var c=0; l.forEach(function(x){ if(x&&x.n>=1&&x.n<=31&&(x.k==='w'||x.k==='e')&&!dd(x.n)[x.k]){ dd(x.n)[x.k]=true; c++; } });
+      if(c){ save(); renderAll(); toast(c===1?'Ticked off from your notification':'Ticked '+c+' tasks from your notifications'); } }).catch(function(){});
+  }
   // ---- start
   function boot(){
     fillIcons();
@@ -2079,9 +2169,9 @@ var PLAN = PLAN_GEN;
     $('main').classList.remove('hidden');
     setLevel();
     sel=Math.min(31,Math.max(1,curDay())); openKey=null;
-    renderForms(); renderAll(); renderInstall(); scheduleInApp(); mirror();
+    renderForms(); renderAll(); renderInstall(); scheduleInApp(); mirror(); applyPending();
   }
-  document.addEventListener('visibilitychange',function(){ if(!document.hidden&&state.cfg){ renderAll(); scheduleInApp(); } });
+  document.addEventListener('visibilitychange',function(){ if(!document.hidden&&state.cfg){ renderAll(); scheduleInApp(); applyPending(); } });
 
   // ---- automatic updates
   var hadController=!!(navigator.serviceWorker&&navigator.serviceWorker.controller);
