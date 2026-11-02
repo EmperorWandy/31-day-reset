@@ -220,6 +220,8 @@
   .how b{color:var(--ink)}
   .how p{margin:6px 0 0}
   .how-h{display:flex;align-items:center;justify-content:space-between;gap:8px}
+  .sel{width:100%;background:#0b0c18;border:1px solid var(--line);color:var(--ink);border-radius:10px;padding:10px;font:inherit;font-size:14px}
+  input[type=range]{padding:0;accent-color:#ff7a2f;height:38px;background:transparent;border:0}
   .hear{background:var(--card2);border:1px solid var(--line);color:var(--ink);border-radius:16px;padding:5px 10px;font-size:12px;font-weight:600;cursor:pointer;flex:none}
   .gw-next{color:var(--mute);font-size:13px;margin-top:14px}
   .gw-next b{color:var(--ink)}
@@ -519,6 +521,13 @@
         <div><label for="sWt">Workout time</label><input id="sWt" type="time"></div>
         <div><label for="sEt">Evening habit time</label><input id="sEt" type="time"></div>
       </div>
+      <label for="vPick">Coach voice</label>
+      <select id="vPick" class="sel"></select>
+      <div class="two" style="align-items:end">
+        <div><label for="vRate">Speaking speed</label><input id="vRate" type="range" min="0.75" max="1.15" step="0.05"></div>
+        <div><button class="btn full" id="vTest" style="margin-top:0">&#128266; Preview voice</button></div>
+      </div>
+      <p class="note" id="vNote"></p>
       <button class="btn grad full" id="sSave">Save settings</button>
       <button class="btn full" id="sPlan">Edit my if-then plan</button>
       <p class="note">If you change times, add the calendar reminders again and delete the old ones.</p>
@@ -547,7 +556,7 @@
     <p class="note" style="text-align:left">The daily task schedule is adapted from the 31-Day Total Reset Challenge graphic by Coach Josh. All session instructions, progressions and the app itself are original work.</p>
     <p class="note" style="text-align:left">General fitness and wellness guidance only. It is not medical advice. Stop exercising and seek help if you feel chest pain, dizziness or unusual breathlessness.</p>
   </div>
-  <div class="foot">&copy; 2026 <span class="own"></span>. All rights reserved.<br>No part of this app may be copied, modified or redistributed without written permission.<br>Version 4.1</div>
+  <div class="foot">&copy; 2026 <span class="own"></span>. All rights reserved.<br>No part of this app may be copied, modified or redistributed without written permission.<br>Version 4.2</div>
 </div>
 
 <div class="modal hidden" id="help"><div class="card">
@@ -1248,11 +1257,32 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
   var G={day:0,steps:[],i:-1,remain:0,endAt:0,running:false,tick:null,lastSec:-1,upStart:0,upVal:null,am:0,t0:0,wake:null,closeArm:0,rpe:0};
   var actx=null, voices=[];
   function voiceOn(){ return flags().voice!==false; }
-  function loadVoices(){ try{ voices=speechSynthesis.getVoices()||[]; }catch(e){} }
+  function loadVoices(){ try{ voices=speechSynthesis.getVoices()||[]; }catch(e){} if(typeof renderVoicePick==='function') renderVoicePick(); }
+  function isNG(v){ return /en[-_]NG/i.test(v.lang)||/nigeria/i.test(v.name); }
+  function enVoices(){
+    var en=voices.filter(function(v){ return /^en/i.test(v.lang); });
+    var score=function(v){ return (isNG(v)?0:(/en[-_]GB/i.test(v.lang)?1:2))*10+(/natural|neural|enhanced|premium|online/i.test(v.name)?0:1); };
+    return en.sort(function(a,b){ return score(a)-score(b)||a.name.localeCompare(b.name); });
+  }
+  function pickVoice(){
+    var want=flags().voiceName, list=enVoices();
+    if(want){ var m=list.filter(function(v){ return v.name===want; })[0]; if(m) return m; }
+    return list[0]||null;
+  }
+  function renderVoicePick(){
+    var sel=document.getElementById('vPick'); if(!sel) return;
+    var list=enVoices(), cur=pickVoice();
+    if(!list.length){ sel.innerHTML='<option>Default voice</option>'; $('vNote').innerHTML='Your browser did not list any voices. The phone\'s default voice will be used.'; return; }
+    sel.innerHTML=list.map(function(v){ return '<option value="'+esc(v.name)+'"'+(cur&&cur.name===v.name?' selected':'')+'>'+esc(v.name.replace(/^(Microsoft|Google)\s*/,''))+(isNG(v)?' (Nigerian English)':' ('+esc(v.lang)+')')+'</option>'; }).join('');
+    var hasNG=list.some(isNG);
+    $('vNote').innerHTML= hasNG ? 'A Nigerian English voice is available on this phone and is chosen first.'
+      : (IOS ? 'No Nigerian English voice on this iPhone. For a more natural sound, go to Settings, Accessibility, Spoken Content, Voices, English, and download an Enhanced or Premium voice.'
+             : 'For a Nigerian accent on Android: open Settings, search for <b>Text-to-speech output</b>, tap the gear next to Speech Services by Google, choose <b>Install voice data</b>, then download <b>English (Nigeria)</b>. Come back and it will appear here.');
+  }
   if('speechSynthesis' in window){ loadVoices(); try{ speechSynthesis.onvoiceschanged=loadVoices; }catch(e){} }
   function speak(t,force){
     if((!voiceOn()&&!force)||!('speechSynthesis' in window)) return;
-    try{ speechSynthesis.cancel(); var u=new SpeechSynthesisUtterance(t); var v=voices.filter(function(x){return /en-(GB|NG)/i.test(x.lang);})[0]||voices.filter(function(x){return /^en/i.test(x.lang);})[0]; if(v) u.voice=v; u.lang=v?v.lang:'en-GB'; u.rate=1; speechSynthesis.speak(u); }catch(e){}
+    try{ speechSynthesis.cancel(); var u=new SpeechSynthesisUtterance(t); var v=pickVoice(); if(v) u.voice=v; u.lang=v?v.lang:'en-NG'; u.rate=flags().rate||0.95; u.pitch=1; speechSynthesis.speak(u); }catch(e){}
   }
   function beep(f,d){
     try{ if(!actx) actx=new (window.AudioContext||window.webkitAudioContext)(); var o=actx.createOscillator(), g=actx.createGain(); o.frequency.value=f; o.connect(g); g.connect(actx.destination); g.gain.setValueAtTime(0.25,actx.currentTime); g.gain.exponentialRampToValueAtTime(0.001,actx.currentTime+d); o.start(); o.stop(actx.currentTime+d); }catch(e){}
@@ -1308,7 +1338,7 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
         '<div class="how" style="margin-top:18px"><b>Today</b><p>'+(cnt.w?'Warm-up: '+cnt.w+' moves<br>':'')+'Main session: '+cnt.m+' steps'+(cnt.c?'<br>Cool-down: '+cnt.c+' moves':'')+'</p></div>'+
         (LV?'<div class="how"><b>Round '+(LV+1)+': one level up</b><p>Extra rounds or sets and longer holds are built in. Use the Harder version of each move where you can.</p></div>':'')+
         (planSentence()?'<div class="how"><b>Your plan</b><p>'+esc(planSentence())+'</p></div>':'')+
-        '<div class="how"><b>Before you start</b><p>Put your phone where you can see it and turn the volume up. The app will talk you through each move, count down and beep before every change.</p><p>Stop if you feel chest pain, dizziness or unusual breathlessness. Have water nearby.</p></div>';
+        '<div class="how"><b>Before you start</b><p>Change the coach voice or speed any time in Settings.</p><p>Put your phone where you can see it and turn the volume up. The app will talk you through each move, count down and beep before every change.</p><p>Stop if you feel chest pain, dizziness or unusual breathlessness. Have water nearby.</p></div>';
       ctl([['start','&#9654; Start','grad']]);
       return;
     }
@@ -1712,6 +1742,11 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
   }
 
   $('sPlan').onclick=function(){ obOpen('plan'); };
+  $('vPick').onchange=function(){ flags().voiceName=$('vPick').value; save(); speak('Hello, I am your 31-Day Reset coach. Let us get moving.',true); };
+  $('vRate').value=flags().rate||0.95;
+  $('vRate').onchange=function(){ flags().rate=+$('vRate').value; save(); speak('This is my new speaking speed.',true); };
+  $('vTest').onclick=function(){ speak('Squats, 12 reps. Feet shoulder-width apart. Sit back as if onto a chair, chest up, then stand tall.',true); };
+  renderVoicePick();
   // ---- start
   function boot(){
     fillIcons();
