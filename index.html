@@ -224,6 +224,38 @@
   .rpe button.on{background:var(--grad);border:0;color:#fff}
   .done-art{width:110px;height:110px;border-radius:32px;background:var(--grad);display:flex;align-items:center;justify-content:center;margin:20px auto 8px;color:#fff}
 
+  /* plan */
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chips button{background:var(--card);border:1px solid var(--line);color:var(--ink);border-radius:20px;padding:9px 13px;font-size:13.5px;text-align:left;cursor:pointer}
+  .chips.multi button{width:100%;border-radius:12px}
+  .chips button.on{background:var(--grad2);border-color:transparent;color:#fff}
+  .planbox{background:rgba(95,124,255,.12);border:1px solid #5f7cff;border-radius:14px;padding:12px 14px;margin-top:16px;font-size:14px;color:#dfe3ff}
+  .planbox b{display:block;margin-bottom:3px;color:#fff}
+  #planCard{margin-top:10px}
+  #planCard .pc-h{display:flex;align-items:center;gap:8px}
+  #planCard .pc-h svg{color:#9b8cff}
+  #planCard .pc-h b{flex:1}
+  #planCard p{margin:6px 0 0;color:#cfd1e8;font-size:13.5px}
+  /* badges, certificate, celebration */
+  .badges{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+  .bd{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 4px;text-align:center;opacity:.55}
+  .bd.on{opacity:1;border-color:var(--c);cursor:pointer}
+  .bd .bc{width:44px;height:44px;border-radius:50%;margin:0 auto 6px;display:flex;align-items:center;justify-content:center;background:#2c2e4d;color:#8a8db0}
+  .bd.on .bc{background:var(--c);color:#fff}
+  .bd b{display:block;font-size:10.5px;line-height:1.25}
+  .bd small{display:block;font-size:9.5px;color:var(--mute);margin-top:3px}
+  .btn.wa{background:#25d366;border:0;color:#fff}
+  .cel{position:fixed;inset:0;z-index:12;background:rgba(8,9,20,.88);display:flex;align-items:center;justify-content:center;padding:20px;overflow:hidden}
+  .cel-card{position:relative;z-index:1;background:var(--card);border:1px solid var(--line);border-radius:24px;padding:22px;max-width:380px;width:100%;text-align:center}
+  .cel-badge{width:110px;height:110px;border-radius:50%;background:var(--c);color:#fff;display:flex;align-items:center;justify-content:center;margin:-70px auto 10px;box-shadow:0 0 0 8px var(--bg),0 0 40px var(--c);animation:pop .6s ease}
+  .cel-k{color:var(--mute);font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase}
+  .cel-t{font-size:24px;font-weight:800;margin:4px 0}
+  .cel-card p{color:#cfd1e8;font-size:14px;margin:4px 0 10px}
+  .conf i{position:absolute;top:-20px;width:10px;height:16px;border-radius:2px;animation:fall linear infinite}
+  @keyframes fall{0%{transform:translateY(-20px) rotate(0)}100%{transform:translateY(110vh) rotate(540deg)}}
+  @keyframes pop{0%{transform:scale(.3)}70%{transform:scale(1.1)}100%{transform:scale(1)}}
+  .cert-prev{border-radius:12px;overflow:hidden;border:1px solid var(--line);margin-top:10px}
+
   /* modal, toast, update */
   .modal{position:fixed;inset:0;background:rgba(0,0,0,.75);display:flex;align-items:flex-end;justify-content:center;z-index:8;padding:12px}
   .modal .card{max-width:640px;width:100%;max-height:85vh;overflow:auto}
@@ -300,6 +332,16 @@
       <p class="note" style="margin-top:12px">General fitness guidance only, not medical advice. If you have a health condition, are pregnant, or have been inactive for a long time, check with a doctor before starting.</p>
     </div></section>
 
+    <section class="slide" data-modes="setup plan"><div class="in">
+      <h1 class="s-title" style="margin-top:8px">Plan for <em>real life</em></h1>
+      <p class="s-text">People who decide in advance where they will exercise, and what they will do when something gets in the way, are more likely to stick with it. Take 20 seconds.</p>
+      <label>Where will you work out?</label>
+      <div class="chips" id="pWhere"></div>
+      <label style="margin-top:16px">If something gets in the way, I will... (pick any that fit you)</label>
+      <div class="chips multi" id="pIf"></div>
+      <div class="planbox" id="pPreview"></div>
+    </div></section>
+
     <section class="slide" data-modes="setup"><div class="in">
       <h1 class="s-title" style="margin-top:8px">Never miss a <em>session</em></h1>
       <p class="s-text">Turn on your reminders now. It takes less than a minute.</p>
@@ -371,12 +413,29 @@
     <div class="dayhead"><div><div class="lbl" id="lbl"></div><div class="hint">Tap a task to see what to do, then Mark done.</div></div><div class="nav"><button id="prev" aria-label="Previous day">&#8249;</button><button id="todayBtn" aria-label="Today">&#9679;</button><button id="next" aria-label="Next day">&#8250;</button></div></div>
     <div id="tasks"></div>
 
+    <div class="card" id="planCard"></div>
+
     <h2>Your 31 days</h2>
     <div class="grid" id="grid"></div>
     <div class="legend">
       <span class="chip" style="--c:var(--str)">Strength</span><span class="chip" style="--c:var(--car)">Cardio</span><span class="chip" style="--c:var(--rec)">Mobility and recovery</span><span class="chip" style="--c:var(--gold)">Final test</span><span class="chip" style="--c:#2eaee8">Catch-up day used</span>
     </div>
     <p class="note">Tap a day to open it. A solid tile means both tasks are done. A dashed tile with a shield is a missed day your weekly catch-up day covered.</p>
+
+    <h2>Your badges</h2>
+    <div class="badges" id="badges"></div>
+    <p class="note">Earn a badge for your first day, then at 7, 14 and 21 full days, and for finishing Day 31. Tap an earned badge to share it.</p>
+
+    <h2 id="certH">Your certificate</h2>
+    <div class="card">
+      <div id="certLocked"><b>Unlocks on Day 31</b><p class="sub">Finish the Day 31 workout to get a personalised certificate with your results, ready to save or share.</p></div>
+      <div id="certOpen" class="hidden">
+        <b>You did it!</b><p class="sub">Type your name as you want it on the certificate.</p>
+        <label for="certName">Name on certificate</label><input id="certName" placeholder="Your full name">
+        <button class="btn grad full" id="certDl">Get my certificate</button>
+        <a class="btn full wa" id="certWa" target="_blank" rel="noopener">Tell friends on WhatsApp</a>
+      </div>
+    </div>
 
     <h2 id="remindH">Reminders</h2>
     <div class="card">
@@ -424,6 +483,7 @@
         <div><label for="sEt">Evening habit time</label><input id="sEt" type="time"></div>
       </div>
       <button class="btn grad full" id="sSave">Save settings</button>
+      <button class="btn full" id="sPlan">Edit my if-then plan</button>
       <p class="note">If you change times, add the calendar reminders again and delete the old ones.</p>
     </div>
 
@@ -450,7 +510,7 @@
     <p class="note" style="text-align:left">The daily task schedule is adapted from the 31-Day Total Reset Challenge graphic by Coach Josh. All session instructions, progressions and the app itself are original work.</p>
     <p class="note" style="text-align:left">General fitness and wellness guidance only. It is not medical advice. Stop exercising and seek help if you feel chest pain, dizziness or unusual breathlessness.</p>
   </div>
-  <div class="foot">&copy; 2026 <span class="own"></span>. All rights reserved.<br>No part of this app may be copied, modified or redistributed without written permission.<br>Version 3.2</div>
+  <div class="foot">&copy; 2026 <span class="own"></span>. All rights reserved.<br>No part of this app may be copied, modified or redistributed without written permission.<br>Version 3.3</div>
 </div>
 
 <div class="modal hidden" id="help"><div class="card">
@@ -458,6 +518,8 @@
   <button class="btn grad full" id="tourBtn" style="margin-top:12px">Replay the welcome tour</button>
   <h3>Your daily routine</h3><p>Every day has two tasks: a workout and an evening habit, at the times you chose. Tap a task to read exactly what to do, then tap <b>Mark done</b>.</p>
   <h3>Guided workouts</h3><p>Tap <b>Start today's workout</b>. The app shows one move at a time with a countdown, rest timers and a voice coach, and keeps your screen on. Each move shows how to do it, plus an easier and a harder version. On test days it saves your results for you. When you finish, the workout is ticked off automatically.</p>
+  <h3>Your if-then plan</h3><p>Decide where you will train and what you will do when life gets in the way. Edit it any time from the plan card or Settings.</p>
+  <h3>Badges and certificate</h3><p>Earn badges for your first day and at 7, 14 and 21 full days. Finish Day 31 to unlock a personalised certificate you can save and share.</p>
   <h3>Colours</h3><p>Red is strength, orange is cardio, green is mobility and recovery, gold is your final test. Evening habits have their own colours: sleep, water, food and stress.</p>
   <h3>Moving between days</h3><p>Use the arrows or tap any day in the grid. The dot button takes you back to today.</p>
   <h3>Check-in days</h3><p>On Day 1, 14, 15, 27, 30 and 31 a gold note tells you what to record and takes you straight there.</p>
@@ -474,6 +536,7 @@
   <div class="gw-ctl" id="gwCtl"></div>
 </div>
 <div class="upd hidden" id="upd" role="status"><span>A new version of the app is ready.</span><button id="updBtn">Refresh now</button><button class="x" id="updX" aria-label="Dismiss">&#10005;</button></div>
+<div class="cel hidden" id="cel"></div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -565,6 +628,7 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
   }
   function obClose(){ $('onb').classList.add('hidden'); document.body.style.overflow=''; }
   function obIsSetup(i){ return obList[i]&&obList[i].querySelector('#fStart'); }
+  function obIsPlan(i){ return obList[i]&&obList[i].querySelector('#pWhere'); }
   function obIsRemind(i){ return obList[i]&&obList[i].querySelector('#obGcalW'); }
   function obIsReady(i){ return obList[i]&&obList[i].querySelector('#readyText'); }
   function obGo(i){
@@ -577,12 +641,13 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
     var label='Next';
     if(obIdx===0) label=obMode==='tour'?'Next':'Let\'s go';
     if(obIsSetup(obIdx)) label='Save and continue';
+    if(obIsPlan(obIdx)){ label=obMode==='plan'?'Save my plan':'Save my plan'; loadPlanDraft(); }
     if(obIsRemind(obIdx)) label='Next';
-    if(last) label=obMode==='tour'?'Done':'Open today\'s plan';
+    if(last) label=obMode==='tour'?'Done':(obMode==='plan'?'Save my plan':'Open today\'s plan');
     $('obNext').textContent=label;
     var preSetup=obMode==='setup'&&obList.some(function(s,k){ return k>obIdx&&s.querySelector('#fStart'); });
-    $('obSkip').textContent=obMode==='tour'?'Close':(obIsRemind(obIdx)?'Later':'Skip');
-    $('obSkip').style.visibility=(obMode==='tour'||preSetup||obIsRemind(obIdx))?'visible':'hidden';
+    $('obSkip').textContent=(obMode==='tour'||obMode==='plan')?'Close':(obIsRemind(obIdx)||obIsPlan(obIdx)?'Later':'Skip');
+    $('obSkip').style.visibility=(obMode==='tour'||obMode==='plan'||preSetup||obIsRemind(obIdx)||obIsPlan(obIdx))?'visible':'hidden';
     if(obIsRemind(obIdx)){ renderCal(); renderNotif(); }
     if(obIsReady(obIdx)) renderReady();
   }
@@ -593,12 +658,15 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
   }
   $('obNext').onclick=function(){
     if(obIsSetup(obIdx)&&!obSaveSetup()) return;
+    if(obIsPlan(obIdx)&&!savePlan()) return;
+    if(obMode==='plan'){ obClose(); renderAll(); toast('Your plan is saved'); return; }
     if(obIdx===obList.length-1){ if(obMode==='setup'){ flags().onb=true; save(); } obClose(); boot(); window.scrollTo({top:0}); return; }
     obGo(obIdx+1);
   };
   $('obBack').onclick=function(){ obGo(obIdx-1); };
   $('obSkip').onclick=function(){
-    if(obMode==='tour'){ obClose(); return; }
+    if(obMode==='tour'||obMode==='plan'){ obClose(); return; }
+    if(obIsPlan(obIdx)){ obGo(obIdx+1); return; }
     var k=obList.findIndex(function(s){ return s.querySelector('#fStart'); });
     if(obIsRemind(obIdx)) k=obIdx+1;
     if(k>obIdx) obGo(k);
@@ -682,11 +750,12 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
     else if(cur>=2&&si.streak===0&&si.lastBreak>=cur-2&&si.lastBreak>0) type='reset';
     if(!type||f.noteOff===today+type){ box.innerHTML=''; return; }
     if(type==='save') h='<div class="snote save"><div class="si">'+icon('shield')+'</div><div class="tx"><b>Your streak is safe</b>Yesterday was missed, so this week\'s catch-up day covered it'+(si.streak?' and kept your '+si.streak+'-day streak':'')+'. Finish today\'s two tasks to keep going. Remember: never miss two in a row.<div class="acts"><button class="p" data-y="1">Do yesterday\'s workout too</button><button class="d" data-x="1">Got it</button></div></div></div>';
-    else h='<div class="snote reset"><div class="si">'+icon('pulse')+'</div><div class="tx"><b>Fresh start</b>Your streak has reset, and that is okay. Everyone misses days. '+(si.best>0?'Your best so far is '+si.best+(si.best===1?' day':' days')+'. ':'')+'Complete today\'s two tasks to start a new one.<div class="acts"><button class="p" data-t="1">Start today\'s workout</button><button class="d" data-x="1">Got it</button></div></div></div>';
+    else h='<div class="snote reset"><div class="si">'+icon('pulse')+'</div><div class="tx"><b>Fresh start</b>Your streak has reset, and that is okay. Everyone misses days. '+(si.best>0?'Your best so far is '+si.best+(si.best===1?' day':' days')+'. ':'')+'Complete today\'s two tasks to start a new one.<div class="acts"><button class="p" data-t="1">Start today\'s workout</button><button class="d" data-pl="1">Review my plan</button><button class="d" data-x="1">Got it</button></div></div></div>';
     box.innerHTML=h;
     each('#snote [data-x]',function(b){ b.onclick=function(){ f.noteOff=today+type; save(); box.innerHTML=''; }; });
     each('#snote [data-y]',function(b){ b.onclick=function(){ sel=cur-1; openKey=(cur-1)+'w'; renderAll(); goTo('tasks'); }; });
     each('#snote [data-t]',function(b){ b.onclick=function(){ gwOpen(cur); }; });
+    each('#snote [data-pl]',function(b){ b.onclick=function(){ obOpen('plan'); }; });
   }
 
   function renderGrid(){
@@ -741,6 +810,7 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
     var items=[
       [STANDALONE||f.inst,'Install the app on your home screen',function(){ f.inst=true; save(); renderInstall(); if($('installCard').classList.contains('hidden')) openHelp(); else goTo('installCard'); renderGS(); }],
       [f.rem||notifOn(),'Turn on your daily reminders',function(){ goTo('remindH'); }],
+      [!!(state.cfg&&state.cfg.plan),'Make your if-then plan',function(){ obOpen('plan'); }],
       [hasMeas(),'Record your Day 1 measurements',function(){ goTo('measH'); }],
       [anyTick(),'Complete and tick your first task',function(){ sel=Math.min(31,Math.max(1,curDay())); openKey=null; renderAll(); goTo('tasks'); }]
     ];
@@ -752,7 +822,7 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
   }
   $('gsHide').onclick=function(){ flags().gsHidden=true; save(); renderGS(); toast('Help is always under "? Help" at the top'); };
 
-  function renderAll(){ renderDay(); renderGrid(); renderStats(); renderGS(); renderStreakNote(); }
+  function renderAll(){ renderDay(); renderGrid(); renderStats(); renderGS(); renderStreakNote(); renderPlanCard(); renderBadges(); checkBadges(); }
   $('prev').onclick=function(){ if(sel>1){ sel--; openKey=null; renderAll(); } };
   $('next').onclick=function(){ if(sel<31){ sel++; openKey=null; renderAll(); } };
   $('todayBtn').onclick=function(){ sel=Math.min(31,Math.max(1,curDay())); openKey=null; renderAll(); };
@@ -850,7 +920,7 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
     if(!notifOn()||!state.cfg) return;
     var n=curDay(); if(n<1||n>31) return;
     var p=PLAN[n-1];
-    [['w',addMin(state.cfg.wt,-30),'Workout in 30 minutes','Day '+n+': '+p[0].t+' at '+fmt12(state.cfg.wt)+'. Time to get ready.'],
+    [['w',addMin(state.cfg.wt,-30),'Workout in 30 minutes','Day '+n+': '+p[0].t+' at '+fmt12(state.cfg.wt)+(whereText()?', '+whereText():'')+'. Time to get ready.'],
      ['w',state.cfg.wt,'Workout time','Day '+n+': '+p[0].t+'. Tap for today\'s instructions.'],
      ['e',state.cfg.et,'Evening habit','Day '+n+': '+p[1].t+'. Tap to tick it off.']].forEach(function(s,ix){
       var hm=s[1].split(':'), at=new Date(); at.setHours(+hm[0],+hm[1],0,0);
@@ -1059,6 +1129,7 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
       var cnt={w:0,m:0,c:0}; G.steps.forEach(function(s){ if(s.k==='rest') return; if(s.ph==='Warm-up') cnt.w++; else if(s.ph==='Cool-down') cnt.c++; else cnt.m++; });
       body.innerHTML='<div class="gw-ph" style="background:'+cat.c+'">'+cat.n+'</div><div class="gw-name">'+esc(PLAN[day-1][0].t)+'</div><div class="gw-x">About '+estMin(day)+' minutes, guided step by step</div>'+
         '<div class="how" style="margin-top:18px"><b>Today</b><p>'+(cnt.w?'Warm-up: '+cnt.w+' moves<br>':'')+'Main session: '+cnt.m+' steps'+(cnt.c?'<br>Cool-down: '+cnt.c+' moves':'')+'</p></div>'+
+        (planSentence()?'<div class="how"><b>Your plan</b><p>'+esc(planSentence())+'</p></div>':'')+
         '<div class="how"><b>Before you start</b><p>Put your phone where you can see it and turn the volume up. The app will talk you through each move, count down and beep before every change.</p><p>Stop if you feel chest pain, dizziness or unusual breathlessness. Have water nearby.</p></div>';
       ctl([['start','&#9654; Start','grad']]);
       return;
@@ -1171,6 +1242,148 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
   $('gwCtl').addEventListener('click',function(e){ var b=e.target.closest('button'); if(b&&b.getAttribute('data-a')==='finish'){ gwClose(); sel=G.day; openKey=null; renderAll(); toast('Workout logged. Nice work!'); } });
   document.addEventListener('visibilitychange',function(){ if(!document.hidden&&!$('gw').classList.contains('hidden')&&G.i>=0) wakeOn(); });
 
+  // =================== IF-THEN PLAN ===================
+  var WHERE=[['home','At home','at home'],['outside','Outside near home','outside near home'],['park','At a park or field','at the park'],['work','At work or school','at work or school'],['gym','At the gym','at the gym']];
+  var IFS=[['tired','If I feel tired, I will do the warm-up first and then decide'],['busy','If I am short on time, I will do just one round'],['weather','If it rains or is too hot, I will train indoors'],['late','If I get home late, I will do it first thing the next morning'],['mood','If I am not in the mood, I will put on music and start anyway']];
+  var pDraft={where:'',ifs:[]};
+  function whereText(p){ p=p||(state.cfg&&state.cfg.plan); if(!p) return ''; var w=WHERE.filter(function(x){return x[0]===p.where;})[0]; return w?w[2]:''; }
+  function planSentence(p){
+    p=p||(state.cfg&&state.cfg.plan); if(!p||!p.where) return '';
+    var t='At '+fmt12(state.cfg?state.cfg.wt:'17:00')+', '+whereText(p)+', I will do my workout.';
+    p.ifs.forEach(function(k){ var f=IFS.filter(function(x){return x[0]===k;})[0]; if(f) t+=' '+f[1]+'.'; });
+    return t;
+  }
+  function renderPlanChips(){
+    $('pWhere').innerHTML=WHERE.map(function(w){ return '<button data-w="'+w[0]+'" class="'+(pDraft.where===w[0]?'on':'')+'">'+w[1]+'</button>'; }).join('');
+    $('pIf').innerHTML=IFS.map(function(f){ return '<button data-i="'+f[0]+'" class="'+(pDraft.ifs.indexOf(f[0])>=0?'on':'')+'">'+f[1]+'</button>'; }).join('');
+    each('#pWhere button',function(b){ b.onclick=function(){ pDraft.where=b.getAttribute('data-w'); renderPlanChips(); }; });
+    each('#pIf button',function(b){ b.onclick=function(){ var k=b.getAttribute('data-i'), i=pDraft.ifs.indexOf(k); if(i>=0) pDraft.ifs.splice(i,1); else pDraft.ifs.push(k); renderPlanChips(); }; });
+    var sct=planSentence(pDraft);
+    $('pPreview').innerHTML= sct?'<b>My plan</b>'+esc(sct):'<b>My plan</b>Pick where you will work out to see your plan.';
+  }
+  function loadPlanDraft(){ var p=state.cfg&&state.cfg.plan; pDraft={where:p?p.where:'',ifs:p?p.ifs.slice():[]}; renderPlanChips(); }
+  function savePlan(){
+    if(!pDraft.where){ toast('Pick where you will work out'); return false; }
+    if(!pDraft.ifs.length){ toast('Pick at least one "if" plan. It really helps.'); return false; }
+    state.cfg.plan={where:pDraft.where,ifs:pDraft.ifs.slice()}; save(); return true;
+  }
+  function renderPlanCard(){
+    var el=$('planCard'); if(!el) return;
+    var sct=planSentence();
+    el.innerHTML= sct ? '<div class="pc-h">'+icon('clip')+'<b>My if-then plan</b><button class="link" id="planEdit">Edit</button></div><p>'+esc(sct)+'</p>'
+                      : '<div class="pc-h">'+icon('clip')+'<b>Make your if-then plan</b></div><p>Decide where you will train and what you will do when something gets in the way. It takes 20 seconds and makes you more likely to stick with it.</p><button class="btn blue full" id="planEdit">Make my plan</button>';
+    $('planEdit').onclick=function(){ obOpen('plan'); };
+  }
+
+  // =================== MILESTONES AND CERTIFICATE ===================
+  var BADGES=[
+    {id:'b1',need:1,t:'First day done',s:'You started. That is the hardest part.',ic:'check',c:'#1dd1a1'},
+    {id:'b7',need:7,t:'One week strong',s:'7 full days complete.',ic:'pulse',c:'#ff9f1a'},
+    {id:'b14',need:14,t:'Halfway hero',s:'14 full days complete.',ic:'dumbbell',c:'#ff4757'},
+    {id:'b21',need:21,t:'Three-week habit',s:'21 full days complete. This is becoming who you are.',ic:'leaf',c:'#9b5cff'},
+    {id:'b31',need:0,t:'31-Day Reset finisher',s:'You made it to Day 31. Your certificate is ready.',ic:'trophy',c:'#e0a800'}
+  ];
+  function fullCount(){ var f=0; for(var n=1;n<=31;n++){ if(isFull(n)) f++; } return f; }
+  function earnedNow(b){ return b.id==='b31' ? !!(state.days[31]&&state.days[31].w) : fullCount()>=b.need; }
+  function badgesGot(){ if(!flags().badges) flags().badges={}; return flags().badges; }
+  function checkBadges(){
+    if(!state.cfg) return;
+    var got=badgesGot(), fresh=null;
+    BADGES.forEach(function(b){ if(!got[b.id]&&earnedNow(b)){ got[b.id]=ymd(new Date()); fresh=b; } });
+    if(fresh){ save(); renderBadges(); celebrate(fresh); }
+  }
+  function renderBadges(){
+    var got=badgesGot(), fc=fullCount();
+    $('badges').innerHTML=BADGES.map(function(b){
+      var on=!!got[b.id];
+      return '<div class="bd'+(on?' on':'')+'" data-b="'+b.id+'" style="--c:'+b.c+'"><div class="bc">'+icon(on?b.ic:'shield')+'</div><b>'+b.t+'</b><small>'+(on?'Earned':(b.id==='b31'?'Finish Day 31':fc+' of '+b.need+' days'))+'</small></div>';
+    }).join('');
+    each('#badges .bd.on',function(el){ el.onclick=function(){ celebrate(BADGES.filter(function(b){return b.id===el.getAttribute('data-b');})[0],true); }; });
+    // certificate
+    var unlocked=!!got.b31;
+    $('certLocked').classList.toggle('hidden',unlocked);
+    $('certOpen').classList.toggle('hidden',!unlocked);
+    if(unlocked&&!$('certName').value) $('certName').value=(state.cfg.name||'');
+    $('certWa').href='https://wa.me/?text='+encodeURIComponent('I completed the 31-Day Reset! Join me: '+appUrl());
+  }
+  function appUrl(){ return location.href.split('#')[0]; }
+  function shareText(b){ return (b.id==='b31'?'I just completed the 31-Day Reset!':'Milestone unlocked on my 31-Day Reset: '+b.t+'!')+' Join me: '+appUrl(); }
+  function celebrate(b,again){
+    var conf=''; for(var i=0;i<28;i++){ conf+='<i style="left:'+(Math.random()*100).toFixed(1)+'%;background:'+['#ff4757','#ff9f1a','#ffc312','#1dd1a1','#5f7cff','#c56cff'][i%6]+';animation-delay:'+(Math.random()*0.8).toFixed(2)+'s;animation-duration:'+(2+Math.random()*1.5).toFixed(2)+'s"></i>'; }
+    $('cel').innerHTML='<div class="conf">'+conf+'</div><div class="cel-card"><div class="cel-badge" style="--c:'+b.c+'">'+icon(b.ic,56)+'</div><div class="cel-k">'+(again?'Your badge':'New badge unlocked')+'</div><div class="cel-t">'+b.t+'</div><p>'+b.s+'</p>'+
+      (b.id==='b31'?'<button class="btn grad full" id="celCert">Get my certificate</button>':'')+
+      '<a class="btn full wa" id="celWa" target="_blank" rel="noopener">Share on WhatsApp</a><button class="btn full" id="celImg">Share as a picture</button><button class="link" id="celX" style="margin-top:6px">Close</button></div>';
+    $('cel').classList.remove('hidden');
+    $('celWa').href='https://wa.me/?text='+encodeURIComponent(shareText(b));
+    $('celImg').onclick=function(){ (document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve()).then(function(){ return drawBadge(b); }).then(function(cv){ shareCanvas(cv,'31-day-reset-'+b.id+'.png',shareText(b)); }); };
+    $('celX').onclick=function(){ $('cel').classList.add('hidden'); };
+    if($('celCert')) $('celCert').onclick=function(){ $('cel').classList.add('hidden'); goTo('certH'); };
+    if(!again) buzz([100,60,100,60,200]);
+  }
+  function shareCanvas(cv,name,text){
+    cv.toBlob(function(blob){
+      if(!blob){ toast('Could not create the picture'); return; }
+      var file=null; try{ file=new File([blob],name,{type:'image/png'}); }catch(e){}
+      if(file&&navigator.canShare&&navigator.canShare({files:[file]})){ navigator.share({files:[file],text:text}).catch(function(){}); return; }
+      var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; document.body.appendChild(a); a.click(); a.remove(); toast('Picture saved. Share it from your gallery or Downloads.');
+    },'image/png');
+  }
+  function grad(ctx,w,h,stops){ var g=ctx.createLinearGradient(0,0,w,h); stops.forEach(function(s,i){ g.addColorStop(i/(stops.length-1),s); }); return g; }
+  function wrapText(ctx,t,x,y,maxW,lh){ var words=t.split(' '),line='',lines=[]; words.forEach(function(w){ var test=line?line+' '+w:w; if(ctx.measureText(test).width>maxW&&line){ lines.push(line); line=w; } else line=test; }); lines.push(line); lines.forEach(function(l,i){ ctx.fillText(l,x,y+i*lh); }); return lines.length; }
+  function iconPath(ctx,n,cx,cy,size,col){
+    var svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="'+size+'" height="'+size+'" fill="none" stroke="'+col+'" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+IC[n]+'</svg>';
+    return new Promise(function(res){ var im=new Image(); im.onload=function(){ ctx.drawImage(im,cx-size/2,cy-size/2,size,size); res(); }; im.onerror=res; im.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg); });
+  }
+  var FONT='Poppins, system-ui, sans-serif';
+  function drawBadge(b){
+    var cv=document.createElement('canvas'); cv.width=1080; cv.height=1080; var x=cv.getContext('2d');
+    x.fillStyle=grad(x,1080,1080,['#ff4757','#ff7a2f','#ffb31a']); x.fillRect(0,0,1080,1080);
+    x.fillStyle='rgba(255,255,255,.12)'; x.beginPath(); x.arc(960,120,260,0,7); x.fill(); x.beginPath(); x.arc(80,1000,220,0,7); x.fill();
+    x.fillStyle='#0f1020'; x.beginPath(); if(x.roundRect) x.roundRect(90,170,900,740,60); else x.rect(90,170,900,740); x.fill();
+    x.fillStyle=b.c; x.beginPath(); x.arc(540,380,120,0,7); x.fill();
+    x.textAlign='center'; x.fillStyle='#a3a6c4'; x.font='600 34px '+FONT; x.fillText('NEW BADGE UNLOCKED',540,570);
+    x.fillStyle='#ffffff'; x.font='800 70px '+FONT; x.fillText(b.t,540,655);
+    x.fillStyle='#c9cbe4'; x.font='500 36px '+FONT; wrapText(x,(state.cfg.name?state.cfg.name+' · ':'')+fullCount()+' of 31 days complete',540,725,800,46);
+    x.fillStyle='#ff9f1a'; x.font='600 30px '+FONT; x.fillText('31-Day Reset',540,830);
+    x.fillStyle='#ffffff'; x.font='600 30px '+FONT; x.fillText('by '+OWNER.name,540,1000);
+    return iconPath(x,b.ic,540,380,130,'#ffffff').then(function(){ return cv; });
+  }
+  function drawCert(name){
+    var W=1414,H=1000, cv=document.createElement('canvas'); cv.width=W; cv.height=H; var x=cv.getContext('2d');
+    x.fillStyle='#fffaf3'; x.fillRect(0,0,W,H);
+    x.fillStyle=grad(x,W,0,['#ff4757','#ff7a2f','#ffb31a']); x.fillRect(0,0,W,26); x.fillRect(0,H-26,W,26);
+    x.strokeStyle='#e0a800'; x.lineWidth=4; x.strokeRect(50,60,W-100,H-120); x.lineWidth=1.5; x.strokeRect(64,74,W-128,H-148);
+    x.textAlign='center';
+    x.fillStyle='#ff4757'; x.font='800 34px '+FONT; x.fillText('31-DAY RESET',W/2,165);
+    x.fillStyle='#1a1b30'; x.font='800 66px '+FONT; x.fillText('Certificate of Completion',W/2,250);
+    x.fillStyle='#55576e'; x.font='500 28px '+FONT; x.fillText('This certifies that',W/2,320);
+    x.fillStyle='#1a1b30'; var fs=72; x.font='800 '+fs+'px '+FONT; while(x.measureText(name||'Participant').width>W-240&&fs>30){ fs-=2; x.font='800 '+fs+'px '+FONT; } x.fillText(name||'Participant',W/2,415);
+    x.strokeStyle='#e0a800'; x.lineWidth=2; x.beginPath(); x.moveTo(W/2-330,440); x.lineTo(W/2+330,440); x.stroke();
+    x.fillStyle='#55576e'; x.font='500 28px '+FONT;
+    x.fillText('completed the 31-Day Reset fitness and wellness programme',W/2,495);
+    x.fillText(dateLabel(1)+' '+dateOf(1).getFullYear()+' to '+dateLabel(31)+' '+dateOf(31).getFullYear(),W/2,538);
+    var si=streakInfo(), m=state.meas, stats=[[fullCount()+'/31','full days'],[String(si.best),'best streak']];
+    var d1=m.d1||{}, d31=m.d31||{};
+    if(d1.push&&d31.push) stats.push([d1.push+' → '+d31.push,'push-ups']);
+    if(d1.waist&&d31.waist) stats.push([d1.waist+' → '+d31.waist,'waist (cm)']);
+    else if((m.d27||{}).stam) stats.push([m.d27.stam+' min','stamina test']);
+    var bw=250, gap=30, tot=stats.length*bw+(stats.length-1)*gap, sx=W/2-tot/2;
+    stats.forEach(function(s,i){ var bx=sx+i*(bw+gap); x.fillStyle='#fff1e0'; x.beginPath(); if(x.roundRect) x.roundRect(bx,590,bw,130,20); else x.rect(bx,590,bw,130); x.fill();
+      x.fillStyle='#ff4757'; x.font='800 40px '+FONT; x.fillText(s[0],bx+bw/2,655); x.fillStyle='#55576e'; x.font='500 22px '+FONT; x.fillText(s[1],bx+bw/2,695); });
+    x.fillStyle='#1a1b30'; x.font='700 26px '+FONT; x.fillText(OWNER.name,W/2,820);
+    x.strokeStyle='#1a1b30'; x.lineWidth=1.5; x.beginPath(); x.moveTo(W/2-230,790); x.lineTo(W/2+230,790); x.stroke();
+    x.fillStyle='#55576e'; x.font='500 20px '+FONT; x.fillText('Creator, 31-Day Reset · MSc Exercise Physiology candidate, University of Lagos',W/2,852);
+    x.fillStyle='#e0a800'; x.beginPath(); x.arc(W-200,820,62,0,7); x.fill();
+    x.fillStyle='#fff'; x.font='800 30px '+FONT; x.fillText('31',W-200,818); x.font='700 15px '+FONT; x.fillText('DAYS',W-200,842);
+    return cv;
+  }
+  $('certDl').onclick=function(){
+    var nm=$('certName').value.trim(); if(!nm){ toast('Type the name for your certificate'); return; }
+    (document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve()).then(function(){ shareCanvas(drawCert(nm),'31-day-reset-certificate.png','I completed the 31-Day Reset! Join me: '+appUrl()); });
+  };
+  $('cel').addEventListener('click',function(e){ if(e.target===$('cel')) $('cel').classList.add('hidden'); });
+
+  $('sPlan').onclick=function(){ obOpen('plan'); };
   // ---- start
   function boot(){
     fillIcons();
