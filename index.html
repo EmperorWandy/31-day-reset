@@ -521,13 +521,21 @@
         <div><label for="sWt">Workout time</label><input id="sWt" type="time"></div>
         <div><label for="sEt">Evening habit time</label><input id="sEt" type="time"></div>
       </div>
-      <label for="vPick">Coach voice</label>
-      <select id="vPick" class="sel"></select>
+      <label for="cPick">Coach voice</label>
+      <select id="cPick" class="sel">
+        <option value="random">Surprise me: Ezinne or Abeo each workout</option>
+        <option value="ezinne">Always Ezinne (Nigerian, female)</option>
+        <option value="abeo">Always Abeo (Nigerian, male)</option>
+        <option value="phone">Phone voice (uses no data)</option>
+      </select>
+      <div id="phoneVoice"><label for="vPick">Phone voice</label>
+      <select id="vPick" class="sel"></select></div>
       <div class="two" style="align-items:end">
         <div><label for="vRate">Speaking speed</label><input id="vRate" type="range" min="0.75" max="1.15" step="0.05"></div>
         <div><button class="btn full" id="vTest" style="margin-top:0">&#128266; Preview voice</button></div>
       </div>
       <p class="note" id="vNote"></p>
+      <p class="note" id="cNote">Ezinne and Abeo are downloaded as you use them (about 1 MB per workout) and then work offline.</p>
       <button class="btn grad full" id="sSave">Save settings</button>
       <button class="btn full" id="sPlan">Edit my if-then plan</button>
       <p class="note">If you change times, add the calendar reminders again and delete the old ones.</p>
@@ -556,7 +564,7 @@
     <p class="note" style="text-align:left">The daily task schedule is adapted from the 31-Day Total Reset Challenge graphic by Coach Josh. All session instructions, progressions and the app itself are original work.</p>
     <p class="note" style="text-align:left">General fitness and wellness guidance only. It is not medical advice. Stop exercising and seek help if you feel chest pain, dizziness or unusual breathlessness.</p>
   </div>
-  <div class="foot">&copy; 2026 <span class="own"></span>. All rights reserved.<br>No part of this app may be copied, modified or redistributed without written permission.<br>Version 4.2</div>
+  <div class="foot">&copy; 2026 <span class="own"></span>. All rights reserved.<br>No part of this app may be copied, modified or redistributed without written permission.<br>Version 5.0</div>
 </div>
 
 <div class="modal hidden" id="help"><div class="card">
@@ -566,6 +574,7 @@
   <h3>Guided workouts</h3><p>Tap <b>Start today's workout</b>. The app shows one move at a time with a countdown, rest timers and a voice coach that reads out how to do each move, and keeps your screen on. Tap <b>Hear it</b> to replay the instructions with the easier and harder versions. Each move shows how to do it, plus an easier and a harder version. On test days it saves your results for you. When you finish, the workout is ticked off automatically.</p>
   <h3>Your if-then plan</h3><p>Decide where you will train and what you will do when life gets in the way. Edit it any time from the plan card or Settings.</p>
   <h3>Badges and certificate</h3><p>Earn badges for your first day and at 7, 14 and 21 full days. Finish Day 31 to unlock a personalised certificate you can save and share.</p>
+  <h3>Your coaches</h3><p>Ezinne and Abeo are Nigerian English voices. By default the app picks one of them at random for each workout. Choose a favourite, or switch to your phone's own voice, under Settings.</p>
   <h3>Exercise pictures</h3><p>In a guided workout, a moving figure shows each exercise from start to finish. During rests it shows the next move so you can get ready.</p>
   <h3>Your progress</h3><p>Charts show your sleep for every day and how your measurements changed from Day 1 to Day 31. Tap a point or bar to see its value.</p>
   <h3>Workout buddy</h3><p>Invite a friend on WhatsApp and send each other a quick update every day. People who train with someone are more likely to keep going.</p>
@@ -1280,10 +1289,35 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
              : 'For a Nigerian accent on Android: open Settings, search for <b>Text-to-speech output</b>, tap the gear next to Speech Services by Google, choose <b>Install voice data</b>, then download <b>English (Nigeria)</b>. Come back and it will appear here.');
   }
   if('speechSynthesis' in window){ loadVoices(); try{ speechSynthesis.onvoiceschanged=loadVoices; }catch(e){} }
-  function speak(t,force){
-    if((!voiceOn()&&!force)||!('speechSynthesis' in window)) return;
-    try{ speechSynthesis.cancel(); var u=new SpeechSynthesisUtterance(t); var v=pickVoice(); if(v) u.voice=v; u.lang=v?v.lang:'en-NG'; u.rate=flags().rate||0.95; u.pitch=1; speechSynthesis.speak(u); }catch(e){}
+  // ---- coach audio: recorded Nigerian coaches (Ezinne, Abeo), phone voice as fallback
+  var AUDIO_SET={"76d6d54c":1,"e1eec37f":1,"ab735cdc":1,"ee3bf6c0":1,"6c1c6a9f":1,"a9777be6":1,"11d648dd":1,"a7354f9b":1,"5ea6e527":1,"3ec645d4":1,"5e09de17":1,"370a65fe":1,"0c94cccf":1,"83463a79":1,"c96ed24d":1,"e71a6269":1,"c03a2584":1,"f715646c":1,"c879c0b9":1,"91ebbf54":1,"b5c7d003":1,"29587586":1,"84145752":1,"2061cb46":1,"55751c68":1,"115659f6":1,"b13bac4a":1,"413333a4":1,"cec6e759":1,"13c8b5e3":1,"232798db":1,"8acb2cf1":1,"69e40c89":1,"0f83f023":1,"d0dc8473":1,"751c89fe":1,"b62f547d":1,"0663cd96":1,"81ada6ac":1,"a31a113c":1,"4cadeb7d":1,"0ad3c2bf":1,"865dbb39":1,"d2191052":1,"a393889e":1,"8df97d49":1,"d5f9c443":1,"9c0faf13":1,"de0d038e":1,"28b53ffa":1,"1785b546":1,"b2f43de6":1,"a095ca9c":1,"4bf2456f":1,"1498258b":1,"7b5ed378":1,"91239b88":1,"4f310dcd":1,"1ad19bcb":1,"2ea5b55e":1,"2f3eab78":1,"5e2b6409":1,"cfb1728b":1,"57d25933":1,"b14d5391":1,"fa058206":1,"bfd73170":1,"d29fc3eb":1,"25b1bd87":1,"8a39cbf0":1,"2327f73b":1,"5a4f8e08":1,"79900a6b":1,"93cece40":1,"6be4fd8f":1,"ed473cec":1,"fa3e8794":1,"b30c4264":1,"7a70fc33":1,"5936061a":1,"7e703a45":1,"035a5e0f":1,"befa6499":1,"411414a0":1,"c3df553b":1,"30f90ece":1,"6da9b574":1,"773bd38d":1,"d2cc8308":1,"c441254f":1,"4a432486":1,"09218a66":1,"01e26f79":1,"952408f8":1,"6dbe3974":1,"d87c98f3":1,"fa130f8a":1,"50c76646":1,"8e9f9048":1,"04d930d9":1,"7d86682c":1,"2099e98d":1,"806085e0":1,"246c3da0":1,"7680a513":1,"b63f2fa6":1,"816fa607":1,"78564a30":1,"7a18e565":1,"c05bedf2":1,"a5ac7df7":1,"2c97609c":1,"454f61ed":1,"1ef3bb48":1,"4fd43594":1,"1d9112a9":1,"f61882b9":1,"10f12caa":1,"d4612297":1,"695b39e9":1,"dfefb34a":1,"aec5a1c9":1,"f5df9d8d":1,"39e9dbbb":1,"487d435a":1,"81c31102":1,"40cc707c":1,"590d45d6":1,"d108f08d":1,"1d1cc187":1,"722f5d64":1,"b9c69ca3":1,"6910bd03":1,"655c86cb":1,"4ee364d9":1,"de614b3e":1,"c44cb958":1,"4c8fbcce":1,"058449e5":1,"589fa64c":1,"e4815b74":1,"4a1a27aa":1,"e7238993":1,"8c3bdb44":1,"ed27979e":1,"92c5b345":1,"655604b2":1,"47127ff0":1,"15587567":1,"b8204cb6":1,"e4cb89ed":1,"3670b6c3":1,"6b2c386b":1,"a8d2e70e":1,"f445cad4":1,"7303e4ba":1,"94052ab4":1,"6bcd8206":1,"e0362f67":1,"891c7cff":1,"8ca7d5b1":1,"30e80391":1,"e9ebd63c":1,"40d82d68":1,"4f6e7b18":1,"7c947050":1,"670c0ab2":1,"d80b66ea":1,"57201537":1,"bcd02e6f":1,"d43873ab":1,"fb6beb80":1,"29ed67e8":1,"77362ef9":1,"95e7d96b":1,"250db28b":1,"c16d110c":1,"4fb42b95":1,"e1b0e9eb":1,"c7adf83e":1,"e8731530":1,"a84d1965":1,"97bcd647":1,"e0d52683":1,"964f72db":1,"deb7fc3e":1,"844498d9":1,"880a9292":1,"9275a521":1,"52784355":1,"f504651a":1,"71393d62":1,"0c54c5a1":1,"1f2e2252":1,"c9b9659f":1,"4df43a79":1,"94fe3694":1,"6bee98a0":1,"a1caea91":1,"5423cb1d":1,"502710a2":1,"ca45a353":1,"4f376b1a":1,"77f7d017":1,"6fe05f8e":1,"4b7d36c5":1,"86da27ba":1,"a8cd975c":1,"14efe053":1,"e70ca477":1,"765594c8":1,"17f4ada8":1,"a1040a2e":1,"1691f956":1,"68af33ca":1,"5b0ea9c0":1,"932ffb08":1,"55f5ebc2":1,"db5f777a":1,"d79c682b":1,"4bbbc923":1,"87edf402":1,"a0d964c1":1,"fdb1253f":1,"7294154d":1,"5ccd319d":1,"e0cbeca5":1,"aa1e3464":1,"4cc4c3c4":1,"fb92de7e":1,"b9a78ef2":1,"bedf65c7":1,"35308480":1,"2dc77dfa":1,"ff688bb8":1,"d256785f":1,"f94ecb7a":1,"03d6c7e1":1,"91bc6261":1,"d1ff825c":1,"da086bcf":1,"b8c4c510":1,"db2bb7b4":1,"8f768f49":1,"b7a29469":1,"606cb95a":1,"4b062d2c":1,"f96f2185":1,"068a1a27":1,"6eac1945":1,"7ef5d512":1,"fee21c14":1,"455e6141":1,"09b1a493":1,"9c6f7733":1,"cd0cec6f":1,"d0b331b2":1,"f52559c8":1,"a8917f12":1,"ebe5d128":1,"5b347d4c":1,"ece367e5":1,"2b55f03b":1,"727e47f7":1,"1173422e":1,"1da0ec88":1,"59866b68":1,"9cff03f5":1,"e676a43a":1,"f5c87759":1,"493706d7":1,"cd028db8":1,"51f2f19b":1,"2e57609f":1,"7d4dfc3d":1,"9c809d64":1,"b560e492":1,"45464978":1,"664cfbe8":1,"fefa54c7":1,"e5a6937e":1,"6b62f0b1":1,"c94f93ae":1,"7d4dec29":1,"a68ebd9d":1,"fee7e517":1,"e46afffd":1,"f54123e9":1,"5e72a74a":1,"3db39c37":1,"adc6c73d":1,"9e2affc0":1,"4be0c6fc":1,"22c7fa4b":1,"aa18fdce":1,"5ece2ce9":1,"f896ccda":1,"d6bba103":1,"eeafabcc":1,"b3642ef0":1,"9cacaef6":1,"45891be0":1,"09873fff":1,"acfd0aea":1,"9740a99d":1,"2baa29ca":1,"9c637738":1,"f6a902c1":1,"1ce7bb33":1,"5f52904c":1,"8c0e0fbe":1,"7c8157d1":1,"59ceeab8":1,"271ae614":1,"1dac59df":1,"ac2490a8":1,"f51835b1":1,"0e0dfa8d":1,"dea20edb":1,"07ac7cbd":1,"c01ee7b0":1,"ae4db442":1,"904988a7":1,"de409917":1,"c39bd1f7":1,"ea191e7c":1,"d4aaebec":1,"0125eaaa":1,"6caf1d59":1,"be585773":1,"fec0d296":1,"54a5e290":1,"65f36ddc":1,"ad0e5e97":1,"5705886d":1,"2322314d":1,"6776053f":1,"ee49e3d0":1,"2ebd5b62":1,"78dd4608":1,"6a235e98":1,"2100bb56":1,"64b854be":1,"56c47b24":1,"726ccdb4":1,"d7b6ff84":1,"a56595d7":1,"e5920a11":1,"0a0d6b28":1,"a2d024e4":1,"203df2be":1,"e360f0cd":1,"37500158":1,"b47b9674":1,"2eb9249e":1,"68ecb224":1,"aa649029":1,"0af58d8f":1,"590ec69a":1,"bc839e3a":1,"3385ab9b":1,"7e49017c":1,"0489d6e5":1,"7898724e":1,"e4d5f8c1":1,"f55e0e27":1,"3d7d33ca":1,"5697712d":1,"fa2350dc":1,"c2d5a56d":1,"8ef24e4d":1,"ff2affe3":1,"0bd415f2":1,"9d12cc06":1,"a35bd87f":1,"bafd44da":1,"c3fa18ac":1,"3318dd2d":1,"7e2a031f":1,"55915052":1,"033186d1":1,"289082bb":1,"ee99ab68":1,"dca1f4fb":1,"f594cbb5":1};
+  var COACHES={ezinne:'Ezinne',abeo:'Abeo'};
+  var AUD=null, AQ=[];
+  function fnv(t){ var h=0x811c9dc5; for(var i=0;i<t.length;i++){ h^=t.charCodeAt(i); h=Math.imul(h,0x01000193)>>>0; } return ('0000000'+h.toString(16)).slice(-8); }
+  function coachMode(){ return flags().coach||'random'; }
+  function sessionCoach(){ var m=coachMode(); if(m==='phone') return null; if(m==='random') return G.coach||(G.coach=Math.random()<0.5?'ezinne':'abeo'); return m; }
+  function segsOf(t){ return (Array.isArray(t)?t:[t]).filter(function(x){ return x&&String(x).trim(); }).map(function(x){ return String(x).trim(); }); }
+  function clipUrl(v,seg){ var h=fnv(seg); return AUDIO_SET[h]?'audio/'+v+'/'+h+'.mp3':null; }
+  function stopAudio(){ AQ=[]; if(AUD){ try{ AUD.onended=null; AUD.onerror=null; AUD.pause(); }catch(e){} } try{ speechSynthesis.cancel(); }catch(e){} }
+  function ttsSay(text){ if(!('speechSynthesis' in window)) return; try{ var u=new SpeechSynthesisUtterance(text); var pv=pickVoice(); if(pv) u.voice=pv; u.lang=pv?pv.lang:'en-NG'; u.rate=flags().rate||0.95; speechSynthesis.speak(u); }catch(e){} }
+  function playNext(){
+    if(!AQ.length) return;
+    var it=AQ.shift(); if(!AUD) AUD=new Audio();
+    AUD.onended=playNext;
+    AUD.onerror=function(){ var rest=[it.t].concat(AQ.map(function(q){ return q.t; })).join(' '); AQ=[]; AUD.onerror=null; ttsSay(rest); };
+    AUD.src=it.u; AUD.playbackRate=flags().rate||1;
+    var p=AUD.play(); if(p&&p.catch) p.catch(function(){ if(AUD.onerror) AUD.onerror(); });
   }
+  function speak(t,force,coach){
+    var segs=segsOf(t); if(!segs.length) return;
+    if(!voiceOn()&&!force) return;
+    var v=coach||sessionCoach();
+    stopAudio();
+    if(v){ var items=segs.map(function(x){ return {t:x,u:clipUrl(v,x)}; });
+      if(items.every(function(q){ return q.u; })){ AQ=items; playNext(); return; } }
+    ttsSay(segs.join(' '));
+  }
+  function prefetchClips(segs,v){ if(!v) return; segs.forEach(function(x){ var u=clipUrl(v,x); if(u){ try{ fetch(u).catch(function(){}); }catch(e){} } }); }
   function beep(f,d){
     try{ if(!actx) actx=new (window.AudioContext||window.webkitAudioContext)(); var o=actx.createOscillator(), g=actx.createGain(); o.frequency.value=f; o.connect(g); g.connect(actx.destination); g.gain.setValueAtTime(0.25,actx.currentTime); g.gain.exponentialRampToValueAtTime(0.001,actx.currentTime+d); o.start(); o.stop(actx.currentTime+d); }catch(e){}
   }
@@ -1296,12 +1330,13 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
   function amount(s){ return s.k==='r'?(/each|Day/.test(s.reps)?s.reps:s.reps+' reps'):(s.k==='t'?(s.s>=120?Math.round(s.s/60)+' minutes':s.s+' seconds'):''); }
 
   function gwOpen(day){
-    G.day=day; G.steps=SESSIONS[day-1]; G.i=-1; G.running=false; G.rpe=0; clearInterval(G.tick);
+    G.day=day; G.steps=SESSIONS[day-1]; G.i=-1; G.running=false; G.rpe=0; G.coach=null; G.intro=false; clearInterval(G.tick);
+    var pv=sessionCoach(); if(pv){ var all=[introSeg(pv)]; G.steps.forEach(function(st,ix){ all=all.concat(stepSpeech(st,ix,G.steps)); }); prefetchClips(all,pv); }
     $('gwTitle').textContent='Day '+day+': '+PLAN[day-1][0].t;
     $('gw').classList.remove('hidden'); document.body.style.overflow='hidden';
     renderSnd(); gwRender();
   }
-  function gwClose(){ figStop(); clearInterval(G.tick); G.running=false; wakeOff(); try{ speechSynthesis.cancel(); }catch(e){} $('gw').classList.add('hidden'); document.body.style.overflow=''; }
+  function gwClose(){ figStop(); stopAudio(); clearInterval(G.tick); G.running=false; wakeOff(); try{ speechSynthesis.cancel(); }catch(e){} $('gw').classList.add('hidden'); document.body.style.overflow=''; }
   function renderSnd(){ $('gwSnd').innerHTML=voiceOn()?'&#128266;':'&#128263;'; }
   $('gwSnd').onclick=function(){ flags().voice=!voiceOn(); save(); renderSnd(); toast(voiceOn()?'Voice coach on':'Voice coach off'); };
   $('gwClose').onclick=function(){
@@ -1314,13 +1349,36 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
     var C=2*Math.PI*90, off=C*(1-Math.max(0,Math.min(1,frac)));
     return '<div class="ring"><svg viewBox="0 0 200 200"><circle class="bg" cx="100" cy="100" r="90"/><circle class="fg" id="gwRing" cx="100" cy="100" r="90" style="stroke:'+c+'" stroke-dasharray="'+C.toFixed(1)+'" stroke-dashoffset="'+off.toFixed(1)+'"/></svg><div class="num"><span id="gwNum">'+big+'</span><small id="gwSmall">'+(small||'')+'</small></div></div>';
   }
+  function repsWord(s){ return /each/.test(s.reps)?s.reps:(/Day 19/.test(s.reps)?'two more reps than on Day 19':s.reps+' reps'); }
+  function howSeg(n){ var c=cueFor(n); return c?c[1]:''; }
+  function nextNameIn(steps,i){ for(var j=i+1;j<steps.length;j++){ if(steps[j].k!=='rest') return steps[j].n; } return 'Finish'; }
+  function stepSpeech(s,i,steps){
+    steps=steps||G.steps;
+    if(s.k==='rest'){ var nx=nextNameIn(steps,i); return ['Rest, '+s.s+' seconds. Next, '+nx+'.', s.s>=30?howSeg(nx):'']; }
+    if(s.k==='t') return [s.n+', '+amount(s)+'.', howSeg(s.n)];
+    if(s.k==='r') return [s.n+', '+repsWord(s)+'.', howSeg(s.n), 'Tap done when you finish.'];
+    if(s.k==='num') return [s.n+'. '+s.x, howSeg(s.n), 'Then enter your number.'];
+    if(s.k==='up') return [s.n+'. '+s.x, howSeg(s.n)];
+    if(s.k==='amrap') return ['Finisher. Five minutes, as many rounds as you can.', howSeg('Finisher'), 'Go!'];
+    return [];
+  }
+  function hearSegs(n){ var c=cueFor(n); return c?[n+'.',c[1],c[2]?'Easier option: '+c[2]:'',c[3]?'Harder option: '+c[3]:'']:[]; }
+  function introSeg(v){ return 'Hi, I\'m '+COACHES[v]+', your coach today. Let\'s get moving.'; }
+  var FIXED=['Halfway. Keep going.','10 seconds.','Paused.','Go!','Workout complete. Well done!','Well done! Your result is saved.','Time! Great work.','This is my new speaking speed.','Squats, 12 reps.'];
+  window.__allSpeech=function(){
+    var out={}, add=function(x){ x=String(x||'').trim(); if(x) out[x]=1; }, keep=LV;
+    [0,1,2].forEach(function(lv){ LV=lv; buildSessions().forEach(function(steps){ steps.forEach(function(s,i){ stepSpeech(s,i,steps).forEach(add); if(s.k!=='rest') hearSegs(s.n).forEach(add); }); }); });
+    LV=keep; FIXED.forEach(add); hearSegs('Squats').forEach(add);
+    return {common:Object.keys(out),intro:{ezinne:introSeg('ezinne'),abeo:introSeg('abeo')}};
+  };
   function howSpeech(n,full){
     var c=cueFor(n); if(!c) return '';
     var t=' '+c[1];
     if(full){ if(c[2]) t+=' Easier option: '+c[2]; if(c[3]) t+=' Harder option: '+c[3]; }
     return t;
   }
-  function wireHear(){ each('#gwBody [data-hear]',function(b){ b.onclick=function(){ speak(b.getAttribute('data-hear')+'.'+howSpeech(b.getAttribute('data-hear'),true),true); }; }); }
+  function wireHear(){ each('#gwBody [data-hear]',function(b){ b.onclick=function(){ speak(hearSegs(b.getAttribute('data-hear')),true); }; }); }
+  function sayStep(s){ var segs=stepSpeech(s,G.i); if(G.intro){ G.intro=false; var cv=sessionCoach(); if(cv&&voiceOn()) segs=[introSeg(cv)].concat(segs); } speak(segs); }
   function howBox(n){
     var c=cueFor(n); if(!c) return '';
     return '<div class="how"><div class="how-h"><b>How to do it</b><button class="hear" data-hear="'+esc(n)+'">&#128266; Hear it</button></div><p>'+c[1]+'</p>'+(c[2]?'<p><b style="color:#1dd1a1">Easier:</b> '+c[2]+'</p>':'')+(c[3]?'<p><b style="color:#ff7a2f">Harder:</b> '+c[3]+'</p>':'')+'</div>';
@@ -1334,7 +1392,7 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
     var body=$('gwBody'), day=G.day, cat=CAT[wcat(PLAN[day-1][0].t)];
     if(G.i<0){
       var cnt={w:0,m:0,c:0}; G.steps.forEach(function(s){ if(s.k==='rest') return; if(s.ph==='Warm-up') cnt.w++; else if(s.ph==='Cool-down') cnt.c++; else cnt.m++; });
-      body.innerHTML='<div class="gw-ph" style="background:'+cat.c+'">'+cat.n+'</div><div class="gw-name">'+esc(PLAN[day-1][0].t)+'</div><div class="gw-x">About '+estMin(day)+' minutes, guided step by step</div>'+
+      body.innerHTML='<div class="gw-ph" style="background:'+cat.c+'">'+cat.n+'</div><div class="gw-name">'+esc(PLAN[day-1][0].t)+'</div><div class="gw-x">About '+estMin(day)+' minutes, guided step by step'+(sessionCoach()?'<br>Your coach today: <b>'+COACHES[sessionCoach()]+'</b>':'')+'</div>'+
         '<div class="how" style="margin-top:18px"><b>Today</b><p>'+(cnt.w?'Warm-up: '+cnt.w+' moves<br>':'')+'Main session: '+cnt.m+' steps'+(cnt.c?'<br>Cool-down: '+cnt.c+' moves':'')+'</p></div>'+
         (LV?'<div class="how"><b>Round '+(LV+1)+': one level up</b><p>Extra rounds or sets and longer holds are built in. Use the Harder version of each move where you can.</p></div>':'')+
         (planSentence()?'<div class="how"><b>Your plan</b><p>'+esc(planSentence())+'</p></div>':'')+
@@ -1350,35 +1408,35 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
       body.innerHTML=head+'<div class="gw-name">'+esc(s.k==='rest'?'Rest':s.n)+'</div>'+(s.x?'<div class="gw-x">'+esc(s.x)+'</div>':'')+(s.k==='rest'?'<div class="figlbl">Get ready for: <b>'+esc(nextName(G.i))+'</b></div>':'')+'<div class="fig" id="gwFig"></div>'+ring(1,mmss(s.s),s.k==='rest'?'breathe':'',c)+(s.k==='rest'?'':howBox(s.n))+nxt;
       figMount($('gwFig'),s.k==='rest'?nextName(G.i):s.n,s.k==='rest'?'#7fd3ff':c);
       ctl(s.k==='rest'?[['back','&#8249;','sm'],['add','+15s',''],['next','Skip rest','grad']]:[['back','&#8249;','sm'],['pause','Pause',''],['next','Skip &#8250;','grad']]);
-      speak(s.k==='rest'?'Rest, '+s.s+' seconds. Next, '+nextName(G.i)+'.'+(s.s>=30?howSpeech(nextName(G.i)):''):s.n+', '+amount(s)+'.'+howSpeech(s.n));
+      sayStep(s);
       wireHear();
       G.tick=setInterval(gwTick,200);
     } else if(s.k==='r'){
       body.innerHTML=head+'<div class="gw-name">'+esc(s.n)+'</div>'+(s.x?'<div class="gw-x">'+esc(s.x)+'</div>':'')+'<div class="fig" id="gwFig"></div><div class="reps" style="color:'+c+'">'+esc(s.reps)+'<small>reps, at your own pace</small></div>'+howBox(s.n)+nxt;
       ctl([['back','&#8249;','sm'],['next','Done &#10003;','grad']]);
       figMount($('gwFig'),s.n,c);
-      speak(s.n+', '+(/each/.test(s.reps)?s.reps:(/Day 19/.test(s.reps)?'two more reps than on Day 19':s.reps+' reps'))+'.'+howSpeech(s.n)+' Tap done when you finish.');
+      sayStep(s);
       wireHear();
     } else if(s.k==='num'){
       var cur=(state.meas[s.log[0]]||{})[s.log[1]]||'';
       body.innerHTML=head+'<div class="gw-name">'+esc(s.n)+'</div><div class="gw-x">'+esc(s.x)+'</div><div class="fig" id="gwFig"></div><input class="gw-in" id="gwIn" type="number" inputmode="numeric" min="0" placeholder="0" value="'+esc(cur)+'"><div class="gw-x" style="margin-top:6px">How many did you do?</div>'+howBox(s.n)+nxt;
       ctl([['back','&#8249;','sm'],['saveNum','Save and continue','grad']]);
       figMount($('gwFig'),s.n,c);
-      speak(s.n+'. '+s.x+howSpeech(s.n)+' Then enter your number.');
+      sayStep(s);
       wireHear();
     } else if(s.k==='up'){
       G.upStart=0; G.upVal=null;
       body.innerHTML=head+'<div class="gw-name">'+esc(s.n)+'</div><div class="gw-x">'+esc(s.x)+'</div><div class="fig" id="gwFig"></div>'+ring(0,'0:00','tap Start',c)+howBox(s.n)+nxt;
       ctl([['back','&#8249;','sm'],['upStart','Start','grad']]);
       figMount($('gwFig'),s.n,c);
-      speak(s.n+'. '+s.x+howSpeech(s.n));
+      sayStep(s);
       wireHear();
     } else if(s.k==='amrap'){
       G.am=0; G.remain=s.s; G.endAt=Date.now()+s.s*1000; G.running=true;
       body.innerHTML=head+'<div class="gw-name">'+esc(s.n)+'</div><div class="gw-x">'+esc(s.x)+'</div><div class="fig" id="gwFig"></div>'+ring(1,mmss(s.s),'<span id="gwAm">0</span> rounds',c)+howBox(s.n)+nxt;
       ctl([['back','&#8249;','sm'],['am','+1 round','grad']]);
       figMount($('gwFig'),s.n,c);
-      speak('Finisher. Five minutes, as many rounds as you can.'+howSpeech('Finisher')+' Go!');
+      sayStep(s);
       wireHear();
       G.tick=setInterval(gwTick,200);
     }
@@ -1415,19 +1473,19 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
     beep(990,0.35); buzz(200);
     if($('gwNum')) $('gwNum').textContent=mmss(t);
     if($('gwSmall')) $('gwSmall').textContent=G.upVal+(s.unit==='min'?' minutes':' seconds');
-    speak('Well done. '+G.upVal+(s.unit==='min'?' minutes.':' seconds.'));
+    speak('Well done! Your result is saved.');
     ctl([['back','&#8249;','sm'],['upAgain','Redo',''],['saveUp','Save and continue','grad']]);
   }
   function gwAmrapDone(){
     var day=G.day; dd(day).fin=G.am; save();
-    speak('Time! '+G.am+' rounds. Great work.');
+    speak('Time! Great work.');
     $('gwSmall').innerHTML=G.am+' rounds done';
     ctl([['next','Continue &#8250;','grad']]);
   }
   function logMeas(log,val){ if(val===''||val==null) return; if(!state.meas[log[0]]) state.meas[log[0]]={}; state.meas[log[0]][log[1]]=String(val); save(); renderForms(); renderGS(); }
   function gwAction(a){
     var s=G.steps[G.i];
-    if(a==='start'){ try{ if(!actx) actx=new (window.AudioContext||window.webkitAudioContext)(); if(actx.resume) actx.resume(); }catch(e){} wakeOn(); G.t0=Date.now(); G.i=0; gwRender(); return; }
+    if(a==='start'){ G.intro=true; try{ if(!actx) actx=new (window.AudioContext||window.webkitAudioContext)(); if(actx.resume) actx.resume(); }catch(e){} wakeOn(); G.t0=Date.now(); G.i=0; gwRender(); return; }
     if(a==='next'){ G.i++; gwRender(); return; }
     if(a==='back'){ var j=G.i-1; while(j>0&&G.steps[j].k==='rest') j--; G.i=Math.max(0,j); gwRender(); return; }
     if(a==='pause'){
@@ -1742,10 +1800,14 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
   }
 
   $('sPlan').onclick=function(){ obOpen('plan'); };
+  function previewCoach(){ var m=coachMode(); return m==='phone'?null:(m==='random'?(Math.random()<0.5?'ezinne':'abeo'):m); }
+  function renderCoachPick(){ $('cPick').value=coachMode(); var ph=coachMode()==='phone'; $('phoneVoice').classList.toggle('hidden',!ph); $('vNote').classList.toggle('hidden',!ph); $('cNote').classList.toggle('hidden',ph); }
+  $('cPick').onchange=function(){ flags().coach=$('cPick').value; save(); renderCoachPick(); var v=previewCoach(); speak(v?[introSeg(v)]:'Hello, I am your 31-Day Reset coach. Let us get moving.',true,v||undefined); };
   $('vPick').onchange=function(){ flags().voiceName=$('vPick').value; save(); speak('Hello, I am your 31-Day Reset coach. Let us get moving.',true); };
-  $('vRate').value=flags().rate||0.95;
-  $('vRate').onchange=function(){ flags().rate=+$('vRate').value; save(); speak('This is my new speaking speed.',true); };
-  $('vTest').onclick=function(){ speak('Squats, 12 reps. Feet shoulder-width apart. Sit back as if onto a chair, chest up, then stand tall.',true); };
+  $('vRate').value=flags().rate||1;
+  $('vRate').onchange=function(){ flags().rate=+$('vRate').value; save(); speak('This is my new speaking speed.',true,previewCoach()||undefined); };
+  $('vTest').onclick=function(){ var v=previewCoach(); speak(v?[introSeg(v),'Squats, 12 reps.',howSeg('Squats')]:'Squats, 12 reps. '+howSeg('Squats'),true,v||undefined); };
+  renderCoachPick();
   renderVoicePick();
   // ---- start
   function boot(){
