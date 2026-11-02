@@ -3,205 +3,353 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#121214">
+<meta name="theme-color" content="#0f1020">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="31-Day Reset">
 <meta name="author" content="Akinwande Akinkunmi Adeniyi">
-<meta name="description" content="31-Day Reset: a daily fitness and wellness tracker by Akinwande Akinkunmi Adeniyi.">
+<meta name="description" content="31-Day Reset: your daily coach for 31 days, by Akinwande Akinkunmi Adeniyi.">
 <meta name="copyright" content="© 2026 Akinwande Akinkunmi Adeniyi">
 <title>31-Day Reset by Akinwande Akinkunmi Adeniyi</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
 <style>
-  :root{--bg:#121214;--card:#1c1c20;--line:#2c2c32;--ink:#f3f3f3;--mute:#a0a0aa;--red:#e0262f;--red2:#ff4d55;--ok:#2fbf71;--amb:#c9971f}
+  :root{
+    --bg:#0f1020;--card:#1a1b30;--card2:#222441;--line:#2c2e4d;--ink:#f4f5ff;--mute:#a3a6c4;
+    --str:#ff4757;--car:#ff9f1a;--rec:#1dd1a1;--gold:#ffc312;--hab:#5f7cff;--ok:#2ed573;
+    --grad:linear-gradient(135deg,#ff4757 0%,#ff7a2f 55%,#ffb31a 100%);
+    --grad2:linear-gradient(135deg,#5f7cff 0%,#9b5cff 100%);
+  }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-  html,body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  html,body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 Poppins,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  button{font-family:inherit}
   .wrap{max-width:640px;margin:0 auto;padding:calc(14px + env(safe-area-inset-top)) 14px calc(70px + env(safe-area-inset-bottom))}
-  h1{font-weight:800;font-size:26px;letter-spacing:.3px;margin:0;text-transform:uppercase}
-  h1 span{color:var(--red2)}
-  .by{color:var(--mute);font-size:12px;margin-top:2px}
-  .by b{color:var(--ink);font-weight:600}
-  h2{font-weight:700;font-size:16px;text-transform:uppercase;letter-spacing:.6px;margin:26px 0 10px;color:#ddd}
+  .hidden{display:none!important}
+  h2{font-weight:700;font-size:17px;margin:28px 0 10px}
   .sub{color:var(--mute);margin:6px 0 0;font-size:13px}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px}
-  .bar{height:8px;background:var(--line);border-radius:6px;overflow:hidden;margin:14px 0 10px}
-  .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--red),var(--red2));width:0;transition:width .3s}
-  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-  .stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 10px}
-  .stat b{display:block;font-size:20px;font-weight:800}
-  .stat small{color:var(--mute);font-size:11px}
-  .dayhead{display:flex;align-items:center;justify-content:space-between;margin-top:16px}
-  .dayhead .lbl{color:var(--red2);font-weight:700;text-transform:uppercase;font-size:13px}
-  .nav{display:flex;gap:6px}
-  .nav button{background:var(--card);border:1px solid var(--line);color:var(--ink);border-radius:8px;width:38px;height:34px;font-size:16px}
-  .task{margin-top:10px}
+  .note{color:var(--mute);font-size:12px;margin-top:6px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px}
+  .btn{background:var(--card2);border:1px solid var(--line);color:var(--ink);border-radius:12px;padding:11px 14px;font-size:14px;font-weight:600;text-decoration:none;display:inline-block;text-align:center;cursor:pointer}
+  .btn.grad{background:var(--grad);border:0;color:#fff}
+  .btn.blue{background:var(--grad2);border:0;color:#fff}
+  .btn.full{width:100%;margin-top:8px}
+  .link{background:none;border:0;color:var(--mute);font-size:14px;padding:6px;cursor:pointer}
+  input,textarea{width:100%;background:#0b0c18;border:1px solid var(--line);color:var(--ink);border-radius:10px;padding:10px;font:inherit;font-size:15px}
+  input[type=date],input[type=time]{color-scheme:dark}
+  label{display:block;font-size:13px;color:var(--mute);margin:12px 0 4px}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  svg.i{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;display:block}
+
+  /* header */
+  .hdr{display:flex;align-items:center;gap:10px}
+  .logo{width:42px;height:42px;border-radius:12px;background:var(--grad);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;flex:none}
+  .brand{flex:1;min-width:0}
+  .brand b{display:block;font-size:19px;font-weight:800;line-height:1.1}
+  .brand small{color:var(--mute);font-size:11px}
+  .help{background:var(--card);border:1px solid var(--line);color:var(--ink);border-radius:20px;height:36px;padding:0 12px;font-weight:600;font-size:13px;flex:none}
+
+  /* hero */
+  .hero{margin-top:14px;border-radius:20px;padding:16px;background:var(--grad);color:#fff;position:relative;overflow:hidden}
+  .hero:after{content:"";position:absolute;right:-40px;top:-40px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.12)}
+  .hero .hi{font-size:13px;opacity:.95}
+  .hero .big{font-size:30px;font-weight:800;line-height:1.15;margin-top:2px}
+  .hero .bar{height:8px;background:rgba(255,255,255,.3);border-radius:6px;overflow:hidden;margin:12px 0}
+  .hero .bar i{display:block;height:100%;background:#fff;width:0;transition:width .4s}
+  .hero .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;position:relative;z-index:1}
+  .hero .stats div{background:rgba(0,0,0,.18);border-radius:12px;padding:7px 8px}
+  .hero .stats b{display:block;font-size:18px;font-weight:800}
+  .hero .stats small{font-size:10px;opacity:.9}
+
+  /* day + tasks */
+  .dayhead{display:flex;align-items:flex-end;justify-content:space-between;margin-top:20px;gap:10px}
+  .dayhead .lbl{font-weight:700;font-size:15px}
+  .dayhead .hint{color:var(--mute);font-size:12px}
+  .nav{display:flex;gap:6px;flex:none}
+  .nav button{background:var(--card);border:1px solid var(--line);color:var(--ink);border-radius:10px;width:38px;height:36px;font-size:16px}
+  .task{margin-top:10px;background:var(--card);border:1px solid var(--line);border-left:5px solid var(--c);border-radius:16px;padding:12px}
   .task .top{display:flex;align-items:center;gap:10px;cursor:pointer}
-  .task .time{color:var(--mute);font-size:12px;width:56px;flex:none}
-  .task .t{flex:1;font-weight:600}
-  .task .more{color:var(--mute);font-size:12px;font-weight:400}
-  .task pre{white-space:pre-wrap;font:inherit;font-size:14px;color:#d6d6dc;margin:10px 0 0;padding-top:10px;border-top:1px solid var(--line);display:none}
+  .ic{width:42px;height:42px;border-radius:12px;background:var(--c);color:#fff;display:flex;align-items:center;justify-content:center;flex:none}
+  .task .t{flex:1;min-width:0}
+  .task .meta{font-size:11px;color:var(--c);font-weight:700;text-transform:uppercase;letter-spacing:.4px}
+  .task .ttl{font-weight:700;font-size:15px;line-height:1.3}
+  .task .more{color:var(--mute);font-size:12px}
+  .task pre{white-space:pre-wrap;font:inherit;font-size:14px;color:#dcdef0;margin:12px 0 0;padding-top:12px;border-top:1px solid var(--line);display:none}
   .task.open pre{display:block}
-  .chk{height:36px;padding:0 14px;border-radius:18px;border:2px solid #55555e;background:transparent;color:#fff;font:inherit;font-size:13px;font-weight:700;flex:none;white-space:nowrap}
-  .chk.on{background:var(--ok);border-color:var(--ok)}
+  .chk{height:38px;padding:0 14px;border-radius:19px;border:2px solid var(--c);background:transparent;color:var(--ink);font-size:13px;font-weight:700;flex:none;white-space:nowrap}
+  .chk.on{background:var(--c);color:#fff}
   .sleeprow{display:flex;align-items:center;gap:10px;margin-top:10px}
   .sleeprow span{flex:1;color:var(--mute);font-size:13px}
-  .grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
-  .day{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:6px 2px;text-align:center;font-size:10px;color:var(--mute);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
-  .day b{display:block;font-size:15px;color:var(--ink)}
-  .day.half{border-color:var(--amb)}
-  .day.full{background:#163d2a;border-color:var(--ok)}
-  .day.cur{outline:2px solid var(--red2)}
+  .sleep{width:76px}
+  .flag{background:rgba(255,195,18,.12);border:1px solid var(--gold);border-radius:14px;padding:10px 12px;margin-top:10px;font-size:13px;display:flex;align-items:center;gap:10px}
+  .flag span{flex:1}
+  .flag button{background:var(--gold);border:0;color:#2a2000;border-radius:10px;padding:8px 10px;font-size:13px;font-weight:700;flex:none}
+
+  /* grid */
+  .grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}
+  .day{background:var(--card);background:color-mix(in srgb,var(--c) 16%,var(--card));border:1px solid color-mix(in srgb,var(--c) 45%,transparent);border-radius:10px;padding:6px 2px 5px;text-align:center;font-size:9.5px;color:var(--mute);overflow:hidden;white-space:nowrap;text-overflow:ellipsis;cursor:pointer}
+  .day b{display:block;font-size:15px;color:var(--ink);font-weight:700}
+  .day i{display:block;font-style:normal;font-size:9px;letter-spacing:1px;color:var(--c)}
+  .day.full{background:var(--c);border-color:var(--c);color:#fff}
+  .day.full b,.day.full i{color:#fff}
+  .day.cur{outline:2px solid #fff;outline-offset:1px}
+  .legend{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+  .chip{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:20px;padding:3px 9px}
+  .chip:before{content:"";width:8px;height:8px;border-radius:50%;background:var(--c)}
+
+  /* checklist */
+  .gs{margin-top:14px}
+  .gs .it{display:flex;align-items:center;gap:10px;padding:9px 0;border-top:1px solid var(--line);cursor:pointer}
+  .gs .it:first-of-type{border-top:0}
+  .gs .bx{width:24px;height:24px;border-radius:7px;border:2px solid #555a80;flex:none;display:flex;align-items:center;justify-content:center;font-size:13px}
+  .gs .it.ok .bx{background:var(--ok);border-color:var(--ok)}
+  .gs .it.ok .tx{color:var(--mute);text-decoration:line-through}
+  .gs .tx{flex:1;font-size:14px}
+  .gs .go{color:#ff7a2f;font-size:13px;font-weight:600}
+
   table{width:100%;border-collapse:collapse;font-size:13px}
   th,td{border-bottom:1px solid var(--line);padding:6px 3px;text-align:left}
   th{color:var(--mute);font-weight:500}
-  input,textarea{width:100%;background:#0d0d0f;border:1px solid var(--line);color:var(--ink);border-radius:6px;padding:8px;font:inherit;font-size:14px}
-  input[type=date],input[type=time]{color-scheme:dark}
-  .sleep{width:72px}
-  textarea{min-height:80px;resize:vertical}
-  label{display:block;font-size:13px;color:var(--mute);margin:10px 0 4px}
-  .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  td input{padding:7px;font-size:14px}
   .scroll{overflow-x:auto}
-  .note{color:var(--mute);font-size:12px;margin-top:6px}
+  textarea{min-height:80px;resize:vertical}
+  ul.basics{margin:0;padding-left:18px;color:var(--mute);font-size:13px}
+  .pill{display:inline-block;font-size:11px;padding:2px 9px;border-radius:10px;background:var(--card2);color:var(--mute);font-weight:600}
+  .pill.ok{background:rgba(46,213,115,.18);color:#7ff0ad}
   .btns{display:flex;gap:8px;flex-wrap:wrap}
-  .btn{background:var(--card);border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:10px 12px;font:inherit;font-size:14px;text-decoration:none;display:inline-block}
-  .btn.red{background:var(--red);border-color:var(--red);color:#fff}
-  .btn.full{width:100%;text-align:center;margin-top:8px}
-  .pill{display:inline-block;font-size:12px;padding:2px 8px;border-radius:10px;background:#2a2a30;color:var(--mute)}
-  .pill.ok{background:#163d2a;color:#7fe0aa}
-  ul{margin:0;padding-left:18px;color:var(--mute);font-size:13px}
-  .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));transform:translateX(-50%);background:#2a2a30;padding:8px 14px;border-radius:20px;font-size:13px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:9}
-  .toast.show{opacity:1}
-  .hidden{display:none!important}
   .owner{text-align:center}
   .owner .nm{font-weight:700;font-size:16px}
   .owner .ti{color:var(--mute);font-size:13px}
   .foot{color:var(--mute);font-size:11px;text-align:center;margin-top:24px;line-height:1.6}
-  .welcome h2{margin-top:6px}
-  .hdr{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
-  .help{background:var(--card);border:1px solid var(--line);color:var(--ink);border-radius:18px;height:36px;padding:0 12px;font:inherit;font-weight:700;font-size:13px;flex:none}
-  .intro .lead{font-size:16px;color:var(--ink);margin:6px 0 4px}
-  .step{display:flex;gap:12px;align-items:flex-start;margin-top:14px}
-  .step .num{width:30px;height:30px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;font-weight:800;flex:none}
-  .step b{display:block}
-  .step span{color:var(--mute);font-size:13px}
-  .hint{color:var(--mute);font-size:12px;margin-top:2px}
-  .flag{background:#3a1d20;border:1px solid var(--red);border-radius:10px;padding:10px 12px;margin-top:10px;font-size:13px;display:flex;align-items:center;gap:10px}
-  .flag span{flex:1}
-  .flag button{background:var(--red);border:0;color:#fff;border-radius:8px;padding:7px 10px;font:inherit;font-size:13px;flex:none}
-  .gs{margin-top:14px;border-color:#3d3d46}
-  .gs .it{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--line);cursor:pointer}
-  .gs .it:first-of-type{border-top:0}
-  .gs .bx{width:22px;height:22px;border-radius:6px;border:2px solid #55555e;flex:none;display:flex;align-items:center;justify-content:center;font-size:13px}
-  .gs .it.ok .bx{background:var(--ok);border-color:var(--ok)}
-  .gs .it.ok .tx{color:var(--mute);text-decoration:line-through}
-  .gs .tx{flex:1;font-size:14px}
-  .gs .go{color:var(--red2);font-size:13px}
-  .upd{position:fixed;top:0;left:0;right:0;z-index:10;background:var(--red);color:#fff;display:flex;align-items:center;gap:10px;padding:calc(10px + env(safe-area-inset-top)) 14px 10px;font-size:14px;font-weight:600}
-  .upd span{flex:1}
-  .upd button{background:#fff;color:#b01820;border:0;border-radius:8px;padding:7px 12px;font:inherit;font-size:13px;font-weight:700;flex:none}
-  .upd button.x{background:transparent;color:#fff;padding:7px 6px;font-size:16px}
+
+  /* onboarding */
+  .onb{position:fixed;inset:0;z-index:7;background:var(--bg);display:flex;flex-direction:column;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}
+  .ob-top{display:flex;align-items:center;justify-content:space-between;padding:12px 16px 4px;max-width:640px;width:100%;margin:0 auto}
+  .dots{display:flex;gap:6px}
+  .dots span{width:8px;height:8px;border-radius:4px;background:#3a3d63;transition:all .25s}
+  .dots span.on{width:22px;background:var(--grad)}
+  .ob-view{flex:1;overflow:hidden;position:relative}
+  .ob-track{display:flex;height:100%;transition:transform .35s ease}
+  .slide{flex:0 0 100%;height:100%;overflow-y:auto;padding:10px 20px 20px}
+  .slide .in{max-width:520px;margin:0 auto}
+  .ob-nav{display:flex;gap:10px;padding:10px 16px 16px;max-width:640px;width:100%;margin:0 auto}
+  .ob-nav .btn{flex:1;padding:14px;font-size:15px}
+  .ob-nav #obBack{flex:0 0 96px}
+  .art{height:170px;border-radius:24px;margin:8px 0 18px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+  .art.g1{background:var(--grad)}
+  .art.g2{background:var(--grad2)}
+  .art .bubble{position:absolute;border-radius:50%;background:rgba(255,255,255,.14)}
+  .art .logo-big{width:96px;height:96px;border-radius:28px;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:44px;font-weight:800;color:#fff;position:relative}
+  .s-title{font-size:25px;font-weight:800;line-height:1.2;margin:0}
+  .s-title em{font-style:normal;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .s-text{color:#c9cbe4;font-size:15px;margin:10px 0 0}
+  .notif{background:rgba(255,255,255,.95);color:#1b1b2b;border-radius:16px;padding:10px 12px;width:84%;display:flex;gap:10px;align-items:center;box-shadow:0 8px 24px rgba(0,0,0,.25);position:relative}
+  .notif .ni{width:36px;height:36px;border-radius:10px;background:var(--grad);color:#fff;display:flex;align-items:center;justify-content:center;flex:none}
+  .notif small{color:#666;font-size:11px;display:block}
+  .notif b{font-size:14px;display:block}
+  .notif span{font-size:12px;color:#333}
+  .mini{display:flex;gap:10px;align-items:center;background:var(--card);border:1px solid var(--line);border-left:5px solid var(--c);border-radius:14px;padding:10px;margin-top:10px}
+  .mini .ic{width:38px;height:38px}
+  .mini .t{flex:1}
+  .mini small{color:var(--c);font-weight:700;font-size:11px;text-transform:uppercase}
+  .mini b{display:block;font-size:14px}
+  .steps3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px}
+  .steps3 div{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px;text-align:center;font-size:12px;color:#c9cbe4}
+  .steps3 b{display:block;font-size:20px;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .ttype{display:flex;gap:12px;align-items:flex-start;margin-top:12px}
+  .ttype .ic{width:40px;height:40px}
+  .ttype b{display:block;font-size:15px}
+  .ttype span{color:var(--mute);font-size:13px}
+  .weeks{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-top:16px}
+  .weeks div{border-radius:10px;padding:8px 4px;text-align:center;font-size:11px;color:#fff;font-weight:600}
+  .weeks small{display:block;font-weight:400;opacity:.9}
+  .fixed{background:rgba(95,124,255,.12);border:1px solid #5f7cff;border-radius:14px;padding:10px 12px;margin-top:14px;font-size:13px;color:#dfe3ff}
+  .rem{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin-top:12px}
+  .rem .h{display:flex;align-items:center;gap:8px;font-weight:700}
+
+  /* modal, toast, update */
   .modal{position:fixed;inset:0;background:rgba(0,0,0,.75);display:flex;align-items:flex-end;justify-content:center;z-index:8;padding:12px}
   .modal .card{max-width:640px;width:100%;max-height:85vh;overflow:auto}
   .modal h3{margin:14px 0 4px;font-size:15px}
-  .modal p{margin:0;color:#cfcfd6;font-size:14px}
+  .modal p{margin:0;color:#cfd1e8;font-size:14px}
+  .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));transform:translateX(-50%);background:#2b2e52;padding:9px 16px;border-radius:20px;font-size:13px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:11;max-width:90%;text-align:center}
+  .toast.show{opacity:1}
+  .upd{position:fixed;top:0;left:0;right:0;z-index:10;background:var(--grad);color:#fff;display:flex;align-items:center;gap:10px;padding:calc(10px + env(safe-area-inset-top)) 14px 10px;font-size:14px;font-weight:600}
+  .upd span{flex:1}
+  .upd button{background:#fff;color:#c2232f;border:0;border-radius:10px;padding:7px 12px;font-size:13px;font-weight:700;flex:none}
+  .upd button.x{background:transparent;color:#fff;padding:7px 6px;font-size:16px}
 </style>
 </head>
 <body>
-<div class="wrap">
+
+<!-- ===================== ONBOARDING (one screen at a time) ===================== -->
+<div id="onb" class="onb hidden">
+  <div class="ob-top"><div class="dots" id="dots"></div><button class="link" id="obSkip">Skip</button></div>
+  <div class="ob-view" id="obView"><div class="ob-track" id="track">
+
+    <section class="slide" data-modes="setup tour"><div class="in">
+      <div class="art g1"><div class="bubble" style="width:180px;height:180px;left:-50px;top:-60px"></div><div class="bubble" style="width:120px;height:120px;right:-30px;bottom:-40px"></div><div class="logo-big">31</div></div>
+      <h1 class="s-title">Welcome to <em>31-Day Reset</em></h1>
+      <p class="s-text">Your daily coach for the next 31 days. It tells you what to do, shows you how to do it, and reminds you so you actually do it.</p>
+      <p class="note" style="margin-top:14px">Created by <b class="own" style="color:var(--ink)"></b></p>
+    </div></section>
+
+    <section class="slide" data-modes="setup tour"><div class="in">
+      <div class="art g2"><div class="bubble" style="width:150px;height:150px;right:-40px;top:-50px"></div>
+        <div class="notif"><div class="ni"><svg class="i" viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4l2-2zM10 20a2 2 0 0 0 4 0"/></svg></div><div><small>31-Day Reset &middot; now</small><b>Workout in 30 minutes</b><span>Day 4: Lower body at 5:00 PM</span></div></div>
+      </div>
+      <h1 class="s-title">Knowing what to do is easy. <em>Doing it</em> is the hard part.</h1>
+      <p class="s-text">That is what this app is for. You choose your workout time and your evening time. It reminds you <b>30 minutes before every workout</b> and again for your evening habit, every day for 31 days.</p>
+    </div></section>
+
+    <section class="slide" data-modes="setup tour"><div class="in">
+      <h1 class="s-title" style="margin-top:8px">How each day <em>works</em></h1>
+      <p class="s-text">Every day you get two tasks.</p>
+      <div class="mini" style="--c:var(--str)"><div class="ic" data-icon="dumbbell"></div><div class="t"><small>5:00 PM &middot; Workout</small><b>Lower body</b><span class="note" style="margin:0">Squats, lunges, bridges, wall sit</span></div></div>
+      <div class="mini" style="--c:#c56cff"><div class="ic" data-icon="breathe"></div><div class="t"><small>9:00 PM &middot; Evening habit</small><b>Unwind for 10 minutes</b><span class="note" style="margin:0">Plan tomorrow, breathe, rest</span></div></div>
+      <div class="steps3">
+        <div><b>1</b>Tap a task to see the warm-up, each exercise and the cool-down</div>
+        <div><b>2</b>Do it at your set time</div>
+        <div><b>3</b>Tap Mark done and build your streak</div>
+      </div>
+    </div></section>
+
+    <section class="slide" data-modes="setup tour"><div class="in">
+      <h1 class="s-title" style="margin-top:8px">Your training and <em>what it does</em></h1>
+      <div class="ttype"><div class="ic" style="--c:var(--str)" data-icon="dumbbell"></div><div><b>Strength and core</b><span>Upper body, lower body, full body and core. Builds muscle, protects your joints and improves posture.</span></div></div>
+      <div class="ttype"><div class="ic" style="--c:var(--car)" data-icon="pulse"></div><div><b>Cardio</b><span>Brisk walks, steady cardio and intervals. A stronger heart and lungs, more stamina and a better mood.</span></div></div>
+      <div class="ttype"><div class="ic" style="--c:var(--rec)" data-icon="leaf"></div><div><b>Mobility and recovery</b><span>Stretching and easy days. Looser hips and back, fewer aches, and time for muscles to rebuild.</span></div></div>
+      <div class="ttype"><div class="ic" style="--c:var(--hab)" data-icon="moon"></div><div><b>Evening habits</b><span>Sleep, water, fibre and stress. The daily habits that make the training work.</span></div></div>
+      <div class="weeks">
+        <div style="background:#1dd1a1">Week 1<small>Learn</small></div>
+        <div style="background:#ff9f1a">Week 2<small>Build</small></div>
+        <div style="background:#ff4757">Week 3<small>Push</small></div>
+        <div style="background:#c99a00">Week 4+<small>Prove it</small></div>
+      </div>
+      <div class="fixed"><b>Your plan is set for you.</b> It gets a little harder each week and works your whole body over the 31 days, so follow it in order rather than picking favourites.</div>
+    </div></section>
+
+    <section class="slide" data-modes="setup"><div class="in">
+      <h1 class="s-title" style="margin-top:8px">Make it <em>yours</em></h1>
+      <p class="s-text">Choose when you start and when you want to train. Pick times you can keep every day.</p>
+      <label for="fName">Your first name</label>
+      <input id="fName" autocomplete="given-name" placeholder="e.g. Tunde">
+      <label for="fStart">Day 1 date</label>
+      <input id="fStart" type="date">
+      <div class="two">
+        <div><label for="fWt">Workout time</label><input id="fWt" type="time" value="17:00"></div>
+        <div><label for="fEt">Evening habit time</label><input id="fEt" type="time" value="21:00"></div>
+      </div>
+      <p class="note" style="margin-top:12px">General fitness guidance only, not medical advice. If you have a health condition, are pregnant, or have been inactive for a long time, check with a doctor before starting.</p>
+    </div></section>
+
+    <section class="slide" data-modes="setup"><div class="in">
+      <h1 class="s-title" style="margin-top:8px">Never miss a <em>session</em></h1>
+      <p class="s-text">Turn on your reminders now. It takes less than a minute.</p>
+      <div class="rem">
+        <div class="h"><svg class="i" viewBox="0 0 24 24" style="color:#ff7a2f"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Calendar alerts <span class="pill ok">most reliable</span></div>
+        <p class="sub">Ring on time even when the app is closed.</p>
+        <a class="btn grad full" id="obGcalW" target="_blank" rel="noopener">Add workout reminders (Google Calendar)</a>
+        <a class="btn grad full" id="obGcalE" target="_blank" rel="noopener">Add evening reminders (Google Calendar)</a>
+        <button class="btn full" id="obIcs">Other calendar apps: add all 62 events</button>
+        <p class="note">In Google Calendar, tap Save on each screen that opens, then come back here.</p>
+      </div>
+      <div class="rem">
+        <div class="h"><svg class="i" viewBox="0 0 24 24" style="color:#9b5cff"><path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4l2-2zM10 20a2 2 0 0 0 4 0"/></svg>App notifications <span class="pill" id="obNotifState">off</span></div>
+        <p class="sub">A nudge 30 minutes before your workout and at your evening time.</p>
+        <button class="btn blue full" id="obNotif">Turn on app notifications</button>
+      </div>
+    </div></section>
+
+    <section class="slide" data-modes="setup"><div class="in">
+      <div class="art g1"><div class="bubble" style="width:160px;height:160px;left:-40px;bottom:-60px"></div><div class="logo-big" data-icon="trophy" style="font-size:0"></div></div>
+      <h1 class="s-title">You are <em>ready</em><span id="readyName"></span></h1>
+      <p class="s-text" id="readyText"></p>
+      <div class="rem" id="obInstall">
+        <div class="h"><svg class="i" viewBox="0 0 24 24" style="color:#1dd1a1"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg>Put it on your home screen</div>
+        <p class="sub" id="obInstallText"></p>
+        <button class="btn grad full hidden" id="obInstallBtn">Install 31-Day Reset</button>
+      </div>
+    </div></section>
+
+  </div></div>
+  <div class="ob-nav"><button class="btn" id="obBack">Back</button><button class="btn grad" id="obNext">Next</button></div>
+</div>
+
+<!-- ===================== MAIN APP ===================== -->
+<div class="wrap" id="app">
   <div class="hdr">
-    <div><h1>31-Day <span>Reset</span></h1>
-    <div class="by">by <b id="ownerName"></b></div></div>
-    <button class="help" id="helpBtn">? How it works</button>
+    <div class="logo">31</div>
+    <div class="brand"><b>31-Day Reset</b><small>by <span class="own"></span></small></div>
+    <button class="help" id="helpBtn">? Help</button>
   </div>
 
-  <div id="installCard" class="card hidden" style="margin-top:14px;border-color:var(--red)">
+  <div id="installCard" class="card hidden" style="margin-top:14px;border-color:#1dd1a1">
     <b>Install this app</b>
     <p class="sub" id="installText"></p>
-    <button class="btn red full hidden" id="installBtn">Install 31-Day Reset</button>
-  </div>
-
-  <!-- What the app does (first screen) -->
-  <div id="intro" class="card intro hidden" style="margin-top:16px">
-    <p class="lead"><b>Get fitter, sleep better and build healthy habits in 31 days.</b></p>
-    <p class="sub">A guided plan with two short tasks each day. The app tells you exactly what to do, reminds you, and tracks your progress.</p>
-    <div class="step"><div class="num">1</div><div><b>Two tasks a day</b><span>A workout (about 30 to 60 min, no gym needed) and a 10 minute evening habit such as water, sleep or fibre.</span></div></div>
-    <div class="step"><div class="num">2</div><div><b>Step-by-step instructions</b><span>Tap any task to see the exercises, sets, times and tips for that day.</span></div></div>
-    <div class="step"><div class="num">3</div><div><b>Tick it off</b><span>Tap "Mark done" and watch your progress bar and streak grow.</span></div></div>
-    <div class="step"><div class="num">4</div><div><b>See your results</b><span>Record weight, waist, pulse and fitness tests on Day 1, 15, 27 and 31 to see how far you have come.</span></div></div>
-    <div class="step"><div class="num">5</div><div><b>Get reminders</b><span>Daily alerts at the times you choose, so you never forget.</span></div></div>
-    <button class="btn red full" id="introGo" style="margin-top:16px">Get started</button>
-    <p class="note" style="text-align:center">Free. Your progress stays private on your phone.</p>
-  </div>
-
-  <!-- First-time setup -->
-  <div id="setup" class="card welcome hidden" style="margin-top:16px">
-    <h2>Set up your plan</h2>
-    <p class="sub">Choose when you start and when you want your two daily reminders. You can change these later in Settings.</p>
-    <label for="fName">Your first name</label>
-    <input id="fName" autocomplete="given-name" placeholder="e.g. Tunde">
-    <label for="fStart">Day 1 date</label>
-    <input id="fStart" type="date">
-    <div class="two">
-      <div><label for="fWt">Workout time</label><input id="fWt" type="time" value="17:00"></div>
-      <div><label for="fEt">Evening habit time</label><input id="fEt" type="time" value="21:00"></div>
-    </div>
-    <p class="note">General fitness guidance only, not medical advice. If you have a health condition, are pregnant, or have been inactive for a long time, check with a doctor before starting.</p>
-    <button class="btn red full" id="fGo">Start my 31 days</button>
+    <button class="btn grad full hidden" id="installBtn">Install 31-Day Reset</button>
   </div>
 
   <div id="main" class="hidden">
-    <p class="sub" id="hello"></p>
-    <div class="card gs hidden" id="gs">
-      <div style="display:flex;justify-content:space-between;align-items:center"><b>Getting started</b><button class="btn" id="gsHide" style="padding:4px 10px;font-size:12px">Hide</button></div>
-      <div id="gsList" style="margin-top:6px"></div>
-    </div>
-    <div class="bar"><i id="bar"></i></div>
-    <div class="stats">
-      <div class="stat"><b id="sTasks">0/62</b><small>tasks done</small></div>
-      <div class="stat"><b id="sDays">0</b><small>days complete</small></div>
-      <div class="stat"><b id="sStreak">0</b><small>day streak</small></div>
-      <div class="stat"><b id="sSleep">-</b><small>avg sleep</small></div>
+    <div class="hero">
+      <div class="hi" id="hello"></div>
+      <div class="big" id="heroDay"></div>
+      <div class="bar"><i id="bar"></i></div>
+      <div class="stats">
+        <div><b id="sTasks">0/62</b><small>tasks done</small></div>
+        <div><b id="sDays">0</b><small>days complete</small></div>
+        <div><b id="sStreak">0</b><small>day streak</small></div>
+        <div><b id="sSleep">-</b><small>avg sleep</small></div>
+      </div>
     </div>
 
-    <div class="dayhead"><div><div class="lbl" id="lbl"></div><div class="hint">Tap a task to see what to do, then tap Mark done.</div></div><div class="nav"><button id="prev" aria-label="Previous day">&#8249;</button><button id="todayBtn" aria-label="Today">&#9679;</button><button id="next" aria-label="Next day">&#8250;</button></div></div>
+    <div class="card gs hidden" id="gs">
+      <div style="display:flex;justify-content:space-between;align-items:center"><b>Getting started</b><button class="link" id="gsHide" style="font-size:12px">Hide</button></div>
+      <div id="gsList" style="margin-top:4px"></div>
+    </div>
+
+    <div class="dayhead"><div><div class="lbl" id="lbl"></div><div class="hint">Tap a task to see what to do, then Mark done.</div></div><div class="nav"><button id="prev" aria-label="Previous day">&#8249;</button><button id="todayBtn" aria-label="Today">&#9679;</button><button id="next" aria-label="Next day">&#8250;</button></div></div>
     <div id="tasks"></div>
 
-    <h2>All 31 days</h2>
+    <h2>Your 31 days</h2>
     <div class="grid" id="grid"></div>
-    <p class="note">Tap a day to open it. Green: both tasks done. Amber: one.</p>
+    <div class="legend">
+      <span class="chip" style="--c:var(--str)">Strength</span><span class="chip" style="--c:var(--car)">Cardio</span><span class="chip" style="--c:var(--rec)">Mobility and recovery</span><span class="chip" style="--c:var(--gold)">Final test</span>
+    </div>
+    <p class="note">Tap a day to open it. A solid tile means both tasks are done.</p>
 
     <h2 id="remindH">Reminders</h2>
     <div class="card">
-      <div><b>1. Calendar alerts</b> <span class="pill">most reliable</span></div>
-      <p class="sub">Adds a daily alert for your workout and your evening habit for all 31 days. Your phone will ring these on time even when the app is closed.</p>
-      <a class="btn red full" id="gcalW" target="_blank" rel="noopener">Add workout reminders to Google Calendar</a>
-      <a class="btn red full" id="gcalE" target="_blank" rel="noopener">Add evening reminders to Google Calendar</a>
-      <button class="btn full" id="icsBtn">Other calendar apps: download all 62 events (.ics)</button>
-      <p class="note">In Google Calendar, tap Save on each screen that opens. The .ics file includes the full instructions and alerts for every day.</p>
+      <div><b>Calendar alerts</b> <span class="pill ok">most reliable</span></div>
+      <p class="sub">A daily alert for your workout and evening habit for all 31 days. They ring on time even when the app is closed.</p>
+      <a class="btn grad full" id="gcalW" target="_blank" rel="noopener">Add workout reminders to Google Calendar</a>
+      <a class="btn grad full" id="gcalE" target="_blank" rel="noopener">Add evening reminders to Google Calendar</a>
+      <button class="btn full" id="icsBtn">Other calendar apps: add all 62 events</button>
+      <p class="note">In Google Calendar, tap Save on each screen that opens. Set the alert to 30 minutes before.</p>
     </div>
     <div class="card" style="margin-top:10px">
-      <div><b>2. App notifications</b> <span class="pill" id="notifState">off</span></div>
-      <p class="sub">The app nudges you about today's tasks. It works best when the app is installed on your home screen. Android decides when a closed app may check in, so use calendar alerts for exact times.</p>
-      <button class="btn red full" id="notifBtn">Turn on app notifications</button>
+      <div><b>App notifications</b> <span class="pill" id="notifState">off</span></div>
+      <p class="sub">A nudge 30 minutes before your workout and at your evening time. Works best when the app is installed. Your phone decides when a closed app may check in, so use calendar alerts for exact times.</p>
+      <button class="btn blue full" id="notifBtn">Turn on app notifications</button>
       <button class="btn full" id="notifTest">Send a test notification</button>
     </div>
 
     <h2 id="measH">Measurements</h2>
-    <p class="sub" style="margin-top:-4px;margin-bottom:8px">Fill in each column on that day to see your progress. Day 27 is the stamina test.</p>
+    <p class="sub" style="margin:-4px 0 8px">Fill in each column on that day to see your progress. Day 27 is the stamina test.</p>
     <div class="card scroll"><table id="meas"></table></div>
     <p class="note">Same time each check, ideally in the morning before eating. Resting pulse: count 60 seconds while seated.</p>
 
-    <h2 id="rateH">Ratings (1 to 5)</h2>
-    <p class="sub" style="margin-top:-4px;margin-bottom:8px">How you feel on Day 1, halfway (Day 14) and at the end.</p>
+    <h2 id="rateH">How you feel (1 to 5)</h2>
+    <p class="sub" style="margin:-4px 0 8px">On Day 1, halfway (Day 14) and at the end.</p>
     <div class="card scroll"><table id="rate"></table></div>
 
     <h2 id="reflH">Day 30 reflection</h2>
     <textarea id="refl" placeholder="3 wins, 1 challenge, 3 habits to keep going..."></textarea>
 
     <h2>Daily basics</h2>
-    <div class="card"><ul>
+    <div class="card"><ul class="basics">
       <li>Drink 2 to 3 litres of water</li>
       <li>Eat whole, high-fibre foods</li>
       <li>Sleep 7 to 9 hours</li>
@@ -217,44 +365,47 @@
         <div><label for="sWt">Workout time</label><input id="sWt" type="time"></div>
         <div><label for="sEt">Evening habit time</label><input id="sEt" type="time"></div>
       </div>
-      <button class="btn red full" id="sSave">Save settings</button>
+      <button class="btn grad full" id="sSave">Save settings</button>
       <p class="note">If you change times, add the calendar reminders again and delete the old ones.</p>
     </div>
 
     <h2>Backup</h2>
     <div class="btns">
-      <button class="btn red" id="exp">Save backup file</button>
+      <button class="btn grad" id="exp">Save backup file</button>
       <button class="btn" id="impBtn">Restore from backup</button>
       <button class="btn" id="resetBtn">Start over</button>
       <input type="file" id="imp" accept=".json,application/json" hidden>
     </div>
     <div class="card hidden" id="resetConfirm" style="margin-top:10px">
       <p class="sub" style="margin-top:0">This clears all your ticks, measurements and settings on this phone. Save a backup first if you may want them.</p>
-      <div class="btns" style="margin-top:8px"><button class="btn red" id="resetYes">Yes, clear everything</button><button class="btn" id="resetNo">Cancel</button></div>
+      <div class="btns" style="margin-top:8px"><button class="btn grad" id="resetYes">Yes, clear everything</button><button class="btn" id="resetNo">Cancel</button></div>
     </div>
     <p class="note">Your progress is stored privately on your own phone. Nobody else, including the app's author, can see it.</p>
   </div>
 
   <h2>About this app</h2>
   <div class="card owner">
-    <div class="nm" id="aboutName"></div>
+    <div class="nm own"></div>
     <div class="ti" id="aboutTitle"></div>
     <div class="ti" id="aboutContact"></div>
-    <p class="note" style="text-align:left;margin-top:12px">31-Day Reset was designed and built by <span class="own"></span>: a structured month of strength, cardio, mobility and daily wellness habits, with exact instructions for every session and simple progress checks on Day 1, 15, 27 and 31.</p>
+    <p class="note" style="text-align:left;margin-top:12px">31-Day Reset was designed and built by <span class="own"></span>: a structured month of strength, cardio, mobility and daily wellness habits that gets harder week by week, with exact instructions for every session, daily reminders and simple progress checks on Day 1, 15, 27 and 31.</p>
     <p class="note" style="text-align:left">The daily task schedule is adapted from the 31-Day Total Reset Challenge graphic by Coach Josh. All session instructions, progressions and the app itself are original work.</p>
     <p class="note" style="text-align:left">General fitness and wellness guidance only. It is not medical advice. Stop exercising and seek help if you feel chest pain, dizziness or unusual breathlessness.</p>
   </div>
-  <div class="foot">&copy; 2026 <span class="own"></span>. All rights reserved.<br>No part of this app may be copied, modified or redistributed without written permission.<br>Version 2.3</div>
+  <div class="foot">&copy; 2026 <span class="own"></span>. All rights reserved.<br>No part of this app may be copied, modified or redistributed without written permission.<br>Version 3.0</div>
 </div>
+
 <div class="modal hidden" id="help"><div class="card">
-  <div style="display:flex;justify-content:space-between;align-items:center"><b style="font-size:17px">How to use 31-Day Reset</b><button class="btn" id="helpClose" style="padding:4px 12px">Close</button></div>
-  <h3>Your daily routine</h3><p>Every day has two tasks: a workout and an evening habit, at the times you chose. Open the app, tap a task to read exactly what to do, then tap <b>Mark done</b>.</p>
-  <h3>Moving between days</h3><p>Use the arrows to go back or ahead, or tap any number in the 31-day grid. Green means both tasks are done, amber means one. The dot button takes you back to today.</p>
-  <h3>Sleep</h3><p>Each morning, enter how many hours you slept. The app shows your average.</p>
-  <h3>Check-in days</h3><p>On Day 1, 14, 15, 27, 30 and 31 a red note tells you what to record and takes you straight to the right box.</p>
+  <div style="display:flex;justify-content:space-between;align-items:center"><b style="font-size:17px">How to use 31-Day Reset</b><button class="btn" id="helpClose" style="padding:6px 12px">Close</button></div>
+  <button class="btn grad full" id="tourBtn" style="margin-top:12px">Replay the welcome tour</button>
+  <h3>Your daily routine</h3><p>Every day has two tasks: a workout and an evening habit, at the times you chose. Tap a task to read exactly what to do, then tap <b>Mark done</b>.</p>
+  <h3>Colours</h3><p>Red is strength, orange is cardio, green is mobility and recovery, gold is your final test. Evening habits have their own colours: sleep, water, food and stress.</p>
+  <h3>Moving between days</h3><p>Use the arrows or tap any day in the grid. The dot button takes you back to today.</p>
+  <h3>Check-in days</h3><p>On Day 1, 14, 15, 27, 30 and 31 a gold note tells you what to record and takes you straight there.</p>
   <h3>Reminders</h3><p>Calendar alerts are the most reliable: they ring at your set times even when the app is closed. App notifications are an extra nudge.</p>
-  <h3>Missed a day?</h3><p>No problem. Carry on with the next day. Never miss two in a row.</p>
-  <h3>Your data</h3><p>Everything stays on your own phone. Use <b>Save backup file</b> now and then so you never lose it.</p>
+  <h3>Why can't I change the exercises?</h3><p>The plan gets a little harder each week and covers your whole body over 31 days. Following it in order is what gets results.</p>
+  <h3>Missed a day?</h3><p>Carry on with the next day. Never miss two in a row.</p>
+  <h3>Your data</h3><p>Everything stays on your own phone. Use <b>Save backup file</b> now and then.</p>
   <h3>Safety</h3><p>Stop if you feel chest pain, dizziness or unusual breathlessness. Check with a doctor first if you have a health condition.</p>
 </div></div>
 <div class="upd hidden" id="upd" role="status"><span>A new version of the app is ready.</span><button id="updBtn">Refresh now</button><button class="x" id="updX" aria-label="Dismiss">&#10005;</button></div>
@@ -271,131 +422,179 @@ var OWNER = {
 var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, arm and hip circles, 10 slow squats.\n\nMain: 20 min brisk walk or easy jog at effort 5 to 6 out of 10 (you can still talk in short sentences).\n\nCool-down (5 min): easy walk, then stretch calves, thighs, hips and chest for 20 to 30 seconds each.\n\nSafety: stop and rest if you feel chest pain, dizziness or unusual breathlessness. Drink water before and after, and train in the shade if it is hot."}, {"t": "Hydrate check + baseline", "d": "1. Did you drink 2 to 3 litres of water today? If not, have a glass now and fill a bottle for tomorrow morning.\n2. Record your baseline on the tracker: body weight, waist (at the navel), resting pulse (count for 60 seconds while seated), and max push-ups in one go (knees or incline allowed, just note which).\n3. Phone away 30 minutes before bed. Aim for 7 to 9 hours of sleep.\n\nTick Day 1 on the tracker."}], [{"t": "Strength (intro)", "d": "Warm-up (5 min): march on the spot, arm and hip circles, 10 slow squats.\n\nMain: 2 rounds, 10 reps each, 60 seconds rest between rounds.\n- Bodyweight squats\n- Push-ups (on a table edge if needed)\n- Glute bridges\n- Bent-over rows with a loaded backpack or filled water bottles\n- Plank 20 seconds\nGoal today is good form. Finish each set with 2 to 3 reps still in the tank.\n\nCool-down (5 min): easy walk, then stretch calves, thighs, hips and chest.\n\nSafety: stop if you feel chest pain, dizziness or unusual breathlessness. Drink water before and after."}, {"t": "Sleep routine", "d": "Sleep focus:\n- Screens off by 10 PM, lights dimmed.\n- Keep the room cool and dark (fan on, curtains drawn).\n- Set the same wake-up time for every day of the challenge.\n- No coffee, tea or energy drinks after 2 PM tomorrow.\nTarget: 7 to 9 hours.\n\nTick Day 2 on the tracker."}], [{"t": "Brisk walk (30 min)", "d": "Main: 30 min brisk walk at effort 4 to 5 out of 10. Swing your arms and keep a pace where talking is easy but you are clearly working.\n\nBonus: a 10 minute stroll after dinner helps digestion.\n\nStretch calves and hips for 5 minutes afterwards. Take water with you."}, {"t": "Fibre check", "d": "Fibre focus (target roughly 25 to 30 g a day):\nCount how many fibre portions you had today. Easy local sources: beans (ewa), moi moi, akara, oats, unripe plantain, garden egg, ugu or efo, okra, oranges, pawpaw, guava, groundnuts.\nPlan one extra fibre portion for tomorrow. Increase fibre gradually and drink water with it, or it can cause bloating.\n\nTick Day 3 on the tracker."}], [{"t": "Lower body", "d": "Warm-up (5 min): march on the spot, leg swings, hip circles, 10 slow squats.\n\nMain: 3 rounds, 60 to 90 seconds rest between rounds.\n- 12 squats\n- 10 reverse lunges each leg\n- 15 glute bridges\n- 30 second wall sit\n- 15 calf raises\n\nCool-down (5 min): stretch thighs, hamstrings, hips and calves.\n\nSafety: stop if you feel chest pain, dizziness or unusual breathlessness. Drink water before and after."}, {"t": "Unwind (10 min)", "d": "Unwind for 10 minutes:\n1. Write tomorrow's top 3 tasks so they leave your head.\n2. Phone in another room.\n3. 4-7-8 breathing: breathe in for 4, hold for 7, breathe out slowly for 8. Repeat 4 times.\n4. Light stretch or quiet reading until bed.\n\nTick Day 4 on the tracker."}], [{"t": "Cardio (20-25 min)", "d": "Warm-up (5 min): march on the spot, arm and hip circles, easy walk.\n\nMain: 20 to 25 min brisk walk, jog or cycle at effort 6 out of 10. Add 3 pick-ups of 1 minute at a slightly faster pace, with 2 minutes easy between them.\n\nCool-down (5 min): easy walk and stretch.\n\nSafety: stop if you feel chest pain, dizziness or unusual breathlessness. Drink water before and after."}, {"t": "Hydrate check", "d": "Hydration check:\n- Did you reach 2 to 3 litres today? Pale yellow urine is a simple sign you are on track.\n- Trick for tomorrow: one glass on waking, one with each meal, one bottle finished before your workout.\n- Swap one soft drink or sweetened juice for water or zobo without added sugar.\n\nTick Day 5 on the tracker."}], [{"t": "Full body circuit", "d": "Warm-up (5 min): march on the spot, arm and hip circles, 10 slow squats.\n\nMain circuit: 3 rounds, 40 seconds work and 20 seconds rest per exercise, 2 minutes rest between rounds.\n- Squats\n- Push-ups\n- Backpack rows\n- Alternating lunges\n- Plank\n- Glute bridges\n\nCool-down (5 min): easy walk and full-body stretch.\n\nSafety: stop if you feel chest pain, dizziness or unusual breathlessness. Drink water before and after."}, {"t": "Sleep routine", "d": "Sleep focus: protect your routine, even on weekends.\n- Keep tomorrow's wake-up time within an hour of your weekday time.\n- Screens off 30 minutes before bed.\n- Light dinner, finished 2 to 3 hours before sleep.\nTarget: 7 to 9 hours.\n\nTick Day 6 on the tracker."}], [{"t": "Mobility (25 min)", "d": "Move slowly and breathe through each position:\n- Cat-cow x 10\n- World's greatest stretch x 5 each side\n- Kneeling hip flexor stretch 45 seconds each side\n- Thoracic rotations x 10 each side\n- Standing hamstring stretch 45 seconds each side\n- Deep squat hold 3 x 30 seconds (hold a door frame if needed)\n- Child's pose 1 minute"}, {"t": "Plan and prep meals", "d": "Meal prep for the week ahead:\n1. Write the next 5 days of lunches and dinners on paper.\n2. Make a shopping list built around whole foods: beans, lentils, eggs, fish, chicken, vegetables, fruit, oats, unripe plantain, brown rice or ofada.\n3. Tomorrow, batch-cook one pot of beans or stew, boil eggs, wash and cut vegetables, and portion fruit.\nPrepared food is the easiest way to avoid snacks and fast food on busy days.\n\nTick Day 7 on the tracker."}], [{"t": "Upper body", "d": "Warm-up (5 min): arm circles, shoulder rolls, 10 wall push-ups, 10 slow squats.\n\nMain: 3 sets of 8 to 12 reps, 60 to 90 seconds rest.\n- Push-ups\n- Backpack or water-bottle rows\n- Pike push-ups or water-bottle shoulder press\n- Chair triceps dips\n- Superman hold 20 seconds\n\nCool-down (5 min): stretch chest, shoulders and upper back.\n\nSafety: stop if you feel chest pain, dizziness or unusual breathlessness. Drink water before and after."}, {"t": "Hydrate check", "d": "Hydration check:\n- 2 to 3 litres today? Training days in the heat need more, so add an extra glass for every 30 minutes of exercise.\n- Fill your bottle now and keep it by the bed for the morning.\n- Phone away 30 minutes before bed for 7 to 9 hours of sleep.\n\nTick Day 8 on the tracker."}], [{"t": "Zone 2 cardio (30-35 min)", "d": "Warm-up (5 min): easy walk, arm and hip circles.\n\nMain: 30 to 35 min of steady, easy cardio (brisk walk, gentle jog or cycle). Use the talk test: you should be able to speak in full sentences the whole time. If you can't, slow down. This easy pace builds your aerobic base.\n\nCool-down (5 min): easy walk and stretch.\n\nSafety: stop if you feel chest pain, dizziness or unusual breathlessness. Drink water before and after."}, {"t": "Fibre check", "d": "Fibre check:\n- Did at least two of today's meals include beans, vegetables, whole grains or fruit?\n- Tomorrow's easy upgrade: add a handful of ugu or efo to your stew, choose oats or beans for breakfast, or snack on an orange or guava instead of biscuits.\n- Drink a glass of water with each fibre-rich meal.\n\nTick Day 9 on the tracker."}], [{"t": "Lower body + core", "d": "Warm-up (5 min): march on the spot, leg swings, hip circles, 10 slow squats.\n\nLower body: 3 rounds, 60 to 90 seconds rest.\n- 15 squats\n- 12 reverse lunges each leg\n- 15 glute bridges\n- 40 second wall sit\n- 15 calf raises\n\nCore: 2 rounds.\n- Plank 30 seconds\n- Dead bug 10 each side\n- Side plank 20 seconds each side\n- Bird dog 8 each side\n\nCool-down (5 min): stretch legs, hips and lower back.\n\nSafety: stop if you feel chest pain, dizziness or unusual breathlessness. Drink water before and after."}, {"t": "Evening check-in", "d": "Daily basics check:\n- 2 to 3 litres of water?\n- Mostly whole, high-fibre foods today?\n- Stress handled? If not, take 5 slow breaths now.\n- Phone away 30 minutes before bed, 7 to 9 hours of sleep.\n\nTick Day 10 on the tracker."}], [{"t": "Brisk walk (30-40 min)", "d": "Main: 30 to 40 min brisk walk at effort 4 to 5 out of 10. Try a new route to keep it interesting.\n\nStretch calves and hips for 5 minutes afterwards. Take water with you."}, {"t": "Breathe (10 min)", "d": "Breathing practice (5 to 10 min), seated or lying down:\nBox breathing: breathe in through the nose for 4, hold for 4, breathe out for 4, hold for 4. Repeat for 5 minutes.\nThen breathe slowly through the nose for another few minutes, about 6 breaths a minute.\nRate your stress from 1 to 10 before and after and note it on the tracker.\n\nTick Day 11 on the tracker."}], [{"t": "Full body circuit", "d": "Warm-up (5 min): march on the spot, arm and hip circles, 10 slow squats.\n\nMain circuit: 3 rounds, 45 seconds work and 15 seconds rest per exercise, 2 minutes rest between rounds.\n- Squats\n- Push-ups\n- Backpack rows\n- Alternating lunges\n- Mountain climbers\n- Plank\n- Glute bridges\n\nCool-down (5 min): easy walk and full-body stretch.\n\nSafety: stop if you feel chest pain, dizziness or unusual breathlessness. Drink water before and after."}, {"t": "Sleep routine", "d": "Sleep focus:\n- How many hours did you sleep last night? Note it on the tracker.\n- If under 7, move bedtime 20 minutes earlier tonight.\n- Screens off, room dark and cool, same wake time tomorrow.\n\nTick Day 12 on the tracker."}], [{"t": "Cardio (25 min)", "d": "Warm-up (5 min): easy walk, arm and hip circles.\n\nMain: 25 min brisk walk, jog or cycle at effort 6 out of 10 (talking in short sentences only).\n\nCool-down (5 min): easy walk and stretch.\n\nSafety: stop if you feel chest pain, dizziness or unusual breathlessness. Drink water before and after."}, {"t": "Fibre check", "d": "Fibre check:\n- Aim for at least 5 portions of vegetables and fruit today. How close did you get?\n- Shopping tip: buy garden egg, carrots, cucumber, oranges and pawpaw as ready snacks.\n- Water with every fibre-rich meal.\n\nTick Day 13 on the tracker."}], [{"t": "Recover (easy walk + mobility)", "d": "Recovery day, no hard training.\n- 15 min easy walk.\n- Then the Day 7 mobility routine: cat-cow x 10, world's greatest stretch x 5 each side, hip flexor stretch 45 seconds each side, thoracic rotations x 10 each side, hamstring stretch 45 seconds each side, deep squat hold 3 x 30 seconds, child's pose 1 minute."}, {"t": "Halfway review", "d": "Halfway review (fill in on the tracker):\n- Days completed so far, out of 14.\n- Rate from 1 to 5: energy, sleep quality, bloating, stress.\n- What got in the way on missed days?\n- Pick ONE thing to fix for Week 3 (for example, a fixed bedtime, or packing water for work).\nAlso do your meal plan and shopping list for the week.\n\nTick Day 14 on the tracker."}], [{"t": "Full body + push-up retest", "d": "Warm-up (5 min): march on the spot, arm and hip circles, 10 slow squats.\n\nRetest first: max push-ups in one go, using the same style as Day 1. Log it on the tracker. Rest 3 minutes.\n\nMain circuit: 3 rounds, 45 seconds work and 15 seconds rest, 2 minutes between rounds.\n- Squats, push-ups, backpack rows, alternating lunges, mountain climbers, plank, glute bridges\n\nCool-down (5 min): easy walk and full-body stretch.\n\nSafety: stop if you feel chest pain, dizziness or unusual breathlessness. Drink water before and after."}, {"t": "Progress log", "d": "Progress check (log on the tracker, compare with Day 1):\n- Body weight\n- Waist at the navel\n- Resting pulse (60 seconds, seated)\n- Push-up result from today\nProgress is more than the scale. Also note energy, sleep and how your clothes fit.\n\nTick Day 15 on the tracker."}], [{"t": "Cardio + core", "d": "Warm-up (5 min): easy walk, arm and hip circles.\n\nCardio: 25 min brisk walk, jog or cycle at effort 6 out of 10.\n\nCore: 3 rounds.\n- Plank 40 seconds\n- Dead bug 10 each side\n- Side plank 30 seconds each side\n- Bird dog 10 each side\n\nCool-down (5 min): stretch hips and lower back.\n\nSafety: stop if you feel chest pain, dizziness or unusual breathlessness. Drink water before and after."}, {"t": "Evening check-in", "d": "Daily basics check:\n- 2 to 3 litres of water?\n- Mostly whole, high-fibre foods today?\n- Stress handled? If not, take 5 slow breaths now.\n- Phone away 30 minutes before bed, 7 to 9 hours of sleep.\n\nTick Day 16 on the tracker."}], [{"t": "Lower body + walk", "d": "Warm-up (5 min): march on the spot, leg swings, hip circles, 10 slow squats.\n\nLower body: 4 rounds, 60 to 90 seconds rest.\n- 15 squats\n- 12 reverse lunges each leg\n- 20 glute bridges (or 10 single-leg each side)\n- 45 second wall sit\n- 20 calf raises\n\nThen: 15 min easy walk to cool down.\n\nStretch legs and hips afterwards.\n\nSafety: stop if you feel chest pain, dizziness or unusual breathlessness. Drink water before and after."}, {"t": "Evening check-in", "d": "Daily basics check:\n- 2 to 3 litres of water?\n- Mostly whole, high-fibre foods today?\n- Stress handled? If not, take 5 slow breaths now.\n- Phone away 30 minutes before bed, 7 to 9 hours of sleep.\n\nTick Day 17 on the tracker."}], [{"t": "Mobility (25 min)", "d": "Day 7 mobility routine, holding each stretch a little longer:\n- Cat-cow x 12\n- World's greatest stretch x 6 each side\n- Kneeling hip flexor stretch 60 seconds each side\n- Thoracic rotations x 10 each side\n- Standing hamstring stretch 60 seconds each side\n- Deep squat hold 3 x 40 seconds\n- Child's pose 1 minute"}, {"t": "Sleep routine", "d": "Sleep focus:\n- Note last night's hours on the tracker.\n- Tonight, try a fixed \"lights out\" time and keep it for the rest of the challenge.\n- If your mind is busy, write it down before bed rather than scrolling.\nTarget: 7 to 9 hours.\n\nTick Day 18 on the tracker."}], [{"t": "Upper body", "d": "Warm-up (5 min): arm circles, shoulder rolls, 10 wall push-ups, 10 slow squats.\n\nMain: 4 sets of 8 to 12 reps, 60 to 90 seconds rest. Lower slowly on every rep (count 3 seconds down).\n- Push-ups\n- Backpack or water-bottle rows\n- Pike push-ups or water-bottle shoulder press\n- Chair triceps dips\n- Superman hold 25 seconds\n\nCool-down (5 min): stretch chest, shoulders and upper back.\n\nSafety: stop if you feel chest pain, dizziness or unusual breathlessness. Drink water before and after."}, {"t": "Unwind (10 min)", "d": "Unwind for 10 minutes:\n1. Write 3 things that went well today.\n2. Write tomorrow's top 3 tasks.\n3. Phone in another room.\n4. 4-7-8 breathing x 4 rounds, then a light stretch.\n\nTick Day 19 on the tracker."}], [{"t": "Intervals", "d": "Warm-up (5 min): easy walk building to a light jog.\n\nIntervals: 8 rounds of\n- 30 seconds fast (effort 8 out of 10): fast run, skipping, or stair climbs\n- 90 seconds easy walk\nNew to intervals? Do 6 rounds.\n\nCool-down (5 min): easy walk and stretch.\n\nSafety: this is the hardest cardio day. Stop if you feel chest pain, dizziness or unusual breathlessness. Drink water before and after."}, {"t": "Hydrate check", "d": "Hydration check after a hard session:\n- 2 to 3 litres today, plus extra for the sweat you lost.\n- Water-rich foods help too: watermelon, cucumber, oranges.\n- Fill your bottle for tomorrow morning.\n\nTick Day 20 on the tracker."}], [{"t": "Active recovery", "d": "Active recovery, keep it easy (effort 3 to 4 out of 10):\n- 30 min easy walk or relaxed cycle\n- 10 min of the Day 7 mobility routine (cat-cow, hip flexor stretch, hamstring stretch, deep squat hold, child's pose)"}, {"t": "Fibre check + meal plan", "d": "Fibre check and weekly planning:\n- How many days this week did you hit 5 portions of vegetables and fruit?\n- Plan next week's meals and shopping list, built around beans, lentils, vegetables, fruit and whole grains.\n- Batch-cook tomorrow if you can.\n\nTick Day 21 on the tracker."}], [{"t": "Full body circuit (4 rounds)", "d": "Warm-up (5 min): march on the spot, arm and hip circles, 10 slow squats.\n\nMain circuit: 4 rounds, 45 seconds work and 15 seconds rest, 2 minutes between rounds.\n- Squats\n- Push-ups\n- Backpack rows\n- Alternating lunges\n- Mountain climbers\n- Plank\n\nCool-down (5 min): easy walk and full-body stretch.\n\nSafety: stop if you feel chest pain, dizziness or unusual breathlessness. Drink water before and after."}, {"t": "Whole foods check", "d": "Whole foods check:\n- Count today's meals that were mostly whole foods (beans, yam, rice with vegetables, fish, eggs, fruit) versus processed ones (pastries, instant noodles, soft drinks, fried snacks).\n- Pick one processed item to swap tomorrow, for example a meat pie for boiled eggs and fruit, or a soft drink for water.\n\nTick Day 22 on the tracker."}], [{"t": "Cardio (30 min)", "d": "Warm-up (5 min): easy walk, arm and hip circles.\n\nMain: 30 min brisk walk, jog or cycle at effort 6 out of 10.\n\nCool-down (5 min): easy walk and stretch.\n\nSafety: stop if you feel chest pain, dizziness or unusual breathlessness. Drink water before and after."}, {"t": "Sleep routine", "d": "Sleep focus:\n- Compare your sleep hours this week with Week 1 on the tracker.\n- Keep the same lights-out and wake-up times.\n- Screens off 30 minutes before bed.\nTarget: 7 to 9 hours.\n\nTick Day 23 on the tracker."}], [{"t": "Lower body + core", "d": "Warm-up (5 min): march on the spot, leg swings, hip circles, 10 slow squats.\n\nLower body: 4 rounds, 60 to 90 seconds rest.\n- 15 squats (try jump squats if your knees are happy)\n- 12 reverse lunges each leg\n- 10 single-leg glute bridges each side\n- 60 second wall sit\n- 20 calf raises\n\nCore: 3 rounds.\n- Plank 45 seconds\n- Dead bug 12 each side\n- Side plank 30 seconds each side\n- Bird dog 10 each side\n\nCool-down (5 min): stretch legs, hips and lower back.\n\nSafety: stop if you feel chest pain, dizziness or unusual breathlessness. Drink water before and after."}, {"t": "Evening check-in", "d": "Daily basics check:\n- 2 to 3 litres of water?\n- Mostly whole, high-fibre foods today?\n- Stress handled? If not, take 5 slow breaths now.\n- Phone away 30 minutes before bed, 7 to 9 hours of sleep.\n\nTick Day 24 on the tracker."}], [{"t": "Walk (40 min)", "d": "Main: 40 min walk at a comfortable brisk pace, effort 4 to 5 out of 10.\n\nStretch calves and hips for 5 minutes afterwards. Take water with you."}, {"t": "Digest (gut check)", "d": "Digestion focus:\n- Was your last big meal finished 2 to 3 hours before bed?\n- Did you eat slowly and stop when comfortably full?\n- A 10 minute stroll after dinner helps digestion and blood sugar.\n- Note any foods during the challenge that left you bloated, and eat less of them.\n\nTick Day 25 on the tracker."}], [{"t": "Upper body", "d": "Warm-up (5 min): arm circles, shoulder rolls, 10 wall push-ups, 10 slow squats.\n\nMain: 4 sets, 60 to 90 seconds rest. Add 2 reps to what you did on Day 19, or use a harder version.\n- Push-ups (or feet raised on a step)\n- Backpack or water-bottle rows (add weight to the bag)\n- Pike push-ups or shoulder press\n- Chair triceps dips\n- Superman hold 30 seconds\n\nCool-down (5 min): stretch chest, shoulders and upper back.\n\nSafety: stop if you feel chest pain, dizziness or unusual breathlessness. Drink water before and after."}, {"t": "Hydrate check", "d": "Hydration check:\n- 2 to 3 litres today?\n- Has drinking water become automatic yet? If not, link it to something you already do (a glass before every meal or meeting).\n- Fill your bottle for tomorrow.\n\nTick Day 26 on the tracker."}], [{"t": "Cardio stamina test", "d": "Warm-up (5 min): easy walk building to a light jog.\n\nStamina test: jog or brisk walk without stopping for as long as you can, up to 30 minutes, at a steady effort of 6 to 7 out of 10. Log the minutes (and distance if you track it) on the tracker.\n\nCool-down (5 min): easy walk and stretch.\n\nSafety: steady, not all-out. Stop if you feel chest pain, dizziness or unusual breathlessness. Drink water before and after."}, {"t": "Evening check-in", "d": "Daily basics check:\n- Stamina test result logged?\n- 2 to 3 litres of water?\n- Mostly whole, high-fibre foods today?\n- Phone away 30 minutes before bed, 7 to 9 hours of sleep.\n\nTick Day 27 on the tracker."}], [{"t": "Recover (easy walk + mobility)", "d": "Recovery day, no hard training.\n- 15 to 20 min easy walk.\n- Then the Day 7 mobility routine: cat-cow x 10, world's greatest stretch x 5 each side, hip flexor stretch 45 seconds each side, thoracic rotations x 10 each side, hamstring stretch 45 seconds each side, deep squat hold 3 x 30 seconds, child's pose 1 minute."}, {"t": "Sleep routine", "d": "Sleep focus:\n- Keep lights-out tonight within an hour of your usual time.\n- Aim for a full 8 hours to recover before the final push.\n- Plan next week's meals while winding down.\n\nTick Day 28 on the tracker."}], [{"t": "Full body + finisher", "d": "Warm-up (5 min): march on the spot, arm and hip circles, 10 slow squats.\n\nMain circuit: 4 rounds, 45 seconds work and 15 seconds rest, 2 minutes between rounds.\n- Squats, push-ups, backpack rows, alternating lunges, mountain climbers, plank\n\nFinisher: 5 minutes, as many rounds as possible of\n- 5 burpees (or squat thrusts without the jump)\n- 10 squats\n- 15 mountain climbers each side\nLog your rounds on the tracker.\n\nCool-down (5 min): easy walk and full-body stretch.\n\nSafety: stop if you feel chest pain, dizziness or unusual breathlessness. Drink water before and after."}, {"t": "Evening check-in", "d": "Daily basics check:\n- Finisher rounds logged?\n- 2 to 3 litres of water?\n- Mostly whole, high-fibre foods today?\n- Phone away 30 minutes before bed, 7 to 9 hours of sleep.\n\nTick Day 29 on the tracker."}], [{"t": "Cardio (30 min)", "d": "Warm-up (5 min): easy walk, arm and hip circles.\n\nMain: 30 min brisk walk, jog or cycle at effort 6 to 7 out of 10. Notice how much easier this feels than Day 1.\n\nCool-down (5 min): easy walk and stretch.\n\nSafety: stop if you feel chest pain, dizziness or unusual breathlessness. Drink water before and after."}, {"t": "Reflect", "d": "Reflection (write it on the tracker):\n- 3 wins from during the challenge.\n- 1 thing that was hard, and why.\n- Which 3 habits will you keep going next month?\n- What would you like your next 4 weeks of training to focus on?\n\nTick Day 30 on the tracker."}], [{"t": "Move + final retest", "d": "Warm-up (5 min): march on the spot, arm and hip circles, 10 slow squats.\n\nFinal retest (log on the tracker):\n- Max push-ups in one go (same style as Day 1)\n- Longest plank hold\nRest 3 minutes.\n\nThen 20 minutes of any movement you enjoy: football, dancing, cycling, a long walk.\n\nCool-down (5 min): easy walk and stretch."}, {"t": "Final results + celebrate", "d": "Final results (log on the tracker and compare with Day 1 and Day 15):\n- Body weight\n- Waist at the navel\n- Resting pulse (60 seconds, seated)\n- Push-ups, plank, stamina test\n\nCelebrate with something that is not food: new training kit, a day out, or a match with friends. You finished.\n\nTick Day 31 on the tracker."}]];
 (function(){
   var KEY='reset31-v2';
-  var MEAS=[["w","Weight (kg)"],["waist","Waist (cm)"],["pulse","Resting pulse"],["push","Max push-ups"],["plank","Plank (s)"],["stam","Stamina (min)"]];
-  var MCOLS=[["d1","Day 1"],["d15","Day 15"],["d27","Day 27"],["d31","Day 31"]];
-  var RATES=[["energy","Energy"],["sleep","Sleep quality"],["bloat","Bloating (5 = none)"],["stress","Stress (5 = calm)"]];
-  var RCOLS=[["d1","Day 1"],["d14","Day 14"],["d31","Day 31"]];
   function $(id){ return document.getElementById(id); }
+  function each(sel,fn){ Array.prototype.forEach.call(document.querySelectorAll(sel),fn); }
   function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
-  function toast(m){ var t=$('toast'); t.textContent=m; t.classList.add('show'); clearTimeout(toast._t); toast._t=setTimeout(function(){t.classList.remove('show');},2000); }
+  function toast(m){ var t=$('toast'); t.textContent=m; t.classList.add('show'); clearTimeout(toast._t); toast._t=setTimeout(function(){t.classList.remove('show');},2200); }
   function pad(n){ return (n<10?'0':'')+n; }
   function ymd(d){ return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); }
   function fmt12(t){ var p=t.split(':'),h=+p[0],m=p[1]; return ((h%12)||12)+':'+m+(h<12?' AM':' PM'); }
+  function addMin(t,m){ var p=t.split(':'),x=(+p[0])*60+(+p[1])+m; x=((x%1440)+1440)%1440; return pad(Math.floor(x/60))+':'+pad(x%60); }
 
-  // Device detection
+  // ---- icons and colours
+  var IC={
+    dumbbell:'<path d="M6 7v10M18 7v10M3 10v4M21 10v4M6 12h12"/>',
+    pulse:'<path d="M3 12h4l2-5 4 10 2-5h6"/>',
+    leaf:'<path d="M5 19c0-8 6-14 14-14 0 8-6 14-14 14zM5 19l7-7"/>',
+    moon:'<path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/>',
+    drop:'<path d="M12 3s6 7 6 11a6 6 0 0 1-12 0c0-4 6-11 6-11z"/>',
+    apple:'<path d="M12 7c-2-2-7-1.5-7 4 0 4 3 9 5 9 1 0 1.3-.5 2-.5s1 .5 2 .5c2 0 5-5 5-9 0-5.5-5-6-7-4zM12 7c0-2 1-4 3-4"/>',
+    breathe:'<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/>',
+    check:'<path d="M5 12l4 4 10-10"/>',
+    clip:'<path d="M9 4h6v3H9zM7 5H5v16h14V5h-2M8 13l2 2 4-4"/>',
+    trophy:'<path d="M8 4h8v5a4 4 0 0 1-8 0V4zM8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4M12 13v4M8 20h8"/>'
+  };
+  function icon(n,size){ return '<svg class="i" viewBox="0 0 24 24"'+(size?' style="width:'+size+'px;height:'+size+'px"':'')+'>'+(IC[n]||IC.check)+'</svg>'; }
+  var CAT={
+    str:{c:'#ff4757',n:'Strength',i:'dumbbell'}, car:{c:'#ff9f1a',n:'Cardio',i:'pulse'}, rec:{c:'#1dd1a1',n:'Mobility and recovery',i:'leaf'}, gold:{c:'#e0a800',n:'Final test',i:'trophy'},
+    sleep:{c:'#7b6cff',n:'Sleep',i:'moon'}, water:{c:'#2eaee8',n:'Hydration',i:'drop'}, food:{c:'#22b864',n:'Nutrition',i:'apple'}, calm:{c:'#b45cf0',n:'Stress',i:'breathe'},
+    check:{c:'#5f7cff',n:'Check-in',i:'check'}, review:{c:'#e0a800',n:'Review',i:'clip'}
+  };
+  function wcat(t){ t=t.toLowerCase(); if(/final retest/.test(t)) return 'gold'; if(/strength|lower body|upper body|full body/.test(t)) return 'str'; if(/mobility|recover/.test(t)) return 'rec'; return 'car'; }
+  function ecat(t){ t=t.toLowerCase(); if(/sleep/.test(t)) return 'sleep'; if(/hydrate/.test(t)) return 'water'; if(/fibre|whole foods|meal|digest/.test(t)) return 'food'; if(/unwind|breathe/.test(t)) return 'calm'; if(/review|progress|reflect|results/.test(t)) return 'review'; return 'check'; }
+  function fillIcons(root){ Array.prototype.forEach.call((root||document).querySelectorAll('[data-icon]'),function(el){ var n=el.getAttribute('data-icon'); el.innerHTML=icon(n, el.classList.contains('logo-big')?54:0); if(!el.style.background&&el.style.getPropertyValue('--c')) el.style.background='var(--c)'; }); }
+
+  // ---- device
   var IOS=/iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
   var STANDALONE=(window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true;
   var deferredPrompt=null;
-  function renderInstall(){
-    var card=$('installCard');
-    if(STANDALONE){ card.classList.add('hidden'); return; }
-    if(IOS){
-      $('installText').innerHTML='On iPhone: open this page in <b>Safari</b>, tap the <b>Share</b> button (square with an up arrow), scroll down and tap <b>Add to Home Screen</b>, then <b>Add</b>. Open the app from your home screen from then on. Notifications only work once it is installed.';
-      card.classList.remove('hidden');
-    } else if(deferredPrompt){
-      $('installText').textContent='Add the app to your home screen so it opens like a normal app, works offline and can send notifications.';
-      $('installBtn').classList.remove('hidden'); card.classList.remove('hidden');
-    }
-  }
-  window.addEventListener('beforeinstallprompt',function(e){ e.preventDefault(); deferredPrompt=e; renderInstall(); });
-  window.addEventListener('appinstalled',function(){ deferredPrompt=null; $('installCard').classList.add('hidden'); });
 
-  // Owner branding
-  $('ownerName').textContent=OWNER.name; $('aboutName').textContent=OWNER.name; $('aboutTitle').textContent=OWNER.title;
-  $('aboutContact').innerHTML='Contact: <a style="color:var(--red2)" href="mailto:'+esc(OWNER.email)+'">'+esc(OWNER.email)+'</a>';
-  Array.prototype.forEach.call(document.querySelectorAll('.own'),function(e){ e.textContent=OWNER.name; });
+  // ---- owner branding
+  each('.own',function(e){ e.textContent=OWNER.name; });
+  $('aboutTitle').textContent=OWNER.title;
+  $('aboutContact').innerHTML='Contact: <a style="color:#ff7a2f" href="mailto:'+esc(OWNER.email)+'">'+esc(OWNER.email)+'</a>';
 
-  // ---- storage (localStorage for the page, IndexedDB copy for background notifications)
+  // ---- storage
   var state;
   function load(){ try{ state=JSON.parse(localStorage.getItem(KEY))||null; }catch(e){ state=null; }
     if(!state||typeof state!=='object') state={};
-    ['days','meas','rate'].forEach(function(k){ if(!state[k]||typeof state[k]!=='object') state[k]={}; });
+    ['days','meas','rate','flags'].forEach(function(k){ if(!state[k]||typeof state[k]!=='object') state[k]={}; });
     if(typeof state.refl!=='string') state.refl=''; }
   function idb(){ return new Promise(function(res,rej){ if(!('indexedDB' in window)) return rej(); var r=indexedDB.open('reset31',1); r.onupgradeneeded=function(){ r.result.createObjectStore('kv'); }; r.onsuccess=function(){ res(r.result); }; r.onerror=function(){ rej(r.error); }; }); }
   function mirror(){ idb().then(function(db){ var t=db.transaction('kv','readwrite'); t.objectStore('kv').put({cfg:state.cfg||null,days:state.days},'state'); }).catch(function(){}); }
   function save(){ try{ localStorage.setItem(KEY,JSON.stringify(state)); }catch(e){ toast('Could not save on this browser'); } mirror(); }
+  function flags(){ return state.flags; }
   load();
 
+  // ---- dates
   function startDate(){ var p=(state.cfg&&state.cfg.start||'').split('-'); return p.length===3?new Date(+p[0],+p[1]-1,+p[2]):new Date(); }
   function curDay(){ var n=new Date(); return Math.floor((new Date(n.getFullYear(),n.getMonth(),n.getDate())-startDate())/86400000)+1; }
   function dateOf(n){ var s=startDate(); return new Date(s.getFullYear(),s.getMonth(),s.getDate()+n-1); }
   function dateLabel(n){ return dateOf(n).toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'}); }
   function dd(n){ if(!state.days[n]) state.days[n]={w:false,e:false,s:''}; return state.days[n]; }
-
   var sel=1, openKey=null;
 
-  // ---- setup
-  function showSetup(){ $('intro').classList.remove('hidden'); $('setup').classList.add('hidden'); $('main').classList.add('hidden'); $('fStart').value=ymd(new Date()); }
-  $('introGo').onclick=function(){ $('intro').classList.add('hidden'); $('setup').classList.remove('hidden'); window.scrollTo({top:0}); };
-  $('fGo').onclick=function(){
-    if(!$('fStart').value){ toast('Choose your Day 1 date'); return; }
+  // =================== ONBOARDING ===================
+  var obMode='setup', obList=[], obIdx=0;
+  function obSlides(){ return Array.prototype.slice.call(document.querySelectorAll('#track .slide')); }
+  function obOpen(mode){
+    obMode=mode;
+    obList=obSlides().filter(function(s){ var on=s.getAttribute('data-modes').split(' ').indexOf(mode)>=0; s.classList.toggle('hidden',!on); return on; });
+    if(mode==='setup'){
+      $('fStart').value=(state.cfg&&state.cfg.start)||ymd(new Date());
+      if(state.cfg){ $('fName').value=state.cfg.name||''; $('fWt').value=state.cfg.wt; $('fEt').value=state.cfg.et; }
+    }
+    $('onb').classList.remove('hidden'); document.body.style.overflow='hidden';
+    obGo(0);
+  }
+  function obClose(){ $('onb').classList.add('hidden'); document.body.style.overflow=''; }
+  function obIsSetup(i){ return obList[i]&&obList[i].querySelector('#fStart'); }
+  function obIsRemind(i){ return obList[i]&&obList[i].querySelector('#obGcalW'); }
+  function obIsReady(i){ return obList[i]&&obList[i].querySelector('#readyText'); }
+  function obGo(i){
+    obIdx=Math.max(0,Math.min(obList.length-1,i));
+    $('track').style.transform='translateX('+(-100*obIdx)+'%)';
+    obList.forEach(function(s,k){ if(k===obIdx) s.scrollTop=0; });
+    $('dots').innerHTML=obList.map(function(_,k){ return '<span'+(k===obIdx?' class="on"':'')+'></span>'; }).join('');
+    var last=obIdx===obList.length-1;
+    $('obBack').style.visibility=obIdx===0?'hidden':'visible';
+    var label='Next';
+    if(obIdx===0) label=obMode==='tour'?'Next':'Let\'s go';
+    if(obIsSetup(obIdx)) label='Save and continue';
+    if(obIsRemind(obIdx)) label='Next';
+    if(last) label=obMode==='tour'?'Done':'Open today\'s plan';
+    $('obNext').textContent=label;
+    var preSetup=obMode==='setup'&&obList.some(function(s,k){ return k>obIdx&&s.querySelector('#fStart'); });
+    $('obSkip').textContent=obMode==='tour'?'Close':(obIsRemind(obIdx)?'Later':'Skip');
+    $('obSkip').style.visibility=(obMode==='tour'||preSetup||obIsRemind(obIdx))?'visible':'hidden';
+    if(obIsRemind(obIdx)){ renderCal(); renderNotif(); }
+    if(obIsReady(obIdx)) renderReady();
+  }
+  function obSaveSetup(){
+    if(!$('fStart').value){ toast('Choose your Day 1 date'); return false; }
     state.cfg={name:$('fName').value.trim(),start:$('fStart').value,wt:$('fWt').value||'17:00',et:$('fEt').value||'21:00'};
-    save(); boot(); window.scrollTo({top:0}); toast('All set. Follow the Getting started list.');
+    save(); return true;
+  }
+  $('obNext').onclick=function(){
+    if(obIsSetup(obIdx)&&!obSaveSetup()) return;
+    if(obIdx===obList.length-1){ if(obMode==='setup'){ flags().onb=true; save(); } obClose(); boot(); window.scrollTo({top:0}); return; }
+    obGo(obIdx+1);
   };
+  $('obBack').onclick=function(){ obGo(obIdx-1); };
+  $('obSkip').onclick=function(){
+    if(obMode==='tour'){ obClose(); return; }
+    var k=obList.findIndex(function(s){ return s.querySelector('#fStart'); });
+    if(obIsRemind(obIdx)) k=obIdx+1;
+    if(k>obIdx) obGo(k);
+  };
+  (function(){ var x0=null,y0=null;
+    $('obView').addEventListener('touchstart',function(e){ var t=e.touches[0]; x0=t.clientX; y0=t.clientY; },{passive:true});
+    $('obView').addEventListener('touchend',function(e){ if(x0===null) return; var t=e.changedTouches[0], dx=t.clientX-x0, dy=t.clientY-y0; x0=null;
+      if(Math.abs(dx)<60||Math.abs(dx)<Math.abs(dy)*1.5) return;
+      if(document.activeElement&&/INPUT|TEXTAREA/.test(document.activeElement.tagName)) return;
+      if(dx<0) $('obNext').click(); else if(obIdx>0) obGo(obIdx-1);
+    },{passive:true});
+  })();
+  function renderReady(){
+    var nm=state.cfg&&state.cfg.name; $('readyName').textContent=nm?', '+nm:'';
+    var c=curDay();
+    $('readyText').innerHTML = c<1 ? 'Your 31 days start on <b>'+dateLabel(1)+'</b>. Your first workout is at <b>'+fmt12(state.cfg.wt)+'</b>.' : 'Day '+Math.min(c,31)+' starts now. Your workout is at <b>'+fmt12(state.cfg.wt)+'</b> and your evening habit at <b>'+fmt12(state.cfg.et)+'</b>.';
+    if(STANDALONE){ $('obInstall').classList.add('hidden'); return; }
+    $('obInstall').classList.remove('hidden');
+    if(IOS){ $('obInstallText').innerHTML='In <b>Safari</b>, tap <b>Share</b> (the square with an arrow), then <b>Add to Home Screen</b>. Open the app from your Home Screen from now on, so notifications can work.'; $('obInstallBtn').classList.add('hidden'); }
+    else if(deferredPrompt){ $('obInstallText').textContent='Open it like a normal app, use it offline, and get notifications.'; $('obInstallBtn').classList.remove('hidden'); }
+    else { $('obInstallText').innerHTML='In Chrome, tap <b>&#8942;</b> then <b>Install app</b> or <b>Add to home screen</b>.'; $('obInstallBtn').classList.add('hidden'); }
+  }
 
-  // ---- main screen
+  // =================== MAIN ===================
+  var FLAGS={1:['Check-in day: record your starting measurements and how you feel.','measH'],
+    14:['Halfway: rate how you feel on Day 14.','rateH'],
+    15:['Check-in day: record your Day 15 measurements.','measH'],
+    27:['Stamina test today: log your minutes under Measurements.','measH'],
+    30:['Reflection day: write your wins and next steps.','reflH'],
+    31:['Final check-in: record your Day 31 measurements and how you feel.','measH']};
+  function goTo(id){ var el=$(id); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); }
+
   function renderDay(){
     var c=curDay(), d=dd(sel), p=PLAN[sel-1];
-    var tag= sel===c?'Today':(sel<c?'Past':'Coming up');
-    $('lbl').textContent=tag+': Day '+sel+' \u00b7 '+dateLabel(sel);
+    var tag= sel===c?'Today':(sel<c?'Past day':'Coming up');
+    $('lbl').textContent=tag+' \u00b7 Day '+sel+' \u00b7 '+dateLabel(sel);
     var h='';
-    [['w',fmt12(state.cfg.wt),p[0]],['e',fmt12(state.cfg.et),p[1]]].forEach(function(x){
-      var k=x[0], open=(openKey===sel+k)||(openKey===null&&k==='w'&&sel===c&&!d.w);
-      h+='<div class="card task'+(open?' open':'')+'" data-k="'+k+'"><div class="top"><span class="time">'+x[1]+'<br>'+(k==='w'?'Workout':'Evening')+'</span><span class="t">'+esc(x[2].t)+'<br><span class="more">'+(open?'&#9650; Hide instructions':'&#9660; Tap to see what to do')+'</span></span><button class="chk'+(d[k]?' on':'')+'">'+(d[k]?'Done &#10003;':'Mark done')+'</button></div><pre>'+esc(x[2].d)+'</pre></div>';
+    if(FLAGS[sel]) h+='<div class="flag"><span>'+FLAGS[sel][0]+'</span><button data-go="'+FLAGS[sel][1]+'">Go there</button></div>';
+    [['w',fmt12(state.cfg.wt),'Workout',p[0],CAT[wcat(p[0].t)]],['e',fmt12(state.cfg.et),'Evening',p[1],CAT[ecat(p[1].t)]]].forEach(function(x){
+      var k=x[0], open=(openKey===sel+k)||(openKey===null&&k==='w'&&sel===c&&!d.w), cat=x[4];
+      h+='<div class="task'+(open?' open':'')+'" data-k="'+k+'" style="--c:'+cat.c+'"><div class="top"><div class="ic">'+icon(cat.i)+'</div><div class="t"><div class="meta">'+x[1]+' &middot; '+x[2]+' &middot; '+cat.n+'</div><div class="ttl">'+esc(x[3].t)+'</div><div class="more">'+(open?'&#9650; Hide instructions':'&#9660; Tap to see what to do')+'</div></div><button class="chk'+(d[k]?' on':'')+'">'+(d[k]?'Done &#10003;':'Mark done')+'</button></div><pre>'+esc(x[3].d)+'</pre></div>';
     });
-    var F=FLAGS[sel];
-    if(F) h='<div class="flag"><span>'+F[0]+'</span><button data-go="'+F[1]+'">'+F[2]+'</button></div>'+h;
     h+='<div class="card sleeprow"><span>Hours slept last night</span><input class="sleep" type="number" inputmode="decimal" step="0.5" min="0" max="14" id="sl" value="'+esc(d.s)+'"></div>';
     $('tasks').innerHTML=h;
-    Array.prototype.forEach.call(document.querySelectorAll('#tasks .task'),function(el){
+    each('#tasks .task',function(el){
       var k=el.getAttribute('data-k');
       el.querySelector('.top').onclick=function(ev){
-        if(ev.target.classList.contains('chk')){ dd(sel)[k]=!dd(sel)[k]; save(); if(dd(sel)[k]) toast(dd(sel).w&&dd(sel).e?'Day '+sel+' complete. Well done!':'Nice work'); renderAll(); return; }
+        if(ev.target.classList.contains('chk')){ dd(sel)[k]=!dd(sel)[k]; save(); if(dd(sel)[k]) toast(dd(sel).w&&dd(sel).e?'Day '+sel+' complete. Well done!':'Nice work. Keep going!'); renderAll(); return; }
         openKey = el.classList.contains('open') ? sel+'none' : sel+k; renderDay();
       };
     });
     $('sl').onchange=function(e){ dd(sel).s=e.target.value; save(); renderStats(); };
     var fb=document.querySelector('#tasks .flag button'); if(fb) fb.onclick=function(){ goTo(fb.getAttribute('data-go')); };
   }
-  var FLAGS={1:['Check-in day: record your starting measurements and ratings.','measH','Go there'],
-    14:['Halfway: give your Day 14 ratings.','rateH','Go there'],
-    15:['Check-in day: record your Day 15 measurements.','measH','Go there'],
-    27:['Stamina test today: log your minutes under Measurements.','measH','Go there'],
-    30:['Reflection day: write your wins and next steps.','reflH','Go there'],
-    31:['Final check-in: record your Day 31 measurements and ratings.','measH','Go there']};
-  function goTo(id){ var el=$(id); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); }
-
-  // Getting started checklist
-  function flags(){ if(!state.flags) state.flags={}; return state.flags; }
-  function hasMeas(){ var c=state.meas.d1||{}; return Object.keys(c).some(function(k){ return String(c[k]).trim()!==''; }); }
-  function anyTick(){ for(var n in state.days){ if(state.days[n].w||state.days[n].e) return true; } return false; }
-  function renderGS(){
-    var f=flags();
-    var items=[
-      [STANDALONE||f.inst,'Install the app on your home screen',function(){ if(!STANDALONE){ f.inst=true; save(); } renderInstall(); $('installCard').classList.contains('hidden')?openHelp():goTo('installCard'); renderGS(); }],
-      [f.rem||(('Notification' in window)&&Notification.permission==='granted'),'Turn on your daily reminders',function(){ goTo('remindH'); }],
-      [hasMeas(),'Record your Day 1 measurements',function(){ goTo('measH'); }],
-      [anyTick(),'Complete and tick your first task',function(){ sel=Math.min(31,Math.max(1,curDay())); openKey=null; renderAll(); window.scrollTo({top:0,behavior:'smooth'}); }]
-    ];
-    var done=items.filter(function(i){return i[0];}).length;
-    if(f.gsHidden||done===items.length){ $('gs').classList.add('hidden'); return; }
-    $('gs').classList.remove('hidden');
-    $('gsList').innerHTML=items.map(function(i,ix){ return '<div class="it'+(i[0]?' ok':'')+'" data-i="'+ix+'"><div class="bx">'+(i[0]?'&#10003;':'')+'</div><div class="tx">'+i[1]+'</div>'+(i[0]?'':'<div class="go">Do it &#8250;</div>')+'</div>'; }).join('');
-    Array.prototype.forEach.call($('gsList').children,function(el){ el.onclick=function(){ items[+el.getAttribute('data-i')][2](); }; });
-  }
-  $('gsHide').onclick=function(){ flags().gsHidden=true; save(); renderGS(); toast('You can find help any time under "? How it works"'); };
-  function openHelp(){ $('help').classList.remove('hidden'); }
-  $('helpBtn').onclick=openHelp;
-  $('helpClose').onclick=function(){ $('help').classList.add('hidden'); };
-  $('help').onclick=function(e){ if(e.target===$('help')) $('help').classList.add('hidden'); };
   function renderGrid(){
     var h='';
     for(var n=1;n<=31;n++){
-      var d=state.days[n]||{}, cls=(d.w&&d.e)?' full':((d.w||d.e)?' half':'');
-      h+='<div class="day'+cls+(n===sel?' cur':'')+'" data-n="'+n+'"><b>'+n+'</b>'+esc(PLAN[n-1][0].t.split(/[ :(]/)[0])+'</div>';
+      var d=state.days[n]||{}, cat=CAT[wcat(PLAN[n-1][0].t)], full=d.w&&d.e;
+      h+='<div class="day'+(full?' full':'')+(n===sel?' cur':'')+'" style="--c:'+cat.c+'" data-n="'+n+'"><b>'+n+'</b>'+esc(PLAN[n-1][0].t.split(/[ :(]/)[0])+'<i>'+(full?'&#10003;':(d.w?'&#9679;':'&#9675;')+(d.e?'&#9679;':'&#9675;'))+'</i></div>';
     }
     $('grid').innerHTML=h;
-    Array.prototype.forEach.call($('grid').children,function(el){ el.onclick=function(){ sel=+el.getAttribute('data-n'); openKey=null; renderAll(); window.scrollTo({top:0,behavior:'smooth'}); }; });
+    each('#grid .day',function(el){ el.onclick=function(){ sel=+el.getAttribute('data-n'); openKey=null; renderAll(); window.scrollTo({top:0,behavior:'smooth'}); }; });
   }
   function renderStats(){
     var t=0,f=0,sl=[],st=0,c=Math.min(31,curDay());
@@ -405,14 +604,19 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
     $('sSleep').textContent=sl.length?(sl.reduce(function(a,b){return a+b;},0)/sl.length).toFixed(1)+'h':'-';
     $('bar').style.width=(t/62*100)+'%';
     var c2=curDay(), nm=state.cfg.name?(', '+state.cfg.name):'';
-    $('hello').textContent = c2<1 ? 'Hello'+nm+'. Your challenge starts on '+dateLabel(1)+'.' : (c2>31 ? 'Well done'+nm+'. Your 31 days are complete.' : 'Hello'+nm+'. Day '+c2+' of 31: '+dateLabel(1)+' to '+dateLabel(31)+'.');
+    $('hello').textContent=(new Date().getHours()<12?'Good morning':(new Date().getHours()<17?'Good afternoon':'Good evening'))+nm;
+    $('heroDay').textContent = c2<1 ? 'Starts '+dateLabel(1) : (c2>31 ? 'All 31 days done!' : 'Day '+c2+' of 31');
   }
   function table(id,rows,cols,store){
     var h='<tr><th></th>'+cols.map(function(c){return '<th>'+c[1]+'</th>';}).join('')+'</tr>';
     rows.forEach(function(r){ h+='<tr><th>'+r[1]+'</th>'+cols.map(function(c){ return '<td><input inputmode="decimal" data-c="'+c[0]+'" data-r="'+r[0]+'" value="'+esc((store[c[0]]||{})[r[0]])+'"></td>'; }).join('')+'</tr>'; });
     $(id).innerHTML=h;
-    Array.prototype.forEach.call($(id).querySelectorAll('input'),function(i){ i.onchange=function(){ var c=i.getAttribute('data-c'); if(!store[c]) store[c]={}; store[c][i.getAttribute('data-r')]=i.value; save(); toast('Saved'); renderGS(); }; });
+    each('#'+id+' input',function(i){ i.onchange=function(){ var c=i.getAttribute('data-c'); if(!store[c]) store[c]={}; store[c][i.getAttribute('data-r')]=i.value; save(); toast('Saved'); renderGS(); }; });
   }
+  var MEAS=[["w","Weight (kg)"],["waist","Waist (cm)"],["pulse","Resting pulse"],["push","Max push-ups"],["plank","Plank (s)"],["stam","Stamina (min)"]];
+  var MCOLS=[["d1","Day 1"],["d15","Day 15"],["d27","Day 27"],["d31","Day 31"]];
+  var RATES=[["energy","Energy"],["sleep","Sleep quality"],["bloat","Bloating (5 = none)"],["stress","Stress (5 = calm)"]];
+  var RCOLS=[["d1","Day 1"],["d14","Day 14"],["d31","Day 31"]];
   function renderForms(){
     table('meas',MEAS,MCOLS,state.meas); table('rate',RATES,RCOLS,state.rate);
     $('refl').value=state.refl;
@@ -420,8 +624,28 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
     renderCal(); renderNotif();
   }
   $('refl').onchange=function(){ state.refl=$('refl').value; save(); toast('Saved'); };
-  function renderAll(){ renderDay(); renderGrid(); renderStats(); renderGS(); }
 
+  // getting started checklist
+  function hasMeas(){ var c=state.meas.d1||{}; return Object.keys(c).some(function(k){ return String(c[k]).trim()!==''; }); }
+  function anyTick(){ for(var n in state.days){ if(state.days[n].w||state.days[n].e) return true; } return false; }
+  function notifOn(){ return ('Notification' in window)&&Notification.permission==='granted'; }
+  function renderGS(){
+    var f=flags();
+    var items=[
+      [STANDALONE||f.inst,'Install the app on your home screen',function(){ f.inst=true; save(); renderInstall(); if($('installCard').classList.contains('hidden')) openHelp(); else goTo('installCard'); renderGS(); }],
+      [f.rem||notifOn(),'Turn on your daily reminders',function(){ goTo('remindH'); }],
+      [hasMeas(),'Record your Day 1 measurements',function(){ goTo('measH'); }],
+      [anyTick(),'Complete and tick your first task',function(){ sel=Math.min(31,Math.max(1,curDay())); openKey=null; renderAll(); goTo('tasks'); }]
+    ];
+    var done=items.filter(function(i){return i[0];}).length;
+    if(f.gsHidden||done===items.length){ $('gs').classList.add('hidden'); return; }
+    $('gs').classList.remove('hidden');
+    $('gsList').innerHTML=items.map(function(i,ix){ return '<div class="it'+(i[0]?' ok':'')+'" data-i="'+ix+'"><div class="bx">'+(i[0]?'&#10003;':'')+'</div><div class="tx">'+i[1]+'</div>'+(i[0]?'':'<div class="go">Do it &#8250;</div>')+'</div>'; }).join('');
+    each('#gsList .it',function(el){ el.onclick=function(){ items[+el.getAttribute('data-i')][2](); }; });
+  }
+  $('gsHide').onclick=function(){ flags().gsHidden=true; save(); renderGS(); toast('Help is always under "? Help" at the top'); };
+
+  function renderAll(){ renderDay(); renderGrid(); renderStats(); renderGS(); }
   $('prev').onclick=function(){ if(sel>1){ sel--; openKey=null; renderAll(); } };
   $('next').onclick=function(){ if(sel<31){ sel++; openKey=null; renderAll(); } };
   $('todayBtn').onclick=function(){ sel=Math.min(31,Math.max(1,curDay())); openKey=null; renderAll(); };
@@ -432,30 +656,54 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
     save(); sel=Math.min(31,Math.max(1,curDay())); renderForms(); renderAll(); scheduleInApp(); toast('Settings saved');
   };
 
+  // help + tour
+  function openHelp(){ $('help').classList.remove('hidden'); }
+  $('helpBtn').onclick=openHelp;
+  $('helpClose').onclick=function(){ $('help').classList.add('hidden'); };
+  $('help').onclick=function(e){ if(e.target===$('help')) $('help').classList.add('hidden'); };
+  $('tourBtn').onclick=function(){ $('help').classList.add('hidden'); obOpen('tour'); };
+
+  // install prompts
+  function renderInstall(){
+    var card=$('installCard');
+    if(STANDALONE||!state.cfg){ card.classList.add('hidden'); return; }
+    if(IOS){
+      $('installText').innerHTML='On iPhone: open this page in <b>Safari</b>, tap <b>Share</b> (square with an arrow), then <b>Add to Home Screen</b>. Notifications only work once it is installed.';
+      card.classList.remove('hidden');
+    } else if(deferredPrompt){
+      $('installText').textContent='Add the app to your home screen so it opens like a normal app, works offline and can send notifications.';
+      $('installBtn').classList.remove('hidden'); card.classList.remove('hidden');
+    } else card.classList.add('hidden');
+  }
+  window.addEventListener('beforeinstallprompt',function(e){ e.preventDefault(); deferredPrompt=e; renderInstall(); if(!$('onb').classList.contains('hidden')&&obIsReady(obIdx)) renderReady(); });
+  window.addEventListener('appinstalled',function(){ deferredPrompt=null; flags().inst=true; save(); $('installCard').classList.add('hidden'); renderGS(); });
+  function doInstall(){ if(!deferredPrompt) return; deferredPrompt.prompt(); deferredPrompt.userChoice.then(function(){ deferredPrompt=null; $('installCard').classList.add('hidden'); $('obInstallBtn').classList.add('hidden'); }); }
+  $('installBtn').onclick=doInstall; $('obInstallBtn').onclick=doInstall;
+
   // ---- calendar reminders
   function stamp(d,t){ return d.getFullYear()+pad(d.getMonth()+1)+pad(d.getDate())+'T'+t.replace(':','')+'00'; }
-  function addMin(t,m){ var p=t.split(':'),x=(+p[0])*60+(+p[1])+m; x=((x%1440)+1440)%1440; return pad(Math.floor(x/60))+':'+pad(x%60); }
   function gcal(title,t,len,details){
     var d=dateOf(1), tz='';
     try{ tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''; }catch(e){}
-    var u='https://calendar.google.com/calendar/render?action=TEMPLATE'+
+    return 'https://calendar.google.com/calendar/render?action=TEMPLATE'+
       '&text='+encodeURIComponent(title)+
       '&dates='+stamp(d,t)+'/'+stamp(d,addMin(t,len))+
       (tz?'&ctz='+encodeURIComponent(tz):'')+
       '&recur='+encodeURIComponent('RRULE:FREQ=DAILY;COUNT=31')+
       '&details='+encodeURIComponent(details+'\n\nOpen the app for today\'s exact instructions: '+location.href.split('#')[0]);
-    return u;
   }
-  $('gcalW').addEventListener('click',function(){ flags().rem=true; save(); renderGS(); });
-  $('gcalE').addEventListener('click',function(){ flags().rem=true; save(); renderGS(); });
   function renderCal(){
-    $('gcalW').href=gcal('31-Day Reset: workout',state.cfg.wt,45,'Time for today\'s 31-Day Reset workout.');
-    $('gcalE').href=gcal('31-Day Reset: evening habit',state.cfg.et,15,'Time for today\'s 31-Day Reset evening habit and check-in.');
+    if(!state.cfg) return;
+    var w=gcal('31-Day Reset: workout',state.cfg.wt,45,'Time for today\'s 31-Day Reset workout.');
+    var e=gcal('31-Day Reset: evening habit',state.cfg.et,15,'Time for today\'s 31-Day Reset evening habit and check-in.');
+    $('gcalW').href=w; $('obGcalW').href=w; $('gcalE').href=e; $('obGcalE').href=e;
+    var lbl=IOS?'iPhone Calendar: add all 62 events with alerts':'Other calendar apps: add all 62 events';
+    $('icsBtn').textContent=lbl; $('obIcs').textContent=lbl;
   }
+  ['gcalW','gcalE','obGcalW','obGcalE'].forEach(function(id){ $(id).addEventListener('click',function(){ flags().rem=true; save(); renderGS(); toast('Tap Save in Google Calendar, then come back'); }); });
   function icsEsc(s){ return String(s).replace(/\\/g,'\\\\').replace(/;/g,'\\;').replace(/,/g,'\\,').replace(/\r?\n/g,'\\n'); }
   function fold(l){ var o='',i=0; while(l.length-i>73){ o+=l.slice(i,i+73)+'\r\n '; i+=73; } return o+l.slice(i); }
-  $('installBtn').onclick=function(){ if(!deferredPrompt) return; deferredPrompt.prompt(); deferredPrompt.userChoice.then(function(){ deferredPrompt=null; $('installCard').classList.add('hidden'); }); };
-  $('icsBtn').onclick=function(){
+  function makeIcs(){
     flags().rem=true; save(); renderGS();
     var L=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//'+OWNER.name+'//31-Day Reset//EN','CALSCALE:GREGORIAN','METHOD:PUBLISH'];
     var now=new Date(), dtstamp=now.getUTCFullYear()+pad(now.getUTCMonth()+1)+pad(now.getUTCDate())+'T'+pad(now.getUTCHours())+pad(now.getUTCMinutes())+'00Z';
@@ -476,52 +724,52 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
     if(IOS){ a.target='_blank'; toast('Tap Add All to put the reminders in your Calendar'); }
     else { a.download='31-day-reset.ics'; toast('Calendar file saved. Open it to add the events.'); }
     document.body.appendChild(a); a.click(); a.remove();
-  };
+  }
+  $('icsBtn').onclick=makeIcs; $('obIcs').onclick=makeIcs;
 
-  // ---- app notifications
+  // ---- app notifications (30 minutes before workout, and at evening time)
   var timers=[];
   function swReg(){ return ('serviceWorker' in navigator)?navigator.serviceWorker.ready:Promise.reject(); }
-  function notify(title,body,tag){
-    return swReg().then(function(r){ return r.showNotification(title,{body:body,tag:tag,icon:'icon-192.png',badge:'icon-192.png',data:{url:'./'}}); });
-  }
+  function notify(title,body,tag){ return swReg().then(function(r){ return r.showNotification(title,{body:body,tag:tag,icon:'icon-192.png',badge:'icon-192.png',data:{url:'./'}}); }); }
   function renderNotif(){
     var p=('Notification' in window)?Notification.permission:(IOS&&!STANDALONE?'install first':'unsupported');
-    $('notifState').textContent= p==='granted'?'on':(p==='denied'?'blocked':(p==='unsupported'?'not supported':(p==='install first'?'install first':'off')));
-    $('notifState').className='pill'+(p==='granted'?' ok':'');
-    $('notifBtn').classList.toggle('hidden',p==='granted');
+    var txt= p==='granted'?'on':(p==='denied'?'blocked':(p==='unsupported'?'not supported':(p==='install first'?'install first':'off')));
+    ['notifState','obNotifState'].forEach(function(id){ $(id).textContent=txt; $(id).className='pill'+(p==='granted'?' ok':''); });
+    $('notifBtn').classList.toggle('hidden',p==='granted'); $('obNotif').classList.toggle('hidden',p==='granted');
     $('notifTest').classList.toggle('hidden',p!=='granted');
-    if(IOS) $('icsBtn').textContent='iPhone Calendar: add all 62 events with alerts';
   }
   function scheduleInApp(){
     timers.forEach(clearTimeout); timers=[];
-    if(!('Notification' in window)||Notification.permission!=='granted'||!state.cfg) return;
+    if(!notifOn()||!state.cfg) return;
     var n=curDay(); if(n<1||n>31) return;
-    [['w',state.cfg.wt,0],['e',state.cfg.et,1]].forEach(function(s){
-      var p=s[1].split(':'), at=new Date(); at.setHours(+p[0],+p[1],0,0);
+    var p=PLAN[n-1];
+    [['w',addMin(state.cfg.wt,-30),'Workout in 30 minutes','Day '+n+': '+p[0].t+' at '+fmt12(state.cfg.wt)+'. Time to get ready.'],
+     ['w',state.cfg.wt,'Workout time','Day '+n+': '+p[0].t+'. Tap for today\'s instructions.'],
+     ['e',state.cfg.et,'Evening habit','Day '+n+': '+p[1].t+'. Tap to tick it off.']].forEach(function(s,ix){
+      var hm=s[1].split(':'), at=new Date(); at.setHours(+hm[0],+hm[1],0,0);
       var ms=at-new Date();
-      if(ms>0 && ms<86400000) timers.push(setTimeout(function(){
-        if(!dd(n)[s[0]]) notify('Day '+n+': '+PLAN[n-1][s[2]].t,'Time for this now. Tap to open today\'s instructions.','reset-'+n+s[0]);
-      },ms));
+      if(ms>0&&ms<86400000) timers.push(setTimeout(function(){ if(!dd(n)[s[0]]) notify(s[2],s[3],'reset-'+n+'-'+ix); },ms));
     });
   }
   function regPeriodic(){
     swReg().then(function(r){
-      if(!r.periodicSync) return;
+      if(!r.periodicSync||!navigator.permissions) return;
       return navigator.permissions.query({name:'periodic-background-sync'}).then(function(st){
         if(st.state==='granted') return r.periodicSync.register('reset31-daily',{minInterval:6*60*60*1000});
       });
     }).catch(function(){});
   }
-  $('notifBtn').onclick=function(){
+  function enableNotif(){
     if(IOS&&!STANDALONE){ toast('First add the app to your Home Screen, then open it from there'); return; }
     if(!('Notification' in window)){ toast('This browser does not support notifications'); return; }
     Notification.requestPermission().then(function(p){
       renderNotif();
-      if(p==='granted'){ renderGS(); scheduleInApp(); regPeriodic(); notify('31-Day Reset','Notifications are on. You will get nudges about today\'s tasks.','reset-on'); }
+      if(p==='granted'){ flags().rem=true; save(); renderGS(); scheduleInApp(); regPeriodic(); notify('31-Day Reset','Notifications are on. You will get a nudge 30 minutes before each workout.','reset-on').catch(function(){}); }
       else toast('Notifications were not allowed. You can change this in your phone settings.');
     });
-  };
-  $('notifTest').onclick=function(){ var n=Math.min(31,Math.max(1,curDay())); notify('Day '+n+': '+PLAN[n-1][0].t,'This is a test reminder from your 31-Day Reset app.','reset-test').catch(function(){ toast('Install the app first, then try again'); }); };
+  }
+  $('notifBtn').onclick=enableNotif; $('obNotif').onclick=enableNotif;
+  $('notifTest').onclick=function(){ var n=Math.min(31,Math.max(1,curDay())); notify('Workout in 30 minutes','Day '+n+': '+PLAN[n-1][0].t+'. This is a test reminder.','reset-test').catch(function(){ toast('Install the app first, then try again'); }); };
 
   // ---- backup
   $('exp').onclick=function(){
@@ -539,17 +787,18 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
   $('resetNo').onclick=function(){ $('resetConfirm').classList.add('hidden'); };
   $('resetYes').onclick=function(){ try{ localStorage.removeItem(KEY); }catch(e){} load(); mirror(); $('resetConfirm').classList.add('hidden'); boot(); };
 
+  // ---- start
   function boot(){
-    if(!state.cfg||!state.cfg.start){ showSetup(); return; }
-    $('intro').classList.add('hidden'); $('setup').classList.add('hidden'); $('main').classList.remove('hidden');
+    fillIcons();
+    if(!state.cfg||!state.cfg.start){ $('main').classList.add('hidden'); obOpen('setup'); return; }
+    $('main').classList.remove('hidden');
     sel=Math.min(31,Math.max(1,curDay())); openKey=null;
-    renderForms(); renderAll(); scheduleInApp(); mirror();
+    renderForms(); renderAll(); renderInstall(); scheduleInApp(); mirror();
   }
   document.addEventListener('visibilitychange',function(){ if(!document.hidden&&state.cfg){ renderAll(); scheduleInApp(); } });
 
-  // ---- automatic updates: check on open, on return to the app, and hourly; offer a refresh when a new version is ready
+  // ---- automatic updates
   var hadController=!!(navigator.serviceWorker&&navigator.serviceWorker.controller);
-  function showUpdate(){ $('upd').classList.remove('hidden'); }
   $('updBtn').onclick=function(){ location.reload(); };
   $('updX').onclick=function(){ $('upd').classList.add('hidden'); };
   if('serviceWorker' in navigator && (location.protocol==='https:'||location.hostname==='localhost')){
@@ -559,9 +808,8 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
       setInterval(check,60*60*1000);
       document.addEventListener('visibilitychange',function(){ if(!document.hidden) check(); });
     }).catch(function(){});
-    navigator.serviceWorker.addEventListener('controllerchange',function(){ if(hadController) showUpdate(); });
+    navigator.serviceWorker.addEventListener('controllerchange',function(){ if(hadController) $('upd').classList.remove('hidden'); });
   }
-  renderInstall();
   boot();
 })();
 </script>
