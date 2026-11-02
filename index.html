@@ -43,7 +43,7 @@
   .task .more{color:var(--mute);font-size:12px;font-weight:400}
   .task pre{white-space:pre-wrap;font:inherit;font-size:14px;color:#d6d6dc;margin:10px 0 0;padding-top:10px;border-top:1px solid var(--line);display:none}
   .task.open pre{display:block}
-  .chk{width:34px;height:34px;border-radius:9px;border:2px solid #44444c;background:transparent;color:#fff;font-size:18px;flex:none}
+  .chk{height:36px;padding:0 14px;border-radius:18px;border:2px solid #55555e;background:transparent;color:#fff;font:inherit;font-size:13px;font-weight:700;flex:none;white-space:nowrap}
   .chk.on{background:var(--ok);border-color:var(--ok)}
   .sleeprow{display:flex;align-items:center;gap:10px;margin-top:10px}
   .sleeprow span{flex:1;color:var(--mute);font-size:13px}
@@ -79,12 +79,38 @@
   .owner .ti{color:var(--mute);font-size:13px}
   .foot{color:var(--mute);font-size:11px;text-align:center;margin-top:24px;line-height:1.6}
   .welcome h2{margin-top:6px}
+  .hdr{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+  .help{background:var(--card);border:1px solid var(--line);color:var(--ink);border-radius:18px;height:36px;padding:0 12px;font:inherit;font-weight:700;font-size:13px;flex:none}
+  .intro .lead{font-size:16px;color:var(--ink);margin:6px 0 4px}
+  .step{display:flex;gap:12px;align-items:flex-start;margin-top:14px}
+  .step .num{width:30px;height:30px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;font-weight:800;flex:none}
+  .step b{display:block}
+  .step span{color:var(--mute);font-size:13px}
+  .hint{color:var(--mute);font-size:12px;margin-top:2px}
+  .flag{background:#3a1d20;border:1px solid var(--red);border-radius:10px;padding:10px 12px;margin-top:10px;font-size:13px;display:flex;align-items:center;gap:10px}
+  .flag span{flex:1}
+  .flag button{background:var(--red);border:0;color:#fff;border-radius:8px;padding:7px 10px;font:inherit;font-size:13px;flex:none}
+  .gs{margin-top:14px;border-color:#3d3d46}
+  .gs .it{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--line);cursor:pointer}
+  .gs .it:first-of-type{border-top:0}
+  .gs .bx{width:22px;height:22px;border-radius:6px;border:2px solid #55555e;flex:none;display:flex;align-items:center;justify-content:center;font-size:13px}
+  .gs .it.ok .bx{background:var(--ok);border-color:var(--ok)}
+  .gs .it.ok .tx{color:var(--mute);text-decoration:line-through}
+  .gs .tx{flex:1;font-size:14px}
+  .gs .go{color:var(--red2);font-size:13px}
+  .modal{position:fixed;inset:0;background:rgba(0,0,0,.75);display:flex;align-items:flex-end;justify-content:center;z-index:8;padding:12px}
+  .modal .card{max-width:640px;width:100%;max-height:85vh;overflow:auto}
+  .modal h3{margin:14px 0 4px;font-size:15px}
+  .modal p{margin:0;color:#cfcfd6;font-size:14px}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <h1>31-Day <span>Reset</span></h1>
-  <div class="by">by <b id="ownerName"></b></div>
+  <div class="hdr">
+    <div><h1>31-Day <span>Reset</span></h1>
+    <div class="by">by <b id="ownerName"></b></div></div>
+    <button class="help" id="helpBtn">? How it works</button>
+  </div>
 
   <div id="installCard" class="card hidden" style="margin-top:14px;border-color:var(--red)">
     <b>Install this app</b>
@@ -92,10 +118,23 @@
     <button class="btn red full hidden" id="installBtn">Install 31-Day Reset</button>
   </div>
 
+  <!-- What the app does (first screen) -->
+  <div id="intro" class="card intro hidden" style="margin-top:16px">
+    <p class="lead"><b>Get fitter, sleep better and build healthy habits in 31 days.</b></p>
+    <p class="sub">A guided plan with two short tasks each day. The app tells you exactly what to do, reminds you, and tracks your progress.</p>
+    <div class="step"><div class="num">1</div><div><b>Two tasks a day</b><span>A workout (about 30 to 60 min, no gym needed) and a 10 minute evening habit such as water, sleep or fibre.</span></div></div>
+    <div class="step"><div class="num">2</div><div><b>Step-by-step instructions</b><span>Tap any task to see the exercises, sets, times and tips for that day.</span></div></div>
+    <div class="step"><div class="num">3</div><div><b>Tick it off</b><span>Tap "Mark done" and watch your progress bar and streak grow.</span></div></div>
+    <div class="step"><div class="num">4</div><div><b>See your results</b><span>Record weight, waist, pulse and fitness tests on Day 1, 15, 27 and 31 to see how far you have come.</span></div></div>
+    <div class="step"><div class="num">5</div><div><b>Get reminders</b><span>Daily alerts at the times you choose, so you never forget.</span></div></div>
+    <button class="btn red full" id="introGo" style="margin-top:16px">Get started</button>
+    <p class="note" style="text-align:center">Free. Your progress stays private on your phone.</p>
+  </div>
+
   <!-- First-time setup -->
   <div id="setup" class="card welcome hidden" style="margin-top:16px">
-    <h2>Welcome</h2>
-    <p class="sub">Set up your 31 days. You can change these later in Settings.</p>
+    <h2>Set up your plan</h2>
+    <p class="sub">Choose when you start and when you want your two daily reminders. You can change these later in Settings.</p>
     <label for="fName">Your first name</label>
     <input id="fName" autocomplete="given-name" placeholder="e.g. Tunde">
     <label for="fStart">Day 1 date</label>
@@ -110,22 +149,26 @@
 
   <div id="main" class="hidden">
     <p class="sub" id="hello"></p>
+    <div class="card gs hidden" id="gs">
+      <div style="display:flex;justify-content:space-between;align-items:center"><b>Getting started</b><button class="btn" id="gsHide" style="padding:4px 10px;font-size:12px">Hide</button></div>
+      <div id="gsList" style="margin-top:6px"></div>
+    </div>
     <div class="bar"><i id="bar"></i></div>
     <div class="stats">
-      <div class="stat"><b id="sTasks">0/62</b><small>tasks</small></div>
-      <div class="stat"><b id="sDays">0</b><small>full days</small></div>
-      <div class="stat"><b id="sStreak">0</b><small>streak</small></div>
+      <div class="stat"><b id="sTasks">0/62</b><small>tasks done</small></div>
+      <div class="stat"><b id="sDays">0</b><small>days complete</small></div>
+      <div class="stat"><b id="sStreak">0</b><small>day streak</small></div>
       <div class="stat"><b id="sSleep">-</b><small>avg sleep</small></div>
     </div>
 
-    <div class="dayhead"><div class="lbl" id="lbl"></div><div class="nav"><button id="prev" aria-label="Previous day">&#8249;</button><button id="todayBtn" aria-label="Today">&#9679;</button><button id="next" aria-label="Next day">&#8250;</button></div></div>
+    <div class="dayhead"><div><div class="lbl" id="lbl"></div><div class="hint">Tap a task to see what to do, then tap Mark done.</div></div><div class="nav"><button id="prev" aria-label="Previous day">&#8249;</button><button id="todayBtn" aria-label="Today">&#9679;</button><button id="next" aria-label="Next day">&#8250;</button></div></div>
     <div id="tasks"></div>
 
     <h2>All 31 days</h2>
     <div class="grid" id="grid"></div>
     <p class="note">Tap a day to open it. Green: both tasks done. Amber: one.</p>
 
-    <h2>Reminders</h2>
+    <h2 id="remindH">Reminders</h2>
     <div class="card">
       <div><b>1. Calendar alerts</b> <span class="pill">most reliable</span></div>
       <p class="sub">Adds a daily alert for your workout and your evening habit for all 31 days. Your phone will ring these on time even when the app is closed.</p>
@@ -141,14 +184,16 @@
       <button class="btn full" id="notifTest">Send a test notification</button>
     </div>
 
-    <h2>Measurements</h2>
+    <h2 id="measH">Measurements</h2>
+    <p class="sub" style="margin-top:-4px;margin-bottom:8px">Fill in each column on that day to see your progress. Day 27 is the stamina test.</p>
     <div class="card scroll"><table id="meas"></table></div>
     <p class="note">Same time each check, ideally in the morning before eating. Resting pulse: count 60 seconds while seated.</p>
 
-    <h2>Ratings (1 to 5)</h2>
+    <h2 id="rateH">Ratings (1 to 5)</h2>
+    <p class="sub" style="margin-top:-4px;margin-bottom:8px">How you feel on Day 1, halfway (Day 14) and at the end.</p>
     <div class="card scroll"><table id="rate"></table></div>
 
-    <h2>Day 30 reflection</h2>
+    <h2 id="reflH">Day 30 reflection</h2>
     <textarea id="refl" placeholder="3 wins, 1 challenge, 3 habits to keep going..."></textarea>
 
     <h2>Daily basics</h2>
@@ -195,8 +240,19 @@
     <p class="note" style="text-align:left">The daily task schedule is adapted from the 31-Day Total Reset Challenge graphic by Coach Josh. All session instructions, progressions and the app itself are original work.</p>
     <p class="note" style="text-align:left">General fitness and wellness guidance only. It is not medical advice. Stop exercising and seek help if you feel chest pain, dizziness or unusual breathlessness.</p>
   </div>
-  <div class="foot">&copy; 2026 <span class="own"></span>. All rights reserved.<br>No part of this app may be copied, modified or redistributed without written permission.<br>Version 2.1</div>
+  <div class="foot">&copy; 2026 <span class="own"></span>. All rights reserved.<br>No part of this app may be copied, modified or redistributed without written permission.<br>Version 2.2</div>
 </div>
+<div class="modal hidden" id="help"><div class="card">
+  <div style="display:flex;justify-content:space-between;align-items:center"><b style="font-size:17px">How to use 31-Day Reset</b><button class="btn" id="helpClose" style="padding:4px 12px">Close</button></div>
+  <h3>Your daily routine</h3><p>Every day has two tasks: a workout and an evening habit, at the times you chose. Open the app, tap a task to read exactly what to do, then tap <b>Mark done</b>.</p>
+  <h3>Moving between days</h3><p>Use the arrows to go back or ahead, or tap any number in the 31-day grid. Green means both tasks are done, amber means one. The dot button takes you back to today.</p>
+  <h3>Sleep</h3><p>Each morning, enter how many hours you slept. The app shows your average.</p>
+  <h3>Check-in days</h3><p>On Day 1, 14, 15, 27, 30 and 31 a red note tells you what to record and takes you straight to the right box.</p>
+  <h3>Reminders</h3><p>Calendar alerts are the most reliable: they ring at your set times even when the app is closed. App notifications are an extra nudge.</p>
+  <h3>Missed a day?</h3><p>No problem. Carry on with the next day. Never miss two in a row.</p>
+  <h3>Your data</h3><p>Everything stays on your own phone. Use <b>Save backup file</b> now and then so you never lose it.</p>
+  <h3>Safety</h3><p>Stop if you feel chest pain, dizziness or unusual breathlessness. Check with a doctor first if you have a health condition.</p>
+</div></div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -264,11 +320,12 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
   var sel=1, openKey=null;
 
   // ---- setup
-  function showSetup(){ $('setup').classList.remove('hidden'); $('main').classList.add('hidden'); $('fStart').value=ymd(new Date()); }
+  function showSetup(){ $('intro').classList.remove('hidden'); $('setup').classList.add('hidden'); $('main').classList.add('hidden'); $('fStart').value=ymd(new Date()); }
+  $('introGo').onclick=function(){ $('intro').classList.add('hidden'); $('setup').classList.remove('hidden'); window.scrollTo({top:0}); };
   $('fGo').onclick=function(){
     if(!$('fStart').value){ toast('Choose your Day 1 date'); return; }
     state.cfg={name:$('fName').value.trim(),start:$('fStart').value,wt:$('fWt').value||'17:00',et:$('fEt').value||'21:00'};
-    save(); boot(); toast('You are set. Add your reminders below.');
+    save(); boot(); window.scrollTo({top:0}); toast('All set. Follow the Getting started list.');
   };
 
   // ---- main screen
@@ -279,8 +336,10 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
     var h='';
     [['w',fmt12(state.cfg.wt),p[0]],['e',fmt12(state.cfg.et),p[1]]].forEach(function(x){
       var k=x[0], open=(openKey===sel+k)||(openKey===null&&k==='w'&&sel===c&&!d.w);
-      h+='<div class="card task'+(open?' open':'')+'" data-k="'+k+'"><div class="top"><span class="time">'+x[1]+'</span><span class="t">'+esc(x[2].t)+'<br><span class="more">'+(open?'Hide details':'Show details')+'</span></span><button class="chk'+(d[k]?' on':'')+'" aria-label="Mark done">'+(d[k]?'&#10003;':'')+'</button></div><pre>'+esc(x[2].d)+'</pre></div>';
+      h+='<div class="card task'+(open?' open':'')+'" data-k="'+k+'"><div class="top"><span class="time">'+x[1]+'<br>'+(k==='w'?'Workout':'Evening')+'</span><span class="t">'+esc(x[2].t)+'<br><span class="more">'+(open?'&#9650; Hide instructions':'&#9660; Tap to see what to do')+'</span></span><button class="chk'+(d[k]?' on':'')+'">'+(d[k]?'Done &#10003;':'Mark done')+'</button></div><pre>'+esc(x[2].d)+'</pre></div>';
     });
+    var F=FLAGS[sel];
+    if(F) h='<div class="flag"><span>'+F[0]+'</span><button data-go="'+F[1]+'">'+F[2]+'</button></div>'+h;
     h+='<div class="card sleeprow"><span>Hours slept last night</span><input class="sleep" type="number" inputmode="decimal" step="0.5" min="0" max="14" id="sl" value="'+esc(d.s)+'"></div>';
     $('tasks').innerHTML=h;
     Array.prototype.forEach.call(document.querySelectorAll('#tasks .task'),function(el){
@@ -291,7 +350,39 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
       };
     });
     $('sl').onchange=function(e){ dd(sel).s=e.target.value; save(); renderStats(); };
+    var fb=document.querySelector('#tasks .flag button'); if(fb) fb.onclick=function(){ goTo(fb.getAttribute('data-go')); };
   }
+  var FLAGS={1:['Check-in day: record your starting measurements and ratings.','measH','Go there'],
+    14:['Halfway: give your Day 14 ratings.','rateH','Go there'],
+    15:['Check-in day: record your Day 15 measurements.','measH','Go there'],
+    27:['Stamina test today: log your minutes under Measurements.','measH','Go there'],
+    30:['Reflection day: write your wins and next steps.','reflH','Go there'],
+    31:['Final check-in: record your Day 31 measurements and ratings.','measH','Go there']};
+  function goTo(id){ var el=$(id); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); }
+
+  // Getting started checklist
+  function flags(){ if(!state.flags) state.flags={}; return state.flags; }
+  function hasMeas(){ var c=state.meas.d1||{}; return Object.keys(c).some(function(k){ return String(c[k]).trim()!==''; }); }
+  function anyTick(){ for(var n in state.days){ if(state.days[n].w||state.days[n].e) return true; } return false; }
+  function renderGS(){
+    var f=flags();
+    var items=[
+      [STANDALONE||f.inst,'Install the app on your home screen',function(){ if(!STANDALONE){ f.inst=true; save(); } renderInstall(); $('installCard').classList.contains('hidden')?openHelp():goTo('installCard'); renderGS(); }],
+      [f.rem||(('Notification' in window)&&Notification.permission==='granted'),'Turn on your daily reminders',function(){ goTo('remindH'); }],
+      [hasMeas(),'Record your Day 1 measurements',function(){ goTo('measH'); }],
+      [anyTick(),'Complete and tick your first task',function(){ sel=Math.min(31,Math.max(1,curDay())); openKey=null; renderAll(); window.scrollTo({top:0,behavior:'smooth'}); }]
+    ];
+    var done=items.filter(function(i){return i[0];}).length;
+    if(f.gsHidden||done===items.length){ $('gs').classList.add('hidden'); return; }
+    $('gs').classList.remove('hidden');
+    $('gsList').innerHTML=items.map(function(i,ix){ return '<div class="it'+(i[0]?' ok':'')+'" data-i="'+ix+'"><div class="bx">'+(i[0]?'&#10003;':'')+'</div><div class="tx">'+i[1]+'</div>'+(i[0]?'':'<div class="go">Do it &#8250;</div>')+'</div>'; }).join('');
+    Array.prototype.forEach.call($('gsList').children,function(el){ el.onclick=function(){ items[+el.getAttribute('data-i')][2](); }; });
+  }
+  $('gsHide').onclick=function(){ flags().gsHidden=true; save(); renderGS(); toast('You can find help any time under "? How it works"'); };
+  function openHelp(){ $('help').classList.remove('hidden'); }
+  $('helpBtn').onclick=openHelp;
+  $('helpClose').onclick=function(){ $('help').classList.add('hidden'); };
+  $('help').onclick=function(e){ if(e.target===$('help')) $('help').classList.add('hidden'); };
   function renderGrid(){
     var h='';
     for(var n=1;n<=31;n++){
@@ -315,7 +406,7 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
     var h='<tr><th></th>'+cols.map(function(c){return '<th>'+c[1]+'</th>';}).join('')+'</tr>';
     rows.forEach(function(r){ h+='<tr><th>'+r[1]+'</th>'+cols.map(function(c){ return '<td><input inputmode="decimal" data-c="'+c[0]+'" data-r="'+r[0]+'" value="'+esc((store[c[0]]||{})[r[0]])+'"></td>'; }).join('')+'</tr>'; });
     $(id).innerHTML=h;
-    Array.prototype.forEach.call($(id).querySelectorAll('input'),function(i){ i.onchange=function(){ var c=i.getAttribute('data-c'); if(!store[c]) store[c]={}; store[c][i.getAttribute('data-r')]=i.value; save(); toast('Saved'); }; });
+    Array.prototype.forEach.call($(id).querySelectorAll('input'),function(i){ i.onchange=function(){ var c=i.getAttribute('data-c'); if(!store[c]) store[c]={}; store[c][i.getAttribute('data-r')]=i.value; save(); toast('Saved'); renderGS(); }; });
   }
   function renderForms(){
     table('meas',MEAS,MCOLS,state.meas); table('rate',RATES,RCOLS,state.rate);
@@ -324,7 +415,7 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
     renderCal(); renderNotif();
   }
   $('refl').onchange=function(){ state.refl=$('refl').value; save(); toast('Saved'); };
-  function renderAll(){ renderDay(); renderGrid(); renderStats(); }
+  function renderAll(){ renderDay(); renderGrid(); renderStats(); renderGS(); }
 
   $('prev').onclick=function(){ if(sel>1){ sel--; openKey=null; renderAll(); } };
   $('next').onclick=function(){ if(sel<31){ sel++; openKey=null; renderAll(); } };
@@ -350,6 +441,8 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
       '&details='+encodeURIComponent(details+'\n\nOpen the app for today\'s exact instructions: '+location.href.split('#')[0]);
     return u;
   }
+  $('gcalW').addEventListener('click',function(){ flags().rem=true; save(); renderGS(); });
+  $('gcalE').addEventListener('click',function(){ flags().rem=true; save(); renderGS(); });
   function renderCal(){
     $('gcalW').href=gcal('31-Day Reset: workout',state.cfg.wt,45,'Time for today\'s 31-Day Reset workout.');
     $('gcalE').href=gcal('31-Day Reset: evening habit',state.cfg.et,15,'Time for today\'s 31-Day Reset evening habit and check-in.');
@@ -358,6 +451,7 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
   function fold(l){ var o='',i=0; while(l.length-i>73){ o+=l.slice(i,i+73)+'\r\n '; i+=73; } return o+l.slice(i); }
   $('installBtn').onclick=function(){ if(!deferredPrompt) return; deferredPrompt.prompt(); deferredPrompt.userChoice.then(function(){ deferredPrompt=null; $('installCard').classList.add('hidden'); }); };
   $('icsBtn').onclick=function(){
+    flags().rem=true; save(); renderGS();
     var L=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//'+OWNER.name+'//31-Day Reset//EN','CALSCALE:GREGORIAN','METHOD:PUBLISH'];
     var now=new Date(), dtstamp=now.getUTCFullYear()+pad(now.getUTCMonth()+1)+pad(now.getUTCDate())+'T'+pad(now.getUTCHours())+pad(now.getUTCMinutes())+'00Z';
     for(var n=1;n<=31;n++){
@@ -418,7 +512,7 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
     if(!('Notification' in window)){ toast('This browser does not support notifications'); return; }
     Notification.requestPermission().then(function(p){
       renderNotif();
-      if(p==='granted'){ scheduleInApp(); regPeriodic(); notify('31-Day Reset','Notifications are on. You will get nudges about today\'s tasks.','reset-on'); }
+      if(p==='granted'){ renderGS(); scheduleInApp(); regPeriodic(); notify('31-Day Reset','Notifications are on. You will get nudges about today\'s tasks.','reset-on'); }
       else toast('Notifications were not allowed. You can change this in your phone settings.');
     });
   };
@@ -442,7 +536,7 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
 
   function boot(){
     if(!state.cfg||!state.cfg.start){ showSetup(); return; }
-    $('setup').classList.add('hidden'); $('main').classList.remove('hidden');
+    $('intro').classList.add('hidden'); $('setup').classList.add('hidden'); $('main').classList.remove('hidden');
     sel=Math.min(31,Math.max(1,curDay())); openKey=null;
     renderForms(); renderAll(); scheduleInApp(); mirror();
   }
