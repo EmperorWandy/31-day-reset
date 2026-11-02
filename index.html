@@ -207,6 +207,13 @@
   .ring .fg{stroke-linecap:round;transition:stroke-dashoffset .2s linear}
   .ring .num{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:50px;font-weight:800}
   .ring .num small{font-size:13px;color:var(--mute);font-weight:500}
+  .fig{width:190px;height:140px;margin:6px auto 0}
+  .fig svg{width:100%;height:100%;display:block}
+  .fig + .ring{width:170px;height:170px;margin-top:4px}
+  .fig + .ring svg{width:170px;height:170px}
+  .fig + .ring .num{font-size:42px}
+  .fig + .reps{margin-top:6px}
+  .figlbl{color:var(--mute);font-size:12px;margin-top:2px}
   .reps{font-size:58px;font-weight:800;margin:26px 0 6px;line-height:1.1}
   .reps small{display:block;font-size:14px;color:var(--mute);font-weight:500}
   .how{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;text-align:left;font-size:14px;color:#dcdef0;margin-top:14px}
@@ -255,6 +262,26 @@
   @keyframes fall{0%{transform:translateY(-20px) rotate(0)}100%{transform:translateY(110vh) rotate(540deg)}}
   @keyframes pop{0%{transform:scale(.3)}70%{transform:scale(1.1)}100%{transform:scale(1)}}
   .cert-prev{border-radius:12px;overflow:hidden;border:1px solid var(--line);margin-top:10px}
+
+  /* charts */
+  .mc{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 14px;margin-top:10px}
+  .mc-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+  .mc-h span{color:var(--ink);font-weight:700;font-size:14px}
+  .mc-c{color:var(--mute);font-size:12.5px;margin-top:2px}
+  .mc-c .ok{color:#7ff0ad;font-weight:700}
+  .mcs{width:100%;height:auto;display:block;margin-top:6px;overflow:visible}
+  .mcs .ax{fill:#a3a6c4;font-size:9px;font-family:Poppins,system-ui,sans-serif}
+  .mcs .vl{fill:#f4f5ff;font-size:10px;font-weight:700;font-family:Poppins,system-ui,sans-serif}
+  .ctip{color:var(--ink);font-size:12.5px;background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:6px 10px;display:inline-block}
+  .rr{display:flex;gap:8px;align-items:center;padding:7px 0;border-top:1px solid var(--line);font-size:13.5px;margin-top:4px}
+  .rr span{flex:1;color:var(--mute)}
+  .rr em{font-style:normal;color:#7ff0ad;font-size:12px}
+  #buddy .pc-h,#round2 .pc-h{display:flex;align-items:center;gap:8px}
+  #buddy .pc-h b,#round2 .pc-h b{flex:1}
+  #buddy .pc-h svg{color:#25d366}
+  #round2{margin-top:14px;border-color:#e0a800}
+  #round2 .pc-h svg{color:#ffc312}
+  .r2tag{display:inline-block;background:rgba(255,255,255,.22);border-radius:10px;padding:1px 8px;font-size:11px;font-weight:700;margin-left:6px;vertical-align:middle}
 
   /* modal, toast, update */
   .modal{position:fixed;inset:0;background:rgba(0,0,0,.75);display:flex;align-items:flex-end;justify-content:center;z-index:8;padding:12px}
@@ -404,6 +431,7 @@
       <button class="startbtn hidden" id="heroStart"></button>
     </div>
     <div id="snote"></div>
+    <div class="card hidden" id="round2"></div>
 
     <div class="card gs hidden" id="gs">
       <div style="display:flex;justify-content:space-between;align-items:center"><b>Getting started</b><button class="link" id="gsHide" style="font-size:12px">Hide</button></div>
@@ -437,6 +465,9 @@
       </div>
     </div>
 
+    <h2 id="buddyH">Workout buddy</h2>
+    <div class="card" id="buddy"></div>
+
     <h2 id="remindH">Reminders</h2>
     <div class="card">
       <div><b>Calendar alerts</b> <span class="pill ok">most reliable</span></div>
@@ -461,6 +492,10 @@
     <h2 id="rateH">How you feel (1 to 5)</h2>
     <p class="sub" style="margin:-4px 0 8px">On Day 1, halfway (Day 14) and at the end.</p>
     <div class="card scroll"><table id="rate"></table></div>
+
+    <h2 id="chartsH">Your progress</h2>
+    <div id="charts"></div>
+    <div id="history"></div>
 
     <h2 id="reflH">Day 30 reflection</h2>
     <textarea id="refl" placeholder="3 wins, 1 challenge, 3 habits to keep going..."></textarea>
@@ -510,7 +545,7 @@
     <p class="note" style="text-align:left">The daily task schedule is adapted from the 31-Day Total Reset Challenge graphic by Coach Josh. All session instructions, progressions and the app itself are original work.</p>
     <p class="note" style="text-align:left">General fitness and wellness guidance only. It is not medical advice. Stop exercising and seek help if you feel chest pain, dizziness or unusual breathlessness.</p>
   </div>
-  <div class="foot">&copy; 2026 <span class="own"></span>. All rights reserved.<br>No part of this app may be copied, modified or redistributed without written permission.<br>Version 3.3</div>
+  <div class="foot">&copy; 2026 <span class="own"></span>. All rights reserved.<br>No part of this app may be copied, modified or redistributed without written permission.<br>Version 4.0</div>
 </div>
 
 <div class="modal hidden" id="help"><div class="card">
@@ -520,6 +555,10 @@
   <h3>Guided workouts</h3><p>Tap <b>Start today's workout</b>. The app shows one move at a time with a countdown, rest timers and a voice coach, and keeps your screen on. Each move shows how to do it, plus an easier and a harder version. On test days it saves your results for you. When you finish, the workout is ticked off automatically.</p>
   <h3>Your if-then plan</h3><p>Decide where you will train and what you will do when life gets in the way. Edit it any time from the plan card or Settings.</p>
   <h3>Badges and certificate</h3><p>Earn badges for your first day and at 7, 14 and 21 full days. Finish Day 31 to unlock a personalised certificate you can save and share.</p>
+  <h3>Exercise pictures</h3><p>In a guided workout, a moving figure shows each exercise from start to finish. During rests it shows the next move so you can get ready.</p>
+  <h3>Your progress</h3><p>Charts show your sleep for every day and how your measurements changed from Day 1 to Day 31. Tap a point or bar to see its value.</p>
+  <h3>Workout buddy</h3><p>Invite a friend on WhatsApp and send each other a quick update every day. People who train with someone are more likely to keep going.</p>
+  <h3>Round 2</h3><p>After Day 31 you can start Round 2: the same plan, one level up, with your Round 1 results kept in your history.</p>
   <h3>Colours</h3><p>Red is strength, orange is cardio, green is mobility and recovery, gold is your final test. Evening habits have their own colours: sleep, water, food and stress.</p>
   <h3>Moving between days</h3><p>Use the arrows or tap any day in the grid. The dot button takes you back to today.</p>
   <h3>Check-in days</h3><p>On Day 1, 14, 15, 27, 30 and 31 a gold note tells you what to record and takes you straight there.</p>
@@ -707,7 +746,7 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
     if(FLAGS[sel]) h+='<div class="flag"><span>'+FLAGS[sel][0]+'</span><button data-go="'+FLAGS[sel][1]+'">Go there</button></div>';
     [['w',fmt12(state.cfg.wt),'Workout',p[0],CAT[wcat(p[0].t)]],['e',fmt12(state.cfg.et),'Evening',p[1],CAT[ecat(p[1].t)]]].forEach(function(x){
       var k=x[0], open=(openKey===sel+k)||(openKey===null&&k==='w'&&sel===c&&!d.w), cat=x[4];
-      h+='<div class="task'+(open?' open':'')+'" data-k="'+k+'" style="--c:'+cat.c+'"><div class="top"><div class="ic">'+icon(cat.i)+'</div><div class="t"><div class="meta">'+x[1]+' &middot; '+x[2]+' &middot; '+cat.n+'</div><div class="ttl">'+esc(x[3].t)+'</div><div class="more">'+(open?'&#9650; Hide instructions':'&#9660; Tap to see what to do')+'</div></div><button class="chk'+(d[k]?' on':'')+'">'+(d[k]?'Done &#10003;':'Mark done')+'</button></div>'+(k==='w'?'<button class="tstart" data-start="'+sel+'">&#9654; Start guided workout &middot; about '+estMin(sel)+' min</button>':'')+'<pre>'+esc(x[3].d)+'</pre></div>';
+      h+='<div class="task'+(open?' open':'')+'" data-k="'+k+'" style="--c:'+cat.c+'"><div class="top"><div class="ic">'+icon(cat.i)+'</div><div class="t"><div class="meta">'+x[1]+' &middot; '+x[2]+' &middot; '+cat.n+'</div><div class="ttl">'+esc(x[3].t)+'</div><div class="more">'+(open?'&#9650; Hide instructions':'&#9660; Tap to see what to do')+'</div></div><button class="chk'+(d[k]?' on':'')+'">'+(d[k]?'Done &#10003;':'Mark done')+'</button></div>'+(k==='w'?'<button class="tstart" data-start="'+sel+'">&#9654; Start guided workout &middot; about '+estMin(sel)+' min</button>':'')+'<pre>'+(k==='w'&&(state.round||1)>1?'Round '+state.round+': the guided workout adds an extra round or set, longer holds and more cardio than the numbers below.\n\n':'')+esc(x[3].d)+'</pre></div>';
     });
     h+='<div class="card sleeprow"><span>Hours slept last night</span><input class="sleep" type="number" inputmode="decimal" step="0.5" min="0" max="14" id="sl" value="'+esc(d.s)+'"></div>';
     $('tasks').innerHTML=h;
@@ -718,7 +757,7 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
         openKey = el.classList.contains('open') ? sel+'none' : sel+k; renderDay();
       };
     });
-    $('sl').onchange=function(e){ dd(sel).s=e.target.value; save(); renderStats(); };
+    $('sl').onchange=function(e){ dd(sel).s=e.target.value; save(); renderStats(); renderCharts(); };
     var fb=document.querySelector('#tasks .flag button'); if(fb) fb.onclick=function(){ goTo(fb.getAttribute('data-go')); };
     each('#tasks .tstart',function(b){ b.onclick=function(){ gwOpen(+b.getAttribute('data-start')); }; });
   }
@@ -778,7 +817,7 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
     $('bar').style.width=(t/62*100)+'%';
     var c2=curDay(), nm=state.cfg.name?(', '+state.cfg.name):'';
     $('hello').textContent=(new Date().getHours()<12?'Good morning':(new Date().getHours()<17?'Good afternoon':'Good evening'))+nm;
-    $('heroDay').textContent = c2<1 ? 'Starts '+dateLabel(1) : (c2>31 ? 'All 31 days done!' : 'Day '+c2+' of 31');
+    $('heroDay').innerHTML = (c2<1 ? 'Starts '+dateLabel(1) : (c2>31 ? 'All 31 days done!' : 'Day '+c2+' of 31'))+((state.round||1)>1?'<span class="r2tag">Round '+state.round+'</span>':'');
     var hs=$('heroStart');
     if(c2>=1&&c2<=31&&!dd(c2).w){ hs.innerHTML='<span>&#9654; Start today\'s workout</span><small>'+esc(PLAN[c2-1][0].t)+' &middot; about '+estMin(c2)+' min</small>'; hs.onclick=function(){ gwOpen(c2); }; hs.classList.remove('hidden'); }
     else hs.classList.add('hidden');
@@ -787,7 +826,7 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
     var h='<tr><th></th>'+cols.map(function(c){return '<th>'+c[1]+'</th>';}).join('')+'</tr>';
     rows.forEach(function(r){ h+='<tr><th>'+r[1]+'</th>'+cols.map(function(c){ return '<td><input inputmode="decimal" data-c="'+c[0]+'" data-r="'+r[0]+'" value="'+esc((store[c[0]]||{})[r[0]])+'"></td>'; }).join('')+'</tr>'; });
     $(id).innerHTML=h;
-    each('#'+id+' input',function(i){ i.onchange=function(){ var c=i.getAttribute('data-c'); if(!store[c]) store[c]={}; store[c][i.getAttribute('data-r')]=i.value; save(); toast('Saved'); renderGS(); }; });
+    each('#'+id+' input',function(i){ i.onchange=function(){ var c=i.getAttribute('data-c'); if(!store[c]) store[c]={}; store[c][i.getAttribute('data-r')]=i.value; save(); toast('Saved'); renderGS(); renderCharts(); }; });
   }
   var MEAS=[["w","Weight (kg)"],["waist","Waist (cm)"],["pulse","Resting pulse"],["push","Max push-ups"],["plank","Plank (s)"],["stam","Stamina (min)"]];
   var MCOLS=[["d1","Day 1"],["d15","Day 15"],["d27","Day 27"],["d31","Day 31"]];
@@ -822,7 +861,7 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
   }
   $('gsHide').onclick=function(){ flags().gsHidden=true; save(); renderGS(); toast('Help is always under "? Help" at the top'); };
 
-  function renderAll(){ renderDay(); renderGrid(); renderStats(); renderGS(); renderStreakNote(); renderPlanCard(); renderBadges(); checkBadges(); }
+  function renderAll(){ renderDay(); renderGrid(); renderStats(); renderGS(); renderStreakNote(); renderPlanCard(); renderBadges(); checkBadges(); renderBuddy(); renderRound(); renderCharts(); renderHistory(); }
   $('prev').onclick=function(){ if(sel>1){ sel--; openKey=null; renderAll(); } };
   $('next').onclick=function(){ if(sel<31){ sel++; openKey=null; renderAll(); } };
   $('todayBtn').onclick=function(){ sel=Math.min(31,Math.max(1,curDay())); openKey=null; renderAll(); };
@@ -964,6 +1003,129 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
   $('resetNo').onclick=function(){ $('resetConfirm').classList.add('hidden'); };
   $('resetYes').onclick=function(){ try{ localStorage.removeItem(KEY); }catch(e){} load(); mirror(); $('resetConfirm').classList.add('hidden'); boot(); };
 
+  // =================== EXERCISE FIGURES (animated, side view) ===================
+  // Joints: h head, s shoulder, c mid-spine (optional), p hip, k1/f1 front knee/foot, k2/f2 back knee/foot, e1/w1 front elbow/hand, e2/w2 back elbow/hand
+  function FP(o){ return o; }
+  var STAND=FP({h:[60,13],s:[60,24],p:[60,48],k1:[61,65],f1:[63,82],k2:[59,65],f2:[57,82],e1:[61,36],w1:[62,47],e2:[59,36],w2:[58,47]});
+  function mv(base,ch){ var o={},k; for(k in base) o[k]=base[k]; for(k in ch) o[k]=ch[k]; return o; }
+  function shift(base,dx,dy){ var o={},k; for(k in base){ o[k]=Array.isArray(base[k])&&typeof base[k][0]==='number'?[base[k][0]+dx,base[k][1]+dy]:base[k]; } return o; }
+  var POSES={
+    squat:[mv(STAND,{e1:[70,28],w1:[82,28],e2:[69,29],w2:[81,29]}),
+           FP({h:[70,34],s:[66,43],p:[46,60],k1:[68,63],f1:[63,82],k2:[66,64],f2:[59,82],e1:[78,44],w1:[90,43],e2:[77,45],w2:[89,44]})],
+    deepsquat:[FP({h:[66,40],s:[62,49],p:[50,70],k1:[68,62],f1:[62,82],k2:[66,63],f2:[58,82],e1:[66,60],w1:[70,66],e2:[64,61],w2:[68,67]}),
+               FP({h:[66,41],s:[62,50],p:[50,71],k1:[69,62],f1:[62,82],k2:[67,63],f2:[58,82],e1:[66,61],w1:[70,67],e2:[64,62],w2:[68,68]})],
+    pushup:[FP({h:[97,52],s:[88,57],p:[55,66],k1:[38,73],f1:[20,80],k2:[38,73],f2:[20,80],e1:[88,69],w1:[88,82],e2:[86,69],w2:[86,82]}),
+            FP({h:[98,70],s:[88,73],p:[55,76],k1:[38,78],f1:[20,80],k2:[38,78],f2:[20,80],e1:[78,70],w1:[88,82],e2:[76,70],w2:[86,82]})],
+    wallpush:[FP({h:[84,22],s:[78,30],p:[64,52],k1:[60,67],f1:[56,82],k2:[60,67],f2:[56,82],e1:[87,30],w1:[96,30],e2:[86,31],w2:[96,31],wall:96}),
+              FP({h:[90,24],s:[84,32],p:[67,53],k1:[61,68],f1:[56,82],k2:[61,68],f2:[56,82],e1:[86,42],w1:[96,30],e2:[85,43],w2:[96,31],wall:96})],
+    pike:[FP({h:[84,66],s:[78,60],p:[56,38],k1:[46,60],f1:[36,82],k2:[46,60],f2:[36,82],e1:[82,71],w1:[86,82],e2:[81,71],w2:[85,82]}),
+          FP({h:[85,76],s:[78,70],p:[56,40],k1:[46,61],f1:[36,82],k2:[46,61],f2:[36,82],e1:[72,74],w1:[86,82],e2:[71,74],w2:[85,82]})],
+    bridge:[FP({h:[16,76],s:[27,78],p:[55,79],k1:[69,61],f1:[77,82],k2:[68,62],f2:[76,82],e1:[38,80],w1:[49,81],e2:[38,80],w2:[49,81]}),
+            FP({h:[16,76],s:[27,77],p:[53,63],k1:[70,58],f1:[77,82],k2:[69,59],f2:[76,82],e1:[38,80],w1:[49,81],e2:[38,80],w2:[49,81]})],
+    row:[FP({h:[86,33],s:[77,38],p:[50,47],k1:[55,64],f1:[53,82],k2:[51,64],f2:[48,82],e1:[77,51],w1:[77,63],e2:[75,51],w2:[75,63],bag:1}),
+         FP({h:[86,33],s:[77,38],p:[50,47],k1:[55,64],f1:[53,82],k2:[51,64],f2:[48,82],e1:[64,40],w1:[72,52],e2:[62,41],w2:[70,53],bag:1})],
+    plank:[FP({h:[97,62],s:[88,66],p:[55,70],k1:[38,75],f1:[20,80],k2:[38,75],f2:[20,80],e1:[88,82],w1:[100,82],e2:[86,82],w2:[98,82]}),
+           FP({h:[97,61],s:[88,65],p:[55,69],k1:[38,74],f1:[20,80],k2:[38,74],f2:[20,80],e1:[88,82],w1:[100,82],e2:[86,82],w2:[98,82]})],
+    sideplank:[FP({h:[94,58],s:[86,63],p:[55,72],k1:[38,77],f1:[20,81],k2:[38,76],f2:[20,79],e1:[86,82],w1:[98,82],e2:[86,50],w2:[86,38]}),
+               FP({h:[94,55],s:[86,60],p:[55,66],k1:[38,74],f1:[20,81],k2:[38,73],f2:[20,79],e1:[86,82],w1:[98,82],e2:[86,47],w2:[86,35]})],
+    lunge:[STAND,
+           FP({h:[60,30],s:[60,41],p:[58,62],k1:[75,63],f1:[75,82],k2:[48,80],f2:[33,81],e1:[60,52],w1:[61,63],e2:[59,52],w2:[58,63]})],
+    wallsit:[FP({h:[44,29],s:[44,40],p:[44,62],k1:[66,62],f1:[66,82],k2:[65,63],f2:[64,82],e1:[52,52],w1:[60,58],e2:[51,53],w2:[59,59],wall:40}),
+             FP({h:[44,28],s:[44,39],p:[44,62],k1:[66,62],f1:[66,82],k2:[65,63],f2:[64,82],e1:[52,51],w1:[60,57],e2:[51,52],w2:[59,58],wall:40})],
+    calf:[mv(STAND,{e1:[68,32],w1:[76,30],e2:[67,33],w2:[76,31],wall:78}),
+          mv(shift(STAND,0,-6),{f1:[66,82],f2:[60,82],e1:[68,26],w1:[76,24],e2:[67,27],w2:[76,25],wall:78})],
+    climber:[FP({h:[97,52],s:[88,57],p:[56,64],k1:[72,70],f1:[60,80],k2:[38,72],f2:[20,80],e1:[88,69],w1:[88,82],e2:[86,69],w2:[86,82]}),
+             FP({h:[97,52],s:[88,57],p:[56,64],k1:[38,72],f1:[20,80],k2:[72,70],f2:[60,80],e1:[88,69],w1:[88,82],e2:[86,69],w2:[86,82]})],
+    dips:[FP({h:[50,31],s:[49,42],p:[52,62],k1:[74,62],f1:[76,82],k2:[73,63],f2:[75,82],e1:[45,52],w1:[42,62],e2:[44,52],w2:[41,62],chair:[22,62,22,20]}),
+          FP({h:[52,42],s:[50,52],p:[53,72],k1:[74,66],f1:[76,82],k2:[73,67],f2:[75,82],e1:[36,56],w1:[42,62],e2:[35,56],w2:[41,62],chair:[22,62,22,20]})],
+    superman:[FP({h:[97,76],s:[86,78],p:[55,79],k1:[38,80],f1:[20,80],k2:[38,80],f2:[20,80],e1:[97,80],w1:[108,80],e2:[97,80],w2:[108,80]}),
+              FP({h:[97,70],s:[86,74],p:[55,79],k1:[38,77],f1:[21,72],k2:[38,77],f2:[21,72],e1:[97,70],w1:[108,66],e2:[97,70],w2:[108,66]})],
+    deadbug:[FP({h:[16,76],s:[27,78],p:[55,79],k1:[56,60],f1:[72,60],k2:[57,61],f2:[73,61],e1:[28,66],w1:[29,53],e2:[27,66],w2:[28,53]}),
+             FP({h:[16,76],s:[27,78],p:[55,79],k1:[57,61],f1:[73,61],k2:[72,73],f2:[90,76],e1:[29,66],w1:[30,53],e2:[17,70],w2:[7,73]})],
+    birddog:[FP({h:[90,52],s:[80,58],p:[52,58],k1:[52,82],f1:[34,82],k2:[51,82],f2:[33,82],e1:[80,70],w1:[80,82],e2:[79,70],w2:[79,82]}),
+             FP({h:[90,52],s:[80,58],p:[52,58],k1:[52,82],f1:[34,82],k2:[36,58],f2:[20,56],e1:[80,70],w1:[80,82],e2:[93,56],w2:[106,54]})],
+    burpee:[FP({h:[70,40],s:[66,48],p:[48,62],k1:[66,64],f1:[62,82],k2:[64,65],f2:[58,82],e1:[72,64],w1:[74,82],e2:[70,64],w2:[72,82]}),
+            FP({h:[97,52],s:[88,57],p:[55,66],k1:[38,73],f1:[20,80],k2:[38,73],f2:[20,80],e1:[88,69],w1:[88,82],e2:[86,69],w2:[86,82]})],
+    catcow:[FP({h:[90,62],s:[80,58],c:[66,46],p:[52,58],k1:[52,82],f1:[34,82],k2:[51,82],f2:[33,82],e1:[80,70],w1:[80,82],e2:[79,70],w2:[79,82]}),
+            FP({h:[91,50],s:[80,56],c:[66,66],p:[52,57],k1:[52,82],f1:[34,82],k2:[51,82],f2:[33,82],e1:[80,70],w1:[80,82],e2:[79,70],w2:[79,82]})],
+    worlds:[FP({h:[84,56],s:[76,58],p:[56,63],k1:[78,64],f1:[80,82],k2:[44,77],f2:[28,80],e1:[78,70],w1:[78,82],e2:[76,70],w2:[76,82]}),
+            FP({h:[82,52],s:[76,56],p:[56,63],k1:[78,64],f1:[80,82],k2:[44,77],f2:[28,80],e1:[78,70],w1:[78,82],e2:[74,42],w2:[72,28]})],
+    hipflexor:[FP({h:[58,27],s:[58,38],p:[56,62],k1:[74,64],f1:[74,82],k2:[47,82],f2:[30,82],e1:[63,48],w1:[60,58],e2:[62,48],w2:[59,58]}),
+               FP({h:[62,28],s:[62,39],p:[61,64],k1:[78,63],f1:[76,82],k2:[47,82],f2:[30,82],e1:[67,49],w1:[64,59],e2:[66,49],w2:[63,59]})],
+    thoracic:[FP({h:[90,56],s:[80,58],p:[52,58],k1:[52,82],f1:[34,82],k2:[51,82],f2:[33,82],e1:[80,70],w1:[80,82],e2:[82,68],w2:[88,58]}),
+              FP({h:[88,50],s:[80,56],p:[52,58],k1:[52,82],f1:[34,82],k2:[51,82],f2:[33,82],e1:[80,70],w1:[80,82],e2:[76,42],w2:[86,48]})],
+    hamstring:[FP({h:[70,26],s:[66,36],p:[56,56],k1:[72,64],f1:[86,70],k2:[56,69],f2:[56,82],e1:[70,46],w1:[74,56],e2:[69,47],w2:[73,57],box:[76,70,22,12]}),
+               FP({h:[82,38],s:[74,42],p:[54,56],k1:[72,64],f1:[86,70],k2:[56,69],f2:[56,82],e1:[78,52],w1:[82,62],e2:[77,53],w2:[81,63],box:[76,70,22,12]})],
+    child:[FP({h:[80,76],s:[70,73],p:[42,70],k1:[54,82],f1:[34,82],k2:[53,82],f2:[33,82],e1:[86,79],w1:[100,81],e2:[85,79],w2:[99,81]}),
+           FP({h:[81,77],s:[71,74],p:[41,71],k1:[54,82],f1:[34,82],k2:[53,82],f2:[33,82],e1:[87,80],w1:[101,81],e2:[86,80],w2:[100,81]})],
+    march:[mv(STAND,{k1:[72,52],f1:[72,68],e1:[56,35],w1:[52,44],e2:[64,35],w2:[70,42]}),
+           mv(STAND,{k2:[72,52],f2:[72,68],e2:[56,35],w2:[52,44],e1:[64,35],w1:[70,42]})],
+    walk:[mv(STAND,{k1:[66,64],f1:[72,82],k2:[56,65],f2:[48,82],e1:[66,35],w1:[72,44],e2:[55,36],w2:[50,45]}),
+          mv(STAND,{k2:[66,64],f2:[72,82],k1:[56,65],f1:[48,82],e2:[66,35],w2:[72,44],e1:[55,36],w1:[50,45]})],
+    jog:[FP({h:[63,14],s:[62,25],p:[59,48],k1:[72,58],f1:[70,74],k2:[52,66],f2:[42,74],e1:[70,32],w1:[76,24],e2:[52,34],w2:[48,42]}),
+         FP({h:[63,12],s:[62,23],p:[59,46],k2:[72,56],f2:[70,72],k1:[52,64],f1:[42,72],e2:[70,30],w2:[76,22],e1:[52,32],w1:[48,40]})],
+    armcircle:[mv(STAND,{e1:[60,12],w1:[60,0],e2:[59,13],w2:[59,1]}),
+               mv(STAND,{e1:[72,24],w1:[84,24],e2:[71,25],w2:[83,25]})],
+    hipcircle:[mv(STAND,{p:[56,48],k1:[59,65],k2:[57,65],e1:[56,36],w1:[57,46],e2:[55,36],w2:[56,46]}),
+               mv(STAND,{p:[64,48],k1:[63,65],k2:[61,65],e1:[64,36],w1:[65,46],e2:[63,36],w2:[64,46]})],
+    legswing:[mv(STAND,{k1:[70,62],f1:[80,76],e1:[52,30],w1:[44,30],wall:42}),
+              mv(STAND,{k1:[54,64],f1:[46,78],e1:[52,30],w1:[44,30],wall:42})],
+    shoulder:[mv(STAND,{s:[60,22],e1:[61,34],w1:[62,45]}),mv(STAND,{s:[58,25],e1:[59,37],w1:[60,48]})],
+    thigh:[mv(STAND,{k2:[58,65],f2:[48,52],e2:[52,40],w2:[49,51],e1:[68,30],w1:[76,28],wall:78}),
+           mv(STAND,{k2:[58,65],f2:[47,50],e2:[51,40],w2:[48,49],e1:[68,30],w1:[76,28],wall:78})],
+    calfstretch:[FP({h:[80,22],s:[76,31],p:[62,52],k1:[72,66],f1:[74,82],k2:[54,67],f2:[44,82],e1:[86,30],w1:[96,28],e2:[85,31],w2:[96,29],wall:96}),
+                 FP({h:[82,23],s:[78,32],p:[64,53],k1:[74,66],f1:[74,82],k2:[54,67],f2:[44,82],e1:[87,31],w1:[96,28],e2:[86,32],w2:[96,29],wall:96})],
+    chest:[mv(STAND,{e1:[50,24],w1:[46,12],wall:44}),mv(STAND,{s:[62,24],e1:[50,24],w1:[46,12],wall:44})],
+    across:[mv(STAND,{e1:[66,30],w1:[76,26],e2:[68,26],w2:[64,22]}),mv(STAND,{e1:[67,28],w1:[78,24],e2:[69,25],w2:[65,21]})],
+    upperback:[mv(STAND,{h:[64,15],e1:[72,28],w1:[84,30],e2:[71,29],w2:[83,31]}),mv(STAND,{h:[66,18],s:[62,26],e1:[74,30],w1:[86,32],e2:[73,31],w2:[85,33]})],
+    kneehug:[FP({h:[16,76],s:[27,78],p:[52,78],k1:[52,60],f1:[64,66],k2:[53,61],f2:[65,67],e1:[38,68],w1:[54,62],e2:[37,69],w2:[53,63]}),
+             FP({h:[17,74],s:[28,77],p:[52,78],k1:[48,58],f1:[60,62],k2:[49,59],f2:[61,63],e1:[36,66],w1:[50,58],e2:[35,67],w2:[49,59]})],
+    hipstretch:[FP({h:[16,76],s:[27,78],p:[52,78],k1:[54,58],f1:[66,66],k2:[64,62],f2:[56,64],e1:[40,68],w1:[56,64],e2:[39,69],w2:[55,65]}),
+                FP({h:[16,76],s:[27,78],p:[52,78],k1:[50,56],f1:[62,62],k2:[60,60],f2:[52,62],e1:[38,66],w1:[52,60],e2:[37,67],w2:[51,61]})]
+  };
+  var FIGMAP=[
+    [/wall push/,'wallpush'],[/pike/,'pike'],[/push-up/,'pushup'],[/glute bridge/,'bridge'],[/deep squat/,'deepsquat'],[/squat/,'squat'],
+    [/row/,'row'],[/side plank/,'sideplank'],[/plank/,'plank'],[/lunge/,'lunge'],[/wall sit/,'wallsit'],[/calf raise/,'calf'],
+    [/mountain climber/,'climber'],[/dips/,'dips'],[/superman/,'superman'],[/dead bug/,'deadbug'],[/bird dog/,'birddog'],[/burpee|finisher/,'burpee'],
+    [/cat-cow/,'catcow'],[/greatest stretch/,'worlds'],[/hip flexor/,'hipflexor'],[/thoracic/,'thoracic'],[/hamstring/,'hamstring'],[/child/,'child'],
+    [/march/,'march'],[/arm circle/,'armcircle'],[/hip circle/,'hipcircle'],[/leg swing/,'legswing'],[/shoulder roll/,'shoulder'],
+    [/calf stretch/,'calfstretch'],[/thigh stretch/,'thigh'],[/hip stretch/,'hipstretch'],[/chest stretch/,'chest'],[/shoulder stretch/,'across'],[/upper back/,'upperback'],[/knee hug/,'kneehug'],
+    [/^fast|jog|stamina|cardio|pick-up|pace|movement|cycle/,'jog'],[/walk/,'walk']
+  ];
+  function figFor(n){ var k=n.toLowerCase(); for(var i=0;i<FIGMAP.length;i++){ if(FIGMAP[i][0].test(k)) return FIGMAP[i][1]; } return null; }
+  var LIMBS=[['s','e2',1],['e2','w2',1],['p','k2',1],['k2','f2',1],['p','k1',0],['k1','f1',0],['s','e1',0],['e1','w1',0]];
+  function lerpPose(A,B,t){ var o={},k; for(k in A){ if(Array.isArray(A[k])&&B[k]) o[k]=[A[k][0]+(B[k][0]-A[k][0])*t,A[k][1]+(B[k][1]-A[k][1])*t]; else o[k]=A[k]; } return o; }
+  function figSVG(pose,col){
+    var P=pose, L='', mid=P.c||[(P.s[0]+P.p[0])/2,(P.s[1]+P.p[1])/2];
+    var line=function(a,b,back){ return '<line x1="'+a[0].toFixed(1)+'" y1="'+a[1].toFixed(1)+'" x2="'+b[0].toFixed(1)+'" y2="'+b[1].toFixed(1)+'"'+(back?' opacity=".38"':'')+'/>'; };
+    var props='';
+    if(P.wall!=null) props+='<line x1="'+P.wall+'" y1="6" x2="'+P.wall+'" y2="82" stroke="#5a5e85" stroke-width="3"/>';
+    if(P.chair) props+='<rect x="'+P.chair[0]+'" y="'+P.chair[1]+'" width="'+P.chair[2]+'" height="'+P.chair[3]+'" rx="2" fill="#3a3d63"/>';
+    if(P.box) props+='<rect x="'+P.box[0]+'" y="'+P.box[1]+'" width="'+P.box[2]+'" height="'+P.box[3]+'" rx="2" fill="#3a3d63"/>';
+    LIMBS.forEach(function(l){ if(l[2]) L+=line(P[l[0]],P[l[1]],1); });
+    L+='<polyline points="'+[P.s,mid,P.p].map(function(q){return q[0].toFixed(1)+','+q[1].toFixed(1);}).join(' ')+'" fill="none"/>';
+    L+=line(P.s,P.h,0);
+    LIMBS.forEach(function(l){ if(!l[2]) L+=line(P[l[0]],P[l[1]],0); });
+    var bag=P.bag?'<rect x="'+(P.w1[0]-6).toFixed(1)+'" y="'+(P.w1[1]-1).toFixed(1)+'" width="12" height="10" rx="2" fill="'+col+'" opacity=".85"/>':'';
+    return props+'<line x1="4" y1="83" x2="116" y2="83" stroke="#3a3d63" stroke-width="2"/><g stroke="'+col+'" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round">'+L+'</g>'+bag+'<circle cx="'+P.h[0].toFixed(1)+'" cy="'+P.h[1].toFixed(1)+'" r="6.8" fill="'+col+'"/>';
+  }
+  var figRAF=null;
+  function figStop(){ if(figRAF) cancelAnimationFrame(figRAF); figRAF=null; }
+  function figMount(el,name,col){
+    figStop(); if(!el) return;
+    var key=figFor(name); if(!key){ el.innerHTML=''; el.style.display='none'; return; }
+    el.style.display='';
+    var pr=POSES[key], A=pr[0], B=pr[1]||pr[0], t0=performance.now(), dur=(key==='jog'||key==='climber'||key==='march'||key==='walk')?900:2200;
+    var last=0;
+    function frame(now){
+      figRAF=requestAnimationFrame(frame);
+      if(now-last<33) return; last=now;
+      var ph=((now-t0)%dur)/dur, t=0.5-0.5*Math.cos(ph*2*Math.PI);
+      el.innerHTML='<svg viewBox="0 0 120 88" class="figsvg">'+figSVG(lerpPose(A,B,t),col)+'</svg>';
+    }
+    figRAF=requestAnimationFrame(frame);
+  }
+
   // =================== GUIDED WORKOUT ===================
   // Exercise cues: how to do it, easier and harder versions
   var CUES=[
@@ -1017,11 +1179,14 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
   function fl(a){ return a.reduce(function(o,x){ return o.concat(Array.isArray(x)?fl(x):[x]); },[]); }
   function cl(s,e){ var c={},k; for(k in s) c[k]=s[k]; for(k in e) c[k]=e[k]; return c; }
   function ph(p,a){ return fl(a).map(function(s){ return s.ph?s:cl(s,{ph:p}); }); }
-  function S(w,m,c){ return ph('Warm-up',w).concat(ph('Workout',m),ph('Cool-down',c||[])); }
-  function rounds(n,items,rest){ items=fl(items); var o=[]; for(var r=1;r<=n;r++){ items.forEach(function(it){ o.push(cl(it,{g:'Round '+r+' of '+n})); }); if(r<n) o.push(cl(RS(rest),{g:'Round '+r+' done'})); } return o; }
-  function circuit(n,names,work,rest,rrest){ var o=[]; for(var r=1;r<=n;r++){ names.forEach(function(nm,i){ o.push(cl(T(nm,work),{g:'Round '+r+' of '+n})); if(i<names.length-1) o.push(cl(RS(rest),{g:'Round '+r+' of '+n})); }); if(r<n) o.push(cl(RS(rrest),{g:'Round '+r+' done'})); } return o; }
-  function sets(n,items,rest){ items=fl(items); var o=[]; items.forEach(function(it,ii){ for(var s=1;s<=n;s++){ o.push(cl(it,{g:'Set '+s+' of '+n})); if(!(ii===items.length-1&&s===n)) o.push(RS(rest)); } }); return o; }
-  function iv(n){ var o=[]; for(var i=1;i<=n;i++){ o.push(cl(T('Fast',30,'Effort 8 out of 10: fast run, skipping or stair climbs.'),{g:'Interval '+i+' of '+n})); o.push(cl(T('Easy walk',90,'Catch your breath.'),{g:'Interval '+i+' of '+n})); } return o; }
+  function S(w,m,c){
+    var mm=ph('Workout',m).map(function(s){ if(LV&&s.k==='t'){ return cl(s,{s: s.s>=600 ? s.s+300*LV : Math.round(s.s*(1+0.2*LV)/5)*5}); } return s; });
+    return ph('Warm-up',w).concat(mm,ph('Cool-down',c||[]));
+  }
+  function rounds(n,items,rest){ n=Math.min(n+LV,6); items=fl(items); var o=[]; for(var r=1;r<=n;r++){ items.forEach(function(it){ o.push(cl(it,{g:'Round '+r+' of '+n})); }); if(r<n) o.push(cl(RS(rest),{g:'Round '+r+' done'})); } return o; }
+  function circuit(n,names,work,rest,rrest){ n=Math.min(n+LV,6); var o=[]; for(var r=1;r<=n;r++){ names.forEach(function(nm,i){ o.push(cl(T(nm,work),{g:'Round '+r+' of '+n})); if(i<names.length-1) o.push(cl(RS(rest),{g:'Round '+r+' of '+n})); }); if(r<n) o.push(cl(RS(rrest),{g:'Round '+r+' done'})); } return o; }
+  function sets(n,items,rest){ n=Math.min(n+LV,6); items=fl(items); var o=[]; items.forEach(function(it,ii){ for(var s=1;s<=n;s++){ o.push(cl(it,{g:'Set '+s+' of '+n})); if(!(ii===items.length-1&&s===n)) o.push(RS(rest)); } }); return o; }
+  function iv(n){ n+=2*LV; var o=[]; for(var i=1;i<=n;i++){ o.push(cl(T('Fast',30,'Effort 8 out of 10: fast run, skipping or stair climbs.'),{g:'Interval '+i+' of '+n})); o.push(cl(T('Easy walk',90,'Catch your breath.'),{g:'Interval '+i+' of '+n})); } return o; }
   function core(n,pl,db,sp,bd){ return rounds(n,[T('Plank',pl),R('Dead bug',db+' each side'),SD('Side plank',sp),R('Bird dog',bd+' each side')],45); }
   function mob(h,cat,wgs,sq){ return [R('Cat-cow',String(cat),'Move slowly with your breath.'),R("World's greatest stretch",wgs+' each side'),SD('Kneeling hip flexor stretch',h),R('Thoracic rotations','10 each side'),SD('Standing hamstring stretch',h),T('Deep squat hold',sq),RS(15),T('Deep squat hold',sq),RS(15),T('Deep squat hold',sq),T("Child's pose",60)]; }
   var E45='Effort 4 to 5 out of 10: talking is easy, but you are clearly working.';
@@ -1039,7 +1204,8 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
   var WALKX=[SD('Calf stretch',45),SD('Hip stretch',45)];
   var FB6=['Squats','Push-ups','Backpack rows','Alternating lunges','Mountain climbers','Plank'];
   var FB7=FB6.concat(['Glute bridges']);
-  var SESSIONS=[
+  var LV=0;
+  function buildSessions(){ return [
     /*1*/ S(WU,[T('Brisk walk or easy jog',1200,E56)],CD),
     /*2*/ S(WU,rounds(2,[R('Bodyweight squats','10'),R('Push-ups','10','On a table edge if needed.'),R('Glute bridges','10'),R('Backpack rows','10'),T('Plank',20)],60),CD),
     /*3*/ S([],[T('Brisk walk',1800,E45)],WALKX),
@@ -1071,7 +1237,9 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
     /*29*/ S(WU,circuit(4,FB6,45,15,120).concat([RS(120),{k:'amrap',n:'Finisher',s:300,x:'As many rounds as you can: 5 burpees (or squat thrusts), 10 squats, 15 mountain climbers each side. Tap +1 after each round.'}]),CD),
     /*30*/ S(WUC,[T('Brisk walk, jog or cycle',1800,'Effort 6 to 7 out of 10. Notice how much easier this feels than Day 1.')],CD),
     /*31*/ S(WU,[{k:'num',n:'Final push-up test',x:'Max push-ups in one go, same style as Day 1.',log:['d31','push']},RS(120),{k:'up',n:'Plank hold test',x:'Hold a plank as long as you can with good form. Tap Stop when you drop.',cap:600,log:['d31','plank'],unit:'s'},RS(180),T('Any movement you enjoy',1200,'Football, dancing, cycling or a long walk.')],CD)
-  ];
+  ]; }
+  var SESSIONS=buildSessions();
+  function setLevel(){ LV=Math.min((state.round||1)-1,2); SESSIONS=buildSessions(); }
   function estMin(day){ var t=0; SESSIONS[day-1].forEach(function(s){ t+= s.k==='r'?45:(s.k==='num'?60:(s.k==='up'?(s.unit==='min'?s.cap:120):(s.s||0))); }); return Math.max(5,Math.round(t/60/5)*5); }
 
   // Player
@@ -1101,7 +1269,7 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
     $('gw').classList.remove('hidden'); document.body.style.overflow='hidden';
     renderSnd(); gwRender();
   }
-  function gwClose(){ clearInterval(G.tick); G.running=false; wakeOff(); try{ speechSynthesis.cancel(); }catch(e){} $('gw').classList.add('hidden'); document.body.style.overflow=''; }
+  function gwClose(){ figStop(); clearInterval(G.tick); G.running=false; wakeOff(); try{ speechSynthesis.cancel(); }catch(e){} $('gw').classList.add('hidden'); document.body.style.overflow=''; }
   function renderSnd(){ $('gwSnd').innerHTML=voiceOn()?'&#128266;':'&#128263;'; }
   $('gwSnd').onclick=function(){ flags().voice=!voiceOn(); save(); renderSnd(); toast(voiceOn()?'Voice coach on':'Voice coach off'); };
   $('gwClose').onclick=function(){
@@ -1121,7 +1289,7 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
   function ctl(btns){ $('gwCtl').innerHTML=btns.map(function(b){ return '<button class="btn '+(b[2]||'')+'" data-a="'+b[0]+'">'+b[1]+'</button>'; }).join(''); each('#gwCtl button',function(el){ el.onclick=function(){ gwAction(el.getAttribute('data-a')); }; }); }
 
   function gwRender(){
-    clearInterval(G.tick); G.running=false; G.lastSec=-1;
+    figStop(); clearInterval(G.tick); G.running=false; G.lastSec=-1;
     var n=G.steps.length;
     $('gwBar').style.width=(Math.max(0,G.i)/n*100)+'%';
     var body=$('gwBody'), day=G.day, cat=CAT[wcat(PLAN[day-1][0].t)];
@@ -1129,6 +1297,7 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
       var cnt={w:0,m:0,c:0}; G.steps.forEach(function(s){ if(s.k==='rest') return; if(s.ph==='Warm-up') cnt.w++; else if(s.ph==='Cool-down') cnt.c++; else cnt.m++; });
       body.innerHTML='<div class="gw-ph" style="background:'+cat.c+'">'+cat.n+'</div><div class="gw-name">'+esc(PLAN[day-1][0].t)+'</div><div class="gw-x">About '+estMin(day)+' minutes, guided step by step</div>'+
         '<div class="how" style="margin-top:18px"><b>Today</b><p>'+(cnt.w?'Warm-up: '+cnt.w+' moves<br>':'')+'Main session: '+cnt.m+' steps'+(cnt.c?'<br>Cool-down: '+cnt.c+' moves':'')+'</p></div>'+
+        (LV?'<div class="how"><b>Round '+(LV+1)+': one level up</b><p>Extra rounds or sets and longer holds are built in. Use the Harder version of each move where you can.</p></div>':'')+
         (planSentence()?'<div class="how"><b>Your plan</b><p>'+esc(planSentence())+'</p></div>':'')+
         '<div class="how"><b>Before you start</b><p>Put your phone where you can see it and turn the volume up. The app will talk you through each move, count down and beep before every change.</p><p>Stop if you feel chest pain, dizziness or unusual breathlessness. Have water nearby.</p></div>';
       ctl([['start','&#9654; Start','grad']]);
@@ -1139,28 +1308,33 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
     var nxt='<div class="gw-next">Next: <b>'+esc(nextName(G.i))+'</b></div>';
     if(s.k==='t'||s.k==='rest'){
       G.remain=s.s; G.endAt=Date.now()+s.s*1000; G.running=true;
-      body.innerHTML=head+'<div class="gw-name">'+esc(s.k==='rest'?'Rest':s.n)+'</div>'+(s.x?'<div class="gw-x">'+esc(s.x)+'</div>':'')+ring(1,mmss(s.s),s.k==='rest'?'breathe':'',c)+(s.k==='rest'?'':howBox(s.n))+nxt;
+      body.innerHTML=head+'<div class="gw-name">'+esc(s.k==='rest'?'Rest':s.n)+'</div>'+(s.x?'<div class="gw-x">'+esc(s.x)+'</div>':'')+(s.k==='rest'?'<div class="figlbl">Get ready for: <b>'+esc(nextName(G.i))+'</b></div>':'')+'<div class="fig" id="gwFig"></div>'+ring(1,mmss(s.s),s.k==='rest'?'breathe':'',c)+(s.k==='rest'?'':howBox(s.n))+nxt;
+      figMount($('gwFig'),s.k==='rest'?nextName(G.i):s.n,s.k==='rest'?'#7fd3ff':c);
       ctl(s.k==='rest'?[['back','&#8249;','sm'],['add','+15s',''],['next','Skip rest','grad']]:[['back','&#8249;','sm'],['pause','Pause',''],['next','Skip &#8250;','grad']]);
       speak(s.k==='rest'?'Rest, '+s.s+' seconds. Next, '+nextName(G.i)+'.':s.n+', '+amount(s)+'.');
       G.tick=setInterval(gwTick,200);
     } else if(s.k==='r'){
-      body.innerHTML=head+'<div class="gw-name">'+esc(s.n)+'</div>'+(s.x?'<div class="gw-x">'+esc(s.x)+'</div>':'')+'<div class="reps" style="color:'+c+'">'+esc(s.reps)+'<small>reps, at your own pace</small></div>'+howBox(s.n)+nxt;
+      body.innerHTML=head+'<div class="gw-name">'+esc(s.n)+'</div>'+(s.x?'<div class="gw-x">'+esc(s.x)+'</div>':'')+'<div class="fig" id="gwFig"></div><div class="reps" style="color:'+c+'">'+esc(s.reps)+'<small>reps, at your own pace</small></div>'+howBox(s.n)+nxt;
       ctl([['back','&#8249;','sm'],['next','Done &#10003;','grad']]);
+      figMount($('gwFig'),s.n,c);
       speak(s.n+', '+s.reps+' reps. Tap done when you finish.');
     } else if(s.k==='num'){
       var cur=(state.meas[s.log[0]]||{})[s.log[1]]||'';
-      body.innerHTML=head+'<div class="gw-name">'+esc(s.n)+'</div><div class="gw-x">'+esc(s.x)+'</div><input class="gw-in" id="gwIn" type="number" inputmode="numeric" min="0" placeholder="0" value="'+esc(cur)+'"><div class="gw-x" style="margin-top:6px">How many did you do?</div>'+howBox(s.n)+nxt;
+      body.innerHTML=head+'<div class="gw-name">'+esc(s.n)+'</div><div class="gw-x">'+esc(s.x)+'</div><div class="fig" id="gwFig"></div><input class="gw-in" id="gwIn" type="number" inputmode="numeric" min="0" placeholder="0" value="'+esc(cur)+'"><div class="gw-x" style="margin-top:6px">How many did you do?</div>'+howBox(s.n)+nxt;
       ctl([['back','&#8249;','sm'],['saveNum','Save and continue','grad']]);
+      figMount($('gwFig'),s.n,c);
       speak(s.n+'. '+s.x+' Then enter your number.');
     } else if(s.k==='up'){
       G.upStart=0; G.upVal=null;
-      body.innerHTML=head+'<div class="gw-name">'+esc(s.n)+'</div><div class="gw-x">'+esc(s.x)+'</div>'+ring(0,'0:00','tap Start',c)+howBox(s.n)+nxt;
+      body.innerHTML=head+'<div class="gw-name">'+esc(s.n)+'</div><div class="gw-x">'+esc(s.x)+'</div><div class="fig" id="gwFig"></div>'+ring(0,'0:00','tap Start',c)+howBox(s.n)+nxt;
       ctl([['back','&#8249;','sm'],['upStart','Start','grad']]);
+      figMount($('gwFig'),s.n,c);
       speak(s.n+'. '+s.x);
     } else if(s.k==='amrap'){
       G.am=0; G.remain=s.s; G.endAt=Date.now()+s.s*1000; G.running=true;
-      body.innerHTML=head+'<div class="gw-name">'+esc(s.n)+'</div><div class="gw-x">'+esc(s.x)+'</div>'+ring(1,mmss(s.s),'<span id="gwAm">0</span> rounds',c)+howBox(s.n)+nxt;
+      body.innerHTML=head+'<div class="gw-name">'+esc(s.n)+'</div><div class="gw-x">'+esc(s.x)+'</div><div class="fig" id="gwFig"></div>'+ring(1,mmss(s.s),'<span id="gwAm">0</span> rounds',c)+howBox(s.n)+nxt;
       ctl([['back','&#8249;','sm'],['am','+1 round','grad']]);
+      figMount($('gwFig'),s.n,c);
       speak('Finisher. Five minutes, as many rounds as you can. Go!');
       G.tick=setInterval(gwTick,200);
     }
@@ -1360,7 +1534,7 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
     x.fillStyle='#1a1b30'; var fs=72; x.font='800 '+fs+'px '+FONT; while(x.measureText(name||'Participant').width>W-240&&fs>30){ fs-=2; x.font='800 '+fs+'px '+FONT; } x.fillText(name||'Participant',W/2,415);
     x.strokeStyle='#e0a800'; x.lineWidth=2; x.beginPath(); x.moveTo(W/2-330,440); x.lineTo(W/2+330,440); x.stroke();
     x.fillStyle='#55576e'; x.font='500 28px '+FONT;
-    x.fillText('completed the 31-Day Reset fitness and wellness programme',W/2,495);
+    x.fillText('completed the 31-Day Reset fitness and wellness programme'+((state.round||1)>1?' (Round '+state.round+')':''),W/2,495);
     x.fillText(dateLabel(1)+' '+dateOf(1).getFullYear()+' to '+dateLabel(31)+' '+dateOf(31).getFullYear(),W/2,538);
     var si=streakInfo(), m=state.meas, stats=[[fullCount()+'/31','full days'],[String(si.best),'best streak']];
     var d1=m.d1||{}, d31=m.d31||{};
@@ -1383,12 +1557,153 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
   };
   $('cel').addEventListener('click',function(e){ if(e.target===$('cel')) $('cel').classList.add('hidden'); });
 
+  // =================== PROGRESS CHARTS ===================
+  var CH='#7b8cff';
+  var MDIR={w:0,waist:-1,pulse:-1,push:1,plank:1,stam:1};
+  var MUNIT={w:' kg',waist:' cm',pulse:' bpm',push:'',plank:' s',stam:' min'};
+  function num(v){ var n=parseFloat(String(v==null?'':v).replace(',','.')); return isNaN(n)?null:n; }
+  function fmtN(n){ return (Math.round(n*10)/10).toString(); }
+  function tipWire(root){
+    var tip=root.querySelector('.ctip');
+    Array.prototype.forEach.call(root.querySelectorAll('[data-tip]'),function(el){
+      var show=function(){ tip.textContent=el.getAttribute('data-tip'); };
+      el.addEventListener('mouseenter',show); el.addEventListener('click',show);
+    });
+  }
+  function metricChart(key,label){
+    var cols=MCOLS, pts=[], xs=[1,15,27,31];
+    cols.forEach(function(c,i){ var v=num((state.meas[c[0]]||{})[key]); if(v!=null) pts.push({x:xs[i],v:v,lab:c[1]}); });
+    if(!pts.length) return '';
+    var first=pts[0], last=pts[pts.length-1], u=MUNIT[key], d=MDIR[key];
+    var head='<div class="mc-h"><b>'+label.replace(/ \(.*\)/,'')+'</b><span>'+fmtN(first.v)+u+(pts.length>1?' &rarr; '+fmtN(last.v)+u:'')+'</span></div>';
+    var change='';
+    if(pts.length>1){
+      var diff=last.v-first.v, pct=first.v?Math.round(Math.abs(diff)/first.v*100):0;
+      var better=d===0?null:(d>0?diff>0:diff<0);
+      var word=diff===0?'No change':(diff>0?'Up ':'Down ')+fmtN(Math.abs(diff))+u+(pct?' ('+pct+'%)':'');
+      change='<div class="mc-c">'+(better===true?'<span class="ok">&#10003; Improved</span> ':'')+word+'</div>';
+    } else change='<div class="mc-c">Add a later check-in to see your change.</div>';
+    var W=300,H=96,L=14,R=14,T=16,B=22;
+    var vs=pts.map(function(p){return p.v;}), mn=Math.min.apply(null,vs), mx=Math.max.apply(null,vs);
+    if(mx===mn){ mx+=1; mn-=1; }
+    var X=function(x){ return L+(x-1)/30*(W-L-R); }, Y=function(v){ return T+(1-(v-mn)/(mx-mn))*(H-T-B); };
+    var svg='<svg viewBox="0 0 '+W+' '+H+'" class="mcs" role="img" aria-label="'+esc(label)+' over the challenge">';
+    svg+='<line x1="'+L+'" y1="'+(H-B)+'" x2="'+(W-R)+'" y2="'+(H-B)+'" stroke="#2c2e4d" stroke-width="1"/>';
+    xs.forEach(function(x,i){ svg+='<text x="'+X(x)+'" y="'+(H-6)+'" text-anchor="middle" class="ax">'+cols[i][1]+'</text>'; });
+    if(pts.length>1) svg+='<polyline fill="none" stroke="'+CH+'" stroke-width="2" stroke-linejoin="round" points="'+pts.map(function(p){return X(p.x).toFixed(1)+','+Y(p.v).toFixed(1);}).join(' ')+'"/>';
+    pts.forEach(function(p,i){
+      svg+='<circle cx="'+X(p.x).toFixed(1)+'" cy="'+Y(p.v).toFixed(1)+'" r="4.5" fill="'+CH+'" stroke="#1a1b30" stroke-width="2"/>';
+      svg+='<circle cx="'+X(p.x).toFixed(1)+'" cy="'+Y(p.v).toFixed(1)+'" r="14" fill="transparent" data-tip="'+p.lab+': '+fmtN(p.v)+u+'"/>';
+      if(i===0||i===pts.length-1) svg+='<text x="'+X(p.x).toFixed(1)+'" y="'+(Y(p.v)-9).toFixed(1)+'" text-anchor="middle" class="vl">'+fmtN(p.v)+'</text>';
+    });
+    svg+='</svg>';
+    return '<div class="mc">'+head+svg+change+'</div>';
+  }
+  function sleepChart(){
+    var vals=[], any=false;
+    for(var n=1;n<=31;n++){ var v=num((state.days[n]||{}).s); vals.push(v); if(v!=null) any=true; }
+    if(!any) return '<div class="mc"><div class="mc-h"><b>Sleep</b><span></span></div><div class="mc-c">Enter your hours slept each morning on the day card to see your sleep chart.</div></div>';
+    var W=300,H=120,L=22,R=6,T=10,B=20, mx=Math.max(10,Math.max.apply(null,vals.filter(function(v){return v!=null;})));
+    var bw=(W-L-R)/31, Y=function(v){ return T+(1-v/mx)*(H-T-B); }, base=H-B;
+    var svg='<svg viewBox="0 0 '+W+' '+H+'" class="mcs" role="img" aria-label="Hours of sleep for each day">';
+    [0,4,8].forEach(function(g){ svg+='<text x="'+(L-5)+'" y="'+(Y(g)+3)+'" text-anchor="end" class="ax">'+g+'</text>'; });
+    svg+='<line x1="'+L+'" y1="'+base+'" x2="'+(W-R)+'" y2="'+base+'" stroke="#2c2e4d"/>';
+    vals.forEach(function(v,i){
+      var x=L+i*bw+1, w=Math.max(2,bw-2);
+      if(v!=null&&v>0){ var y=Y(v), h=base-y, r=Math.min(3,w/2,h);
+        svg+='<path d="M'+x.toFixed(1)+','+base+' V'+(y+r).toFixed(1)+' Q'+x.toFixed(1)+','+y.toFixed(1)+' '+(x+r).toFixed(1)+','+y.toFixed(1)+' H'+(x+w-r).toFixed(1)+' Q'+(x+w).toFixed(1)+','+y.toFixed(1)+' '+(x+w).toFixed(1)+','+(y+r).toFixed(1)+' V'+base+' Z" fill="'+CH+'"/>'; }
+      svg+='<rect x="'+(L+i*bw).toFixed(1)+'" y="'+T+'" width="'+bw.toFixed(1)+'" height="'+(H-T-B)+'" fill="transparent" data-tip="Day '+(i+1)+': '+(v!=null?fmtN(v)+' hours':'not logged')+'"/>';
+      if(i===0||i===14||i===30) svg+='<text x="'+(L+i*bw+bw/2).toFixed(1)+'" y="'+(H-6)+'" text-anchor="middle" class="ax">'+(i+1)+'</text>';
+    });
+    svg+='<line x1="'+L+'" y1="'+Y(7).toFixed(1)+'" x2="'+(W-R)+'" y2="'+Y(7).toFixed(1)+'" stroke="#a3a6c4" stroke-width="1" stroke-dasharray="3 3"/><text x="'+(W-R)+'" y="'+(Y(7)-3).toFixed(1)+'" text-anchor="end" class="ax">7 h goal</text>';
+    svg+='</svg>';
+    var got=vals.filter(function(v){return v!=null;}), avg=got.reduce(function(a,b){return a+b;},0)/got.length, ok=got.filter(function(v){return v>=7;}).length;
+    return '<div class="mc"><div class="mc-h"><b>Sleep</b><span>average '+fmtN(avg)+' h</span></div>'+svg+'<div class="mc-c">'+ok+' of '+got.length+' logged nights reached 7 hours or more.</div></div>';
+  }
+  function ratingsList(){
+    var rows=[];
+    RATES.forEach(function(r){
+      var a=num((state.rate.d1||{})[r[0]]), b=num((state.rate.d31||{})[r[0]]), m=num((state.rate.d14||{})[r[0]]);
+      var last=b!=null?b:m; if(a==null||last==null) return;
+      rows.push('<div class="rr"><span>'+r[1].replace(/ \(.*\)/,'')+'</span><b>'+fmtN(a)+' &rarr; '+fmtN(last)+'</b>'+(last>a?'<em>&#10003; better</em>':'')+'</div>');
+    });
+    return rows.length?'<div class="mc"><div class="mc-h"><b>How you feel</b><span>out of 5</span></div>'+rows.join('')+'</div>':'';
+  }
+  function renderCharts(){
+    var el=$('charts'); if(!el||!state.cfg) return;
+    var h=sleepChart();
+    MEAS.forEach(function(m){ h+=metricChart(m[0],m[1]); });
+    h+=ratingsList();
+    el.innerHTML='<div class="ctip">Tap a point or bar to see its value.</div>'+h;
+    tipWire(el);
+  }
+  // =================== WORKOUT BUDDY ===================
+  function waLink(t){ return 'https://wa.me/?text='+encodeURIComponent(t); }
+  function renderBuddy(){
+    var el=$('buddy'); if(!el||!state.cfg) return;
+    var b=state.buddy, c=Math.min(31,Math.max(1,curDay()));
+    if(!b){
+      el.innerHTML='<div class="pc-h">'+icon('pulse')+'<b>Do it with a friend</b></div><p class="sub">People who train with a friend are more likely to keep going. Invite one friend to do the 31 days with you, then send each other a quick update every day.</p>'+
+        '<label for="bName">Your buddy\'s first name</label><input id="bName" placeholder="e.g. Chioma"><a class="btn wa full" id="bInvite" target="_blank" rel="noopener">Invite on WhatsApp</a>';
+      var upd=function(){ var n=$('bName').value.trim(); $('bInvite').href=waLink('Hi'+(n?' '+n:'')+'! I am doing the 31-Day Reset: a free 31-day home fitness plan with a guided workout every day. Do it with me so we keep each other going? Start here: '+appUrl()); };
+      $('bName').oninput=upd; upd();
+      $('bInvite').addEventListener('click',function(e){ var n=$('bName').value.trim(); if(!n){ e.preventDefault(); toast('Type your buddy\'s name first'); return; } state.buddy={name:n,since:ymd(new Date())}; save(); setTimeout(renderBuddy,300); });
+      return;
+    }
+    var d=dd(c), si=streakInfo(), done=d.w&&d.e;
+    var msg='Day '+c+' of my 31-Day Reset: workout '+(d.w?'done':'not yet')+', evening habit '+(d.e?'done':'not yet')+'. Streak: '+si.streak+(si.streak===1?' day':' days')+'. How is yours going, '+b.name+'?';
+    el.innerHTML='<div class="pc-h">'+icon('pulse')+'<b>Your buddy: '+esc(b.name)+'</b><button class="link" id="bChange">Change</button></div>'+
+      '<p class="sub">'+(done?'You finished today. Tell '+esc(b.name)+' and ask how they did.':'Send '+esc(b.name)+' a quick update. Knowing someone is checking in makes it easier to show up.')+'</p>'+
+      '<a class="btn wa full" id="bSend" target="_blank" rel="noopener">Send '+esc(b.name)+' today\'s update</a>';
+    $('bSend').href=waLink(msg);
+    $('bChange').onclick=function(){ delete state.buddy; save(); renderBuddy(); };
+  }
+
+  // =================== ROUND 2 ===================
+  var r2arm=0;
+  function roundNo(){ return state.round||1; }
+  function renderRound(){
+    var el=$('round2'); if(!el||!state.cfg) return;
+    var c=curDay(), eligible=c>31||!!(state.days[31]&&state.days[31].w);
+    if(!eligible){ el.classList.add('hidden'); return; }
+    el.classList.remove('hidden');
+    var t=new Date(); t.setDate(t.getDate()+1);
+    el.innerHTML='<div class="pc-h">'+icon('trophy')+'<b>Ready for Round '+(roundNo()+1)+'?</b></div>'+
+      '<p class="sub">Same 31-day plan, one level up: an extra round or set on strength days, longer holds, more intervals and 5 more minutes of cardio. Your Round '+roundNo()+' results stay saved.</p>'+
+      '<label for="r2Start">Round '+(roundNo()+1)+' Day 1 date</label><input id="r2Start" type="date" value="'+ymd(t)+'">'+
+      '<button class="btn grad full" id="r2Go">Start Round '+(roundNo()+1)+'</button><p class="note" id="r2Note"></p>';
+    $('r2Go').onclick=function(){
+      if(Date.now()-r2arm>4000){ r2arm=Date.now(); $('r2Note').textContent='Tap again to confirm. Your ticks and measurements start fresh; Round '+roundNo()+' is kept in your history.'; $('r2Go').textContent='Yes, start Round '+(roundNo()+1); return; }
+      var st=$('r2Start').value; if(!st){ toast('Choose a start date'); return; }
+      var si=streakInfo();
+      if(!state.history) state.history=[];
+      state.history.push({round:roundNo(),start:state.cfg.start,full:fullCount(),best:si.best,meas:state.meas,rate:state.rate,refl:state.refl,badges:badgesGot()});
+      state.round=roundNo()+1; state.cfg.start=st;
+      state.days={}; state.meas={}; state.rate={}; state.refl='';
+      flags().badges={}; delete flags().noteOff; delete flags().gsHidden;
+      save(); setLevel(); r2arm=0; boot(); window.scrollTo({top:0});
+      toast('Round '+state.round+' is set. Add your calendar reminders again for the new dates.');
+    };
+  }
+  function renderHistory(){
+    var el=$('history'); if(!el) return;
+    var h=state.history||[];
+    if(!h.length){ el.innerHTML=''; return; }
+    el.innerHTML='<div class="mc"><div class="mc-h"><b>Previous rounds</b><span></span></div>'+h.map(function(r){
+      var m1=(r.meas.d1||{}), m31=(r.meas.d31||{}), bits=[r.full+'/31 full days','best streak '+r.best];
+      if(m1.push&&m31.push) bits.push('push-ups '+m1.push+' &rarr; '+m31.push);
+      if(m1.waist&&m31.waist) bits.push('waist '+m1.waist+' &rarr; '+m31.waist+' cm');
+      return '<div class="rr"><span>Round '+r.round+' &middot; from '+esc(r.start)+'</span><b style="font-weight:600;font-size:12.5px;text-align:right">'+bits.join(' &middot; ')+'</b></div>';
+    }).join('')+'</div>';
+  }
+
   $('sPlan').onclick=function(){ obOpen('plan'); };
   // ---- start
   function boot(){
     fillIcons();
     if(!state.cfg||!state.cfg.start){ $('main').classList.add('hidden'); obOpen('setup'); return; }
     $('main').classList.remove('hidden');
+    setLevel();
     sel=Math.min(31,Math.max(1,curDay())); openKey=null;
     renderForms(); renderAll(); renderInstall(); scheduleInApp(); mirror();
   }

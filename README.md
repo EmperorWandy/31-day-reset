@@ -1,12 +1,15 @@
 # 31-Day Reset
 
-A 31-day fitness and wellness tracker by **Akinwande Akinkunmi Adeniyi**, B.Sc. Ed., MSc Exercise Physiology candidate, Department of Human Kinetics and Health Education, University of Lagos.
+A 31-day fitness and wellness app by **Akinwande Akinkunmi Adeniyi**, B.Sc. Ed., MSc Exercise Physiology candidate, Department of Human Kinetics and Health Education, University of Lagos.
 
-- Two tasks a day: a workout and an evening wellness habit, with full instructions for every session
-- Progress checks on Day 1, 15, 27 and 31
-- Calendar and in-app reminders
-- Works offline and installs to the home screen
-- Each user's progress stays private on their own phone
+- Two tasks a day: a workout and an evening wellness habit, in a fixed plan that gets harder each week and covers the whole body
+- Guided workouts with timers, a voice coach and animated pictures of every exercise, with easier and harder versions
+- Calendar and in-app reminders, plus an if-then plan for real life
+- Forgiving streak with one catch-up day a week
+- Badges, a shareable certificate and a WhatsApp workout buddy
+- Progress charts for sleep and Day 1 to Day 31 measurements
+- Round 2 and beyond: the same plan, one level up
+- Works offline, installs to the home screen, and keeps each user's progress private on their own phone
 
 General fitness guidance only, not medical advice.
 
