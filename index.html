@@ -98,6 +98,10 @@
   .gs .it.ok .tx{color:var(--mute);text-decoration:line-through}
   .gs .tx{flex:1;font-size:14px}
   .gs .go{color:var(--red2);font-size:13px}
+  .upd{position:fixed;top:0;left:0;right:0;z-index:10;background:var(--red);color:#fff;display:flex;align-items:center;gap:10px;padding:calc(10px + env(safe-area-inset-top)) 14px 10px;font-size:14px;font-weight:600}
+  .upd span{flex:1}
+  .upd button{background:#fff;color:#b01820;border:0;border-radius:8px;padding:7px 12px;font:inherit;font-size:13px;font-weight:700;flex:none}
+  .upd button.x{background:transparent;color:#fff;padding:7px 6px;font-size:16px}
   .modal{position:fixed;inset:0;background:rgba(0,0,0,.75);display:flex;align-items:flex-end;justify-content:center;z-index:8;padding:12px}
   .modal .card{max-width:640px;width:100%;max-height:85vh;overflow:auto}
   .modal h3{margin:14px 0 4px;font-size:15px}
@@ -240,7 +244,7 @@
     <p class="note" style="text-align:left">The daily task schedule is adapted from the 31-Day Total Reset Challenge graphic by Coach Josh. All session instructions, progressions and the app itself are original work.</p>
     <p class="note" style="text-align:left">General fitness and wellness guidance only. It is not medical advice. Stop exercising and seek help if you feel chest pain, dizziness or unusual breathlessness.</p>
   </div>
-  <div class="foot">&copy; 2026 <span class="own"></span>. All rights reserved.<br>No part of this app may be copied, modified or redistributed without written permission.<br>Version 2.2</div>
+  <div class="foot">&copy; 2026 <span class="own"></span>. All rights reserved.<br>No part of this app may be copied, modified or redistributed without written permission.<br>Version 2.3</div>
 </div>
 <div class="modal hidden" id="help"><div class="card">
   <div style="display:flex;justify-content:space-between;align-items:center"><b style="font-size:17px">How to use 31-Day Reset</b><button class="btn" id="helpClose" style="padding:4px 12px">Close</button></div>
@@ -253,6 +257,7 @@
   <h3>Your data</h3><p>Everything stays on your own phone. Use <b>Save backup file</b> now and then so you never lose it.</p>
   <h3>Safety</h3><p>Stop if you feel chest pain, dizziness or unusual breathlessness. Check with a doctor first if you have a health condition.</p>
 </div></div>
+<div class="upd hidden" id="upd" role="status"><span>A new version of the app is ready.</span><button id="updBtn">Refresh now</button><button class="x" id="updX" aria-label="Dismiss">&#10005;</button></div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -542,7 +547,20 @@ var PLAN = [[{"t": "Cardio (20 min)", "d": "Warm-up (5 min): march on the spot, 
   }
   document.addEventListener('visibilitychange',function(){ if(!document.hidden&&state.cfg){ renderAll(); scheduleInApp(); } });
 
-  if('serviceWorker' in navigator && location.protocol==='https:'){ navigator.serviceWorker.register('sw.js').then(regPeriodic).catch(function(){}); }
+  // ---- automatic updates: check on open, on return to the app, and hourly; offer a refresh when a new version is ready
+  var hadController=!!(navigator.serviceWorker&&navigator.serviceWorker.controller);
+  function showUpdate(){ $('upd').classList.remove('hidden'); }
+  $('updBtn').onclick=function(){ location.reload(); };
+  $('updX').onclick=function(){ $('upd').classList.add('hidden'); };
+  if('serviceWorker' in navigator && (location.protocol==='https:'||location.hostname==='localhost')){
+    navigator.serviceWorker.register('sw.js').then(function(reg){
+      regPeriodic();
+      function check(){ try{ reg.update(); }catch(e){} }
+      setInterval(check,60*60*1000);
+      document.addEventListener('visibilitychange',function(){ if(!document.hidden) check(); });
+    }).catch(function(){});
+    navigator.serviceWorker.addEventListener('controllerchange',function(){ if(hadController) showUpdate(); });
+  }
   renderInstall();
   boot();
 })();
