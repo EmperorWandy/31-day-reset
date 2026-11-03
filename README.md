@@ -4,6 +4,7 @@ A 31-day fitness and wellness app by **Akinwande Akinkunmi Adeniyi**, B.Sc. Ed.,
 
 - Five goals to choose from at setup: General Fitness, Fat Loss, Healthy Weight Gain, Heart and Stamina, and Gentle Start, each with its own fixed 31-day plan and a quick safety check
 - Automatic workout log: time, effort and GPS distance recorded when you finish a guided workout, with weekly active-minute totals
+- Android app (version 7.0): reminders that ring on time even when the app is closed, a home screen widget with tick buttons, all-day step counting and long-press shortcuts. Download: https://emperorwandy.github.io/31-day-reset/get/
 - Tick tasks straight from the reminder notification (Android)
 - Two tasks a day: a workout and an evening wellness habit, in a fixed plan that gets harder each week and covers the whole body
 - Guided workouts with timers, a voice coach and animated pictures of every exercise, with easier and harder versions

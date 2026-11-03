@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="widgetDesc">Today\'s workout, evening habit and steps</string>
+    <string name="scWorkout">Start workout</string>
+    <string name="scWorkoutLong">Start today\'s workout</string>
+    <string name="scToday">Today\'s plan</string>
+    <string name="scTodayLong">Open today\'s plan</string>
+    <string name="scMeas">Measurements</string>
+    <string name="scMeasLong">Log my measurements</string>
+</resources>

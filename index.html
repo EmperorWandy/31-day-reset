@@ -614,7 +614,7 @@
     <p class="note" style="text-align:left">General fitness and wellness guidance only. It is not medical advice. Stop exercising and seek help if you feel chest pain, dizziness or unusual breathlessness.</p>
     <p class="note" style="text-align:left"><a href="get/" style="color:inherit;text-decoration:underline">Get the Android app</a> · <a href="privacy.html" style="color:inherit;text-decoration:underline">Privacy policy</a></p>
   </div>
-  <div class="foot">&copy; 2026 <span class="own"></span>. All rights reserved.<br>No part of this app may be copied, modified or redistributed without written permission.<br>Version 6.1</div>
+  <div class="foot">&copy; 2026 <span class="own"></span>. All rights reserved.<br>No part of this app may be copied, modified or redistributed without written permission.<br>Version 7.0</div>
 </div>
 
 <div class="modal hidden" id="help"><div class="card">
@@ -1076,6 +1076,7 @@ var PLAN = PLAN_GEN;
   }
   function scheduleInApp(){
     timers.forEach(clearTimeout); timers=[];
+    if(APK) return;
     if(!notifOn()||!state.cfg) return;
     var n=curDay(); if(n<1||n>31) return;
     var p=PLAN[n-1];
@@ -1090,12 +1091,14 @@ var PLAN = PLAN_GEN;
   function regPeriodic(){
     swReg().then(function(r){
       if(!r.periodicSync||!navigator.permissions) return;
+      if(APK) return r.periodicSync.unregister('reset31-daily');
       return navigator.permissions.query({name:'periodic-background-sync'}).then(function(st){
         if(st.state==='granted') return r.periodicSync.register('reset31-daily',{minInterval:6*60*60*1000});
       });
     }).catch(function(){});
   }
   function enableNotif(){
+    if(APK){ apkSetup(); return; }
     if(IOS&&!STANDALONE){ toast('First add the app to your Home Screen, then open it from there'); return; }
     if(!('Notification' in window)){ toast('This browser does not support notifications'); return; }
     Notification.requestPermission().then(function(p){
@@ -2067,6 +2070,8 @@ var PLAN = PLAN_GEN;
   var RPEW=['','very easy','easy','just right','hard','very hard'];
   function renderLog(){
     var el=$('wlog'); if(!el||!state.cfg) return;
+    var sh=$('stepsBox'); if(!sh){ sh=document.createElement('div'); sh.id='stepsBox'; el.parentNode.insertBefore(sh,el); }
+    sh.innerHTML=stepsHtml(); if($('stepOn')) $('stepOn').onclick=function(){ apkSync(true); };
     var cur=Math.min(31,Math.max(1,curDay())), weeks=[], rows=[], tot={min:0,km:0,n:0};
     for(var w=0;w<5;w++){ var a=w*7+1, z=Math.min(31,a+6), wk={min:0,km:0,n:0,est:false,a:a,z:z};
       for(var n=a;n<=z;n++){ var d=state.days[n]; if(!d||!d.w) continue; wk.n++; if(d.wmin) wk.min+=d.wmin; else { wk.min+=estMin(n); wk.est=true; } if(d.km) wk.km+=d.km; }
@@ -2163,14 +2168,85 @@ var PLAN = PLAN_GEN;
     .then(function(l){ if(!l||!l.length) return; var c=0; l.forEach(function(x){ if(x&&x.n>=1&&x.n<=31&&(x.k==='w'||x.k==='e')&&!dd(x.n)[x.k]){ dd(x.n)[x.k]=true; c++; } });
       if(c){ save(); renderAll(); toast(c===1?'Ticked off from your notification':'Ticked '+c+' tasks from your notifications'); } }).catch(function(){});
   }
+  // =================== ANDROID APP BRIDGE ===================
+  // Inside the Android app (version 7.0+), reminders, the home screen widget and the
+  // step counter run natively. The web app passes its plan and ticks across, and
+  // reads back ticks made from notifications or the widget, plus the day's steps.
+  var APK=(function(){ try{ var q=new URLSearchParams(location.search); if(q.get('src')==='apk') sessionStorage.setItem('reset31-apk','1'); return sessionStorage.getItem('reset31-apk')==='1'||document.referrer.indexOf('android-app://io.github.emperorwandy.reset31')===0; }catch(e){ return false; } })();
+  var apkGo=null;
+  function apkInit(){
+    if(!APK) return;
+    var q; try{ q=new URLSearchParams(location.search); }catch(e){ return; }
+    if(!q.has('src')&&!q.has('go')) return;
+    var changed=false;
+    if(!state.steps||typeof state.steps!=='object') state.steps={};
+    (q.get('st')||'').split(';').forEach(function(x){ var p=x.split(':'); if(p.length===2&&/^\d{4}-\d\d-\d\d$/.test(p[0])&&!isNaN(+p[1])){ if(state.steps[p[0]]!==+p[1]){ state.steps[p[0]]=+p[1]; changed=true; } } });
+    if(q.get('sp')) { if(flags().stepPerm!==q.get('sp')){ flags().stepPerm=q.get('sp'); changed=true; } }
+    var c=0; (q.get('nd')||'').split(',').forEach(function(x){ var m=/^(\d{1,2})([we])$/.exec(x); if(m){ var n=+m[1]; if(n>=1&&n<=31&&!dd(n)[m[2]]){ dd(n)[m[2]]=true; c++; changed=true; } } });
+    apkGo=q.get('go');
+    if(changed){ try{ localStorage.setItem(KEY,JSON.stringify(state)); }catch(e){} mirror(); }
+    if(c) setTimeout(function(){ toast(c===1?'Ticked off from your notification or widget':'Ticked '+c+' tasks from your notifications or widget'); },600);
+    try{ history.replaceState(null,'',location.pathname); }catch(e){}
+  }
+  function apkPayload(){
+    if(!state.cfg||!state.cfg.start) return null;
+    var d=[]; for(var n=1;n<=31;n++){ var x=state.days[n]; if(x&&x.w) d.push(n+'w'); if(x&&x.e) d.push(n+'e'); }
+    return {v:1,s:state.cfg.start,wt:state.cfg.wt||'17:00',et:state.cfg.et||'21:00',nm:state.cfg.name||'',g:GOALS[goal()].n,r:flags().rem?1:0,
+      t:PLAN.map(function(p){ return [p[0].t,p[1].t]; }),d:d.join(',')};
+  }
+  // Opens the invisible Android sync screen. Android only allows this straight after a tap.
+  function apkSync(ask){
+    if(!APK) return false;
+    var p=apkPayload(); if(!p) return false;
+    var j=JSON.stringify(p);
+    var last=null; try{ last=sessionStorage.getItem('reset31-sent'); }catch(e){}
+    if(!ask&&j===last) return false;
+    if(!ask&&navigator.userActivation&&!navigator.userActivation.isActive) return false;
+    try{ sessionStorage.setItem('reset31-sent',j); }catch(e){}
+    if(ask){ flags().apkSetup=true; try{ localStorage.setItem(KEY,JSON.stringify(state)); }catch(e){} }
+    location.href='intent://sync?d='+encodeURIComponent(j)+(ask?'&p=1':'')+'#Intent;scheme=reset31;package=io.github.emperorwandy.reset31;end';
+    return true;
+  }
+  if(APK){ var _save=save; save=function(){ _save(); apkSync(false); }; }
+  function apkSetup(){ flags().rem=true; try{ localStorage.setItem(KEY,JSON.stringify(state)); }catch(e){} apkSync(true);
+    setTimeout(function(){ renderNotif(); renderGS(); renderApkCard(); renderLog(); },1500); }
+  function renderApkCard(){
+    var el=$('apkCard');
+    if(!APK||!state.cfg||!state.cfg.start||flags().apkSetup){ if(el) el.remove(); return; }
+    if(!el){ el=document.createElement('div'); el.id='apkCard'; el.className='card'; el.style.cssText='margin:12px 0;border-color:#ff8a3d';
+      el.innerHTML='<b>Finish setting up the Android app</b><p class="note" style="margin:6px 0 10px">Turn on reminders that ring on time even when the app is closed, plus step counting for your home screen widget. Android will ask for permission.</p><button class="btn grad full" type="button">Turn on reminders and steps</button>';
+      el.querySelector('button').onclick=apkSetup;
+      var m=$('main'), h=m.querySelector('.hero'); m.insertBefore(el,h?h.nextSibling:m.firstChild); }
+  }
+  function stepsHtml(){
+    if(!APK&&!(state.steps&&Object.keys(state.steps).length)) return '';
+    var st=state.steps||{}, sp=flags().stepPerm;
+    if(APK&&sp==='x') return '';
+    if(APK&&sp!=='1') return '<div class="card" style="margin-bottom:10px"><b>Steps</b><p class="note" style="margin:6px 0 10px">Your phone can count your steps all day, even when the app is closed.</p><button class="btn full" type="button" id="stepOn">Count my steps</button></div>';
+    var rows=[], today=ymd(new Date());
+    for(var i=0;i<7;i++){ var d=new Date(); d.setDate(d.getDate()-i); var k=ymd(d); if(st[k]==null) continue;
+      rows.push('<div style="display:flex;justify-content:space-between;padding:4px 0"><span>'+(k===today?'Today':d.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'}))+'</span><b>'+(+st[k]).toLocaleString('en-GB')+'</b></div>'); }
+    if(!rows.length) rows.push('<p class="note">Walk around a little, then open the app again to see your steps.</p>');
+    return '<div class="card" style="margin-bottom:10px"><b>Steps counted by your phone</b><div style="margin-top:6px">'+rows.join('')+'</div><p class="note" style="margin-top:6px">A brisk 30-minute walk is roughly 3,000 to 4,000 steps.</p></div>';
+  }
+  function apkAfterBoot(){
+    renderApkCard();
+    var g=apkGo; apkGo=null; if(!g) return;
+    setTimeout(function(){
+      if(g==='workout'){ var n=curDay(); if(n>=1&&n<=31&&$('heroStart')) $('heroStart').click(); }
+      else if(g==='meas'){ goTo('measH'); }
+      else { sel=Math.min(31,Math.max(1,curDay())); openKey=null; renderAll(); window.scrollTo(0,0); }
+    },400);
+  }
+
   // ---- start
   function boot(){
-    fillIcons();
+    fillIcons(); apkInit();
     if(!state.cfg||!state.cfg.start){ $('main').classList.add('hidden'); obOpen('setup'); return; }
     $('main').classList.remove('hidden');
     setLevel();
     sel=Math.min(31,Math.max(1,curDay())); openKey=null;
-    renderForms(); renderAll(); renderInstall(); scheduleInApp(); mirror(); applyPending();
+    renderForms(); renderAll(); renderInstall(); scheduleInApp(); mirror(); applyPending(); apkAfterBoot();
   }
   document.addEventListener('visibilitychange',function(){ if(!document.hidden&&state.cfg){ renderAll(); scheduleInApp(); applyPending(); } });
 

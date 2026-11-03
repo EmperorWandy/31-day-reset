@@ -1,0 +1,51 @@
+{
+  "packageId": "io.github.emperorwandy.reset31",
+  "host": "emperorwandy.github.io",
+  "name": "31-Day Reset",
+  "launcherName": "31-Day Reset",
+  "display": "standalone",
+  "themeColor": "#0F1020",
+  "themeColorDark": "#0F1020",
+  "navigationColor": "#0F1020",
+  "navigationColorDark": "#0F1020",
+  "navigationDividerColor": "#000000",
+  "navigationDividerColorDark": "#000000",
+  "backgroundColor": "#0F1020",
+  "enableNotifications": true,
+  "startUrl": "/31-day-reset/",
+  "iconUrl": "https://emperorwandy.github.io/31-day-reset/icon-512.png",
+  "maskableIconUrl": "https://emperorwandy.github.io/31-day-reset/icon-512.png",
+  "splashScreenFadeOutDuration": 300,
+  "signingKey": {
+    "path": "./reset31-upload.keystore",
+    "alias": "upload"
+  },
+  "appVersionName": "7.0",
+  "appVersionCode": 70,
+  "shortcuts": [],
+  "generatorApp": "unknown",
+  "webManifestUrl": "https://emperorwandy.github.io/31-day-reset/manifest.webmanifest",
+  "fallbackType": "customtabs",
+  "features": {
+    "locationDelegation": {
+      "enabled": true
+    }
+  },
+  "alphaDependencies": {
+    "enabled": false
+  },
+  "enableSiteSettingsShortcut": true,
+  "isChromeOSOnly": false,
+  "isMetaQuest": false,
+  "fullScopeUrl": "https://emperorwandy.github.io/31-day-reset/",
+  "minSdkVersion": 24,
+  "orientation": "portrait",
+  "fingerprints": [],
+  "additionalTrustedOrigins": [],
+  "retainedBundles": [],
+  "protocolHandlers": [],
+  "fileHandlers": [],
+  "launchHandlerClientMode": "",
+  "displayOverride": [],
+  "appVersion": "7.0"
+}

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical" android:padding="12dp" android:background="@drawable/widget_bg">
+    <LinearLayout android:id="@+id/wHead" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="horizontal" android:gravity="center_vertical">
+        <ImageView android:layout_width="34dp" android:layout_height="34dp" android:src="@mipmap/ic_launcher"
+            android:contentDescription="@string/appName"/>
+        <LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
+            android:orientation="vertical" android:paddingStart="10dp">
+            <TextView android:id="@+id/wDay" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="31-Day Reset" android:textColor="#FFFFFFFF" android:textSize="17sp" android:textStyle="bold"/>
+            <TextView android:id="@+id/wGoal" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:textColor="#FFFFB13D" android:textSize="12sp" android:maxLines="2"/>
+        </LinearLayout>
+        <TextView android:id="@+id/wSteps" android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:textColor="#FFE8E8F0" android:textSize="12sp" android:visibility="gone"/>
+    </LinearLayout>
+    <LinearLayout android:id="@+id/wRowW" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginTop="10dp" android:orientation="horizontal" android:gravity="center_vertical"
+        android:background="@drawable/widget_row" android:padding="8dp" android:visibility="gone">
+        <TextView android:id="@+id/wW" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
+            android:textColor="#FFFFFFFF" android:textSize="14sp" android:maxLines="2" android:paddingStart="4dp"/>
+        <TextView android:id="@+id/wWs" android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:minWidth="64dp" android:gravity="center" android:paddingTop="6dp" android:paddingBottom="6dp"
+            android:paddingStart="12dp" android:paddingEnd="12dp" android:textColor="#FFFFFFFF" android:textSize="13sp"
+            android:textStyle="bold" android:background="@drawable/widget_pill"/>
+    </LinearLayout>
+    <LinearLayout android:id="@+id/wRowE" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginTop="6dp" android:orientation="horizontal" android:gravity="center_vertical"
+        android:background="@drawable/widget_row" android:padding="8dp" android:visibility="gone">
+        <TextView android:id="@+id/wE" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
+            android:textColor="#FFFFFFFF" android:textSize="14sp" android:maxLines="2" android:paddingStart="4dp"/>
+        <TextView android:id="@+id/wEs" android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:minWidth="64dp" android:gravity="center" android:paddingTop="6dp" android:paddingBottom="6dp"
+            android:paddingStart="12dp" android:paddingEnd="12dp" android:textColor="#FFFFFFFF" android:textSize="13sp"
+            android:textStyle="bold" android:background="@drawable/widget_pill"/>
+    </LinearLayout>
+</LinearLayout>

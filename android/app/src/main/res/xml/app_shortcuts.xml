@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut android:shortcutId="workout" android:enabled="true" android:icon="@drawable/sc_workout"
+        android:shortcutShortLabel="@string/scWorkout" android:shortcutLongLabel="@string/scWorkoutLong">
+        <intent android:action="android.intent.action.VIEW"
+            android:targetPackage="io.github.emperorwandy.reset31"
+            android:targetClass="io.github.emperorwandy.reset31.LauncherActivity"
+            android:data="https://emperorwandy.github.io/31-day-reset/?go=workout"/>
+    </shortcut>
+    <shortcut android:shortcutId="today" android:enabled="true" android:icon="@drawable/sc_today"
+        android:shortcutShortLabel="@string/scToday" android:shortcutLongLabel="@string/scTodayLong">
+        <intent android:action="android.intent.action.VIEW"
+            android:targetPackage="io.github.emperorwandy.reset31"
+            android:targetClass="io.github.emperorwandy.reset31.LauncherActivity"
+            android:data="https://emperorwandy.github.io/31-day-reset/?go=today"/>
+    </shortcut>
+    <shortcut android:shortcutId="meas" android:enabled="true" android:icon="@drawable/sc_measure"
+        android:shortcutShortLabel="@string/scMeas" android:shortcutLongLabel="@string/scMeasLong">
+        <intent android:action="android.intent.action.VIEW"
+            android:targetPackage="io.github.emperorwandy.reset31"
+            android:targetClass="io.github.emperorwandy.reset31.LauncherActivity"
+            android:data="https://emperorwandy.github.io/31-day-reset/?go=meas"/>
+    </shortcut>
+</shortcuts>
