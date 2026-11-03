@@ -20,11 +20,13 @@ import java.util.List;
  */
 public class SyncActivity extends Activity {
     private static final int REQ = 31;
+    private boolean relaunch;
 
     @Override
     protected void onCreate(Bundle b) {
         super.onCreate(b);
         boolean ask = false;
+        relaunch = false;
         try {
             Uri u = getIntent() == null ? null : getIntent().getData();
             if (u != null && "sync".equals(u.getHost())) {
@@ -37,6 +39,15 @@ public class SyncActivity extends Activity {
                     s.saveCfg(o);
                 }
                 ask = "1".equals(u.getQueryParameter("p"));
+                relaunch = ask || "1".equals(u.getQueryParameter("r"));
+                if ("alarm".equals(u.getQueryParameter("x")) && Build.VERSION.SDK_INT >= 31) {
+                    try {
+                        startActivity(new android.content.Intent(android.provider.Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM,
+                                Uri.parse("package:" + getPackageName())));
+                    } catch (Exception ignored) { }
+                    finish();
+                    return;
+                }
             }
         } catch (Exception ignored) { }
 
@@ -46,6 +57,10 @@ public class SyncActivity extends Activity {
             need.add(Manifest.permission.POST_NOTIFICATIONS);
         if (Build.VERSION.SDK_INT >= 29 && Steps.available(this) && checkSelfPermission(Manifest.permission.ACTIVITY_RECOGNITION) != PackageManager.PERMISSION_GRANTED)
             need.add(Manifest.permission.ACTIVITY_RECOGNITION);
+        if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            need.add(Manifest.permission.ACCESS_FINE_LOCATION);
+            need.add(Manifest.permission.ACCESS_COARSE_LOCATION);
+        }
         // ask when the person taps "Turn on reminders", or once on the first sync
         if (ask && !need.isEmpty() && Build.VERSION.SDK_INT >= 23) {
             s.setAskedPerms();
@@ -66,6 +81,14 @@ public class SyncActivity extends Activity {
         Reminders.scheduleAll(c);
         TodayWidget.updateAll(c);
         Steps.read(c, () -> TodayWidget.updateAll(c));
+        if (relaunch) {
+            // reopen the app straight away so it shows the new status
+            try {
+                startActivity(new android.content.Intent(this, LauncherActivity.class)
+                        .setAction(android.content.Intent.ACTION_VIEW)
+                        .setData(Uri.parse(Reminders.APP_URL + "?go=check")));
+            } catch (Exception ignored) { }
+        }
         finish();
         overridePendingTransition(0, 0);
     }

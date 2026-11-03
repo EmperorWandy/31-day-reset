@@ -123,7 +123,7 @@ final class Store {
             while (it.hasNext()) { String k = it.next(); if (k.compareTo(cutS) < 0) old.add(k); }
             for (String k : old) st.remove(k);
         } catch (Exception ignored) { }
-        sp.edit().putLong("lastC", c).putString("lastDay", now).putString("steps", st.toString()).apply();
+        sp.edit().putLong("lastC", c).putString("lastDay", now).putLong("lastAt", System.currentTimeMillis()).putString("steps", st.toString()).apply();
     }
     /** Last 31 days of steps as "2026-11-03:8200;2026-11-02:10400". */
     String stepsParam() {
@@ -137,6 +137,8 @@ final class Store {
         }
         return b.toString();
     }
+
+    long lastReadAt() { return sp.getLong("lastAt", 0); }
 
     boolean askedPerms() { return sp.getBoolean("asked", false); }
     void setAskedPerms() { sp.edit().putBoolean("asked", true).apply(); }

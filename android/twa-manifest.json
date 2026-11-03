@@ -20,8 +20,8 @@
     "path": "./reset31-upload.keystore",
     "alias": "upload"
   },
-  "appVersionName": "7.0",
-  "appVersionCode": 70,
+  "appVersionName": "7.1",
+  "appVersionCode": 71,
   "shortcuts": [],
   "generatorApp": "unknown",
   "webManifestUrl": "https://emperorwandy.github.io/31-day-reset/manifest.webmanifest",
@@ -47,5 +47,5 @@
   "fileHandlers": [],
   "launchHandlerClientMode": "",
   "displayOverride": [],
-  "appVersion": "7.0"
+  "appVersion": "7.1"
 }

@@ -57,8 +57,8 @@ android {
         applicationId "io.github.emperorwandy.reset31"
         minSdkVersion 24
         targetSdkVersion 36
-        versionCode 70
-        versionName "7.0"
+        versionCode 71
+        versionName "7.1"
 
         // The name for the application
         resValue "string", "appName", twaManifest.name
@@ -154,6 +154,9 @@ android {
         release {
             minifyEnabled true
         }
+    }
+    buildFeatures {
+        buildConfig true
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8

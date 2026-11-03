@@ -59,6 +59,14 @@ public class LauncherActivity
             String st = s.stepsParam();
             if (st.length() > 0) b.appendQueryParameter("st", st);
             b.appendQueryParameter("sp", Steps.available(this) ? (Steps.allowed(this) ? "1" : "0") : "x");
+            b.appendQueryParameter("ls", String.valueOf(s.lastReadAt()));
+            b.appendQueryParameter("av", String.valueOf(BuildConfig.VERSION_CODE));
+            b.appendQueryParameter("np", Reminders.canNotify(this) ? "1" : "0");
+            android.app.AlarmManager am = (android.app.AlarmManager) getSystemService(ALARM_SERVICE);
+            b.appendQueryParameter("ea", (Build.VERSION.SDK_INT < 31 || (am != null && am.canScheduleExactAlarms())) ? "1" : "0");
+            String lp = checkSelfPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) == android.content.pm.PackageManager.PERMISSION_GRANTED ? "2"
+                    : (checkSelfPermission(android.Manifest.permission.ACCESS_COARSE_LOCATION) == android.content.pm.PackageManager.PERMISSION_GRANTED ? "1" : "0");
+            b.appendQueryParameter("lp", lp);
             return b.build();
         } catch (Exception e) {
             return uri;

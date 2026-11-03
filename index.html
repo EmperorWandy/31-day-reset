@@ -590,6 +590,10 @@
       <p class="note">If you change times, add the calendar reminders again and delete the old ones.</p>
     </div>
 
+    <h2 id="checkH">Phone check</h2>
+    <p class="sub" style="margin:-4px 0 8px">See whether reminders, step counting and GPS are working on this phone.</p>
+    <div class="card" id="checkBox"></div>
+
     <h2>Backup</h2>
     <div class="btns">
       <button class="btn grad" id="exp">Save backup file</button>
@@ -614,7 +618,7 @@
     <p class="note" style="text-align:left">General fitness and wellness guidance only. It is not medical advice. Stop exercising and seek help if you feel chest pain, dizziness or unusual breathlessness.</p>
     <p class="note" style="text-align:left"><a href="get/" style="color:inherit;text-decoration:underline">Get the Android app</a> · <a href="privacy.html" style="color:inherit;text-decoration:underline">Privacy policy</a></p>
   </div>
-  <div class="foot">&copy; 2026 <span class="own"></span>. All rights reserved.<br>No part of this app may be copied, modified or redistributed without written permission.<br>Version 7.0</div>
+  <div class="foot">&copy; 2026 <span class="own"></span>. All rights reserved.<br>No part of this app may be copied, modified or redistributed without written permission.<br>Version 7.1</div>
 </div>
 
 <div class="modal hidden" id="help"><div class="card">
@@ -981,7 +985,7 @@ var PLAN = PLAN_GEN;
   }
   $('gsHide').onclick=function(){ flags().gsHidden=true; save(); renderGS(); toast('Help is always under "? Help" at the top'); };
 
-  function renderAll(){ renderDay(); renderGrid(); renderStats(); renderGS(); renderStreakNote(); renderPlanCard(); renderBadges(); checkBadges(); renderBuddy(); renderRound(); renderCharts(); renderHistory(); renderLog(); }
+  function renderAll(){ renderDay(); renderGrid(); renderStats(); renderGS(); renderStreakNote(); renderPlanCard(); renderBadges(); checkBadges(); renderBuddy(); renderRound(); renderCharts(); renderHistory(); renderLog(); if(typeof renderStepChip==='function'){ renderStepChip(); renderCheck(); } }
   $('prev').onclick=function(){ if(sel>1){ sel--; openKey=null; renderAll(); } };
   $('next').onclick=function(){ if(sel<31){ sel++; openKey=null; renderAll(); } };
   $('todayBtn').onclick=function(){ sel=Math.min(31,Math.max(1,curDay())); openKey=null; renderAll(); };
@@ -1635,7 +1639,7 @@ var PLAN = PLAN_GEN;
   function gpsStop(){ if(GPS.id!=null){ try{ navigator.geolocation.clearWatch(GPS.id); }catch(e){} } GPS.id=null; GPS.on=false; GPS.last=null; }
   function gpsFix(p){
     var c=p.coords, pt={lat:c.latitude,lon:c.longitude,t:p.timestamp||Date.now()}; GPS.acc=c.accuracy;
-    if(c.accuracy>35){ gpsShow(); return; }
+    if(c.accuracy>50){ gpsShow(); return; }
     if(GPS.last&&moving()){
       var d=hav(GPS.last,pt), dt=Math.max(0.5,(pt.t-GPS.last.t)/1000);
       if(d>=2&&d/dt<9){ GPS.m+=d; GPS.stepM+=d; }
@@ -1648,8 +1652,8 @@ var PLAN = PLAN_GEN;
   function gpsLine(st){ if(!GPS.on||!isMove(st)) return; var r=document.querySelector('#gwBody .how'); var d=document.createElement('div'); d.className='gpsl'; d.id='gpsL'; if(r) r.parentNode.insertBefore(d,r); else $('gwBody').appendChild(d); gpsShow(); }
   function gpsShow(){
     var el=$('gpsL'); if(!el) return;
-    if(GPS.acc===-1){ el.textContent='GPS: no signal. Check location is on for this app.'; return; }
-    if(GPS.acc==null||GPS.acc>35){ el.textContent='GPS: finding your position'+(GPS.acc?' (±'+Math.round(GPS.acc)+' m)':'')+'...'; return; }
+    if(GPS.acc===-1){ el.textContent='GPS: location blocked or switched off. Open Phone check (under Settings) to fix it.'; return; }
+    if(GPS.acc==null||GPS.acc>50){ el.textContent=(GPS.acc>300?'GPS: only a rough position (±'+Math.round(GPS.acc)+' m). Switch on precise location for this app.':'GPS: finding your position'+(GPS.acc?' (±'+Math.round(GPS.acc)+' m, needs under 50 m)':'')+'...'); return; }
     var st=G.steps[G.i], txt='GPS: '+(GPS.stepM/1000).toFixed(2)+' km this step';
     if(st&&st.k==='up'&&st.log&&st.log[1]==='km') txt='GPS: '+Math.round(GPS.stepM)+' m of 1,000 m. It stops by itself at 1 km.';
     else if(st&&st.n==='12 minute test') txt='GPS: '+Math.round(GPS.stepM)+' m so far';
@@ -1718,7 +1722,7 @@ var PLAN = PLAN_GEN;
         (hasMove()&&gpsOk()?'<div class="how"><label class="gpsopt"><input type="checkbox" id="gpsChk"'+(flags().gps?' checked':'')+'><span><b>Measure my distance with GPS</b><br>For outdoor walks and runs. It records distance and pace by itself'+(G.steps.some(function(x){ return x.log&&(x.log[1]==='km'||x.log[1]==='dist'); })?', stops the 1 km test at 1 km and fills in your 12 minute distance':'')+'. Keep the app open on screen.</span></label></div>':'')+
         '<div class="how"><b>Before you start</b><p>Change the coach voice or speed any time in Settings.</p><p>Put your phone where you can see it and turn the volume up. The app will talk you through each move, count down and beep before every change.</p><p>Stop if you feel chest pain, dizziness or unusual breathlessness. Have water nearby.</p></div>';
       ctl([['start','&#9654; Start','grad']]);
-      var gc=$('gpsChk'); if(gc) gc.onchange=function(){ flags().gps=gc.checked; save(); if(gc.checked){ try{ navigator.geolocation.getCurrentPosition(function(){},function(){ toast('Location is blocked. Allow it in your browser settings to use GPS.'); },{enableHighAccuracy:true,timeout:15000}); }catch(e){} } };
+      var gc=$('gpsChk'); if(gc) gc.onchange=function(){ flags().gps=gc.checked; save(); if(gc.checked){ try{ navigator.geolocation.getCurrentPosition(function(){},function(){ toast('Location is blocked. Open Phone check (below Settings) to fix it.'); },{enableHighAccuracy:true,timeout:15000}); }catch(e){} } };
       return;
     }
     if(G.i>=n){ gwFinish(); return; }
@@ -2182,6 +2186,7 @@ var PLAN = PLAN_GEN;
     if(!state.steps||typeof state.steps!=='object') state.steps={};
     (q.get('st')||'').split(';').forEach(function(x){ var p=x.split(':'); if(p.length===2&&/^\d{4}-\d\d-\d\d$/.test(p[0])&&!isNaN(+p[1])){ if(state.steps[p[0]]!==+p[1]){ state.steps[p[0]]=+p[1]; changed=true; } } });
     if(q.get('sp')) { if(flags().stepPerm!==q.get('sp')){ flags().stepPerm=q.get('sp'); changed=true; } }
+    if(q.has('av')){ flags().nat={av:+q.get('av')||0,np:q.get('np'),ea:q.get('ea'),lp:q.get('lp'),ls:+q.get('ls')||0,at:Date.now()}; changed=true; }
     var c=0; (q.get('nd')||'').split(',').forEach(function(x){ var m=/^(\d{1,2})([we])$/.exec(x); if(m){ var n=+m[1]; if(n>=1&&n<=31&&!dd(n)[m[2]]){ dd(n)[m[2]]=true; c++; changed=true; } } });
     apkGo=q.get('go');
     if(changed){ try{ localStorage.setItem(KEY,JSON.stringify(state)); }catch(e){} mirror(); }
@@ -2195,16 +2200,16 @@ var PLAN = PLAN_GEN;
       t:PLAN.map(function(p){ return [p[0].t,p[1].t]; }),d:d.join(',')};
   }
   // Opens the invisible Android sync screen. Android only allows this straight after a tap.
-  function apkSync(ask){
+  function apkSync(ask,again){
     if(!APK) return false;
     var p=apkPayload(); if(!p) return false;
     var j=JSON.stringify(p);
     var last=null; try{ last=sessionStorage.getItem('reset31-sent'); }catch(e){}
-    if(!ask&&j===last) return false;
+    if(!ask&&!again&&j===last) return false;
     if(!ask&&navigator.userActivation&&!navigator.userActivation.isActive) return false;
     try{ sessionStorage.setItem('reset31-sent',j); }catch(e){}
     if(ask){ flags().apkSetup=true; try{ localStorage.setItem(KEY,JSON.stringify(state)); }catch(e){} }
-    location.href='intent://sync?d='+encodeURIComponent(j)+(ask?'&p=1':'')+'#Intent;scheme=reset31;package=io.github.emperorwandy.reset31;end';
+    location.href='intent://sync?d='+encodeURIComponent(j)+(ask?'&p=1':'')+(again?'&r=1':'')+'#Intent;scheme=reset31;package=io.github.emperorwandy.reset31;end';
     return true;
   }
   if(APK){ var _save=save; save=function(){ _save(); apkSync(false); }; }
@@ -2222,12 +2227,68 @@ var PLAN = PLAN_GEN;
     if(!APK&&!(state.steps&&Object.keys(state.steps).length)) return '';
     var st=state.steps||{}, sp=flags().stepPerm;
     if(APK&&sp==='x') return '';
-    if(APK&&sp!=='1') return '<div class="card" style="margin-bottom:10px"><b>Steps</b><p class="note" style="margin:6px 0 10px">Your phone can count your steps all day, even when the app is closed.</p><button class="btn full" type="button" id="stepOn">Count my steps</button></div>';
+    if(APK&&sp!=='1') return '<div class="card" style="margin-bottom:10px"><b>Steps</b><p class="note" style="margin:6px 0 10px">Your phone can count your steps all day, even when the app is closed.</p><button class="btn full" type="button" id="stepOn">Turn on step counting</button></div>';
     var rows=[], today=ymd(new Date());
     for(var i=0;i<7;i++){ var d=new Date(); d.setDate(d.getDate()-i); var k=ymd(d); if(st[k]==null) continue;
       rows.push('<div style="display:flex;justify-content:space-between;padding:4px 0"><span>'+(k===today?'Today':d.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'}))+'</span><b>'+(+st[k]).toLocaleString('en-GB')+'</b></div>'); }
     if(!rows.length) rows.push('<p class="note">Walk around a little, then open the app again to see your steps.</p>');
     return '<div class="card" style="margin-bottom:10px"><b>Steps counted by your phone</b><div style="margin-top:6px">'+rows.join('')+'</div><p class="note" style="margin-top:6px">A brisk 30-minute walk is roughly 3,000 to 4,000 steps.</p></div>';
+  }
+
+  // ---- Phone check: shows whether reminders, steps and GPS are working
+  function pill(ok,txt){ return '<span class="pill'+(ok===true?' ok':'')+'" style="'+(ok===false?'background:#5a2330;color:#ffb3b8':'')+'">'+txt+'</span>'; }
+  function crow(t,st,note){ return '<div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start;padding:9px 0;border-top:1px solid var(--line)"><div><b>'+t+'</b>'+(note?'<div class="note" style="margin:2px 0 0">'+note+'</div>':'')+'</div><div style="flex:0 0 auto">'+st+'</div></div>'; }
+  function renderCheck(){
+    var el=$('checkBox'); if(!el) return;
+    var f=flags(), N=f.nat||null, h=[];
+    if(!APK){
+      h.push(crow('Android app',pill(null,'Not in use'),'You are using the website. Reminders, the widget and step counting need the Android app. <a href="get/" style="color:inherit;text-decoration:underline">Get it here</a>.'));
+    } else {
+      h.push(crow('Android app',N&&N.av?pill(true,'Version '+(Math.floor(N.av/10))+'.'+(N.av%10)):pill(false,'Old version'),N&&N.av?'':'Download the latest version from the Get the app page and install it over this one.'));
+      var np=N?N.np:null;
+      h.push(crow('Reminders',np==='1'&&f.rem?pill(true,'On'):pill(false,'Off'),np==='1'&&f.rem?'They ring at the times in Settings, even when the app is closed.':'Tap "Turn on reminders, steps and GPS" below and allow notifications.'));
+      if(N&&N.ea==='0') h.push(crow('Exact timing',pill(null,'Limited'),'Reminders may come a few minutes late. <button class="btn" type="button" id="ckAlarm" style="margin-top:6px">Allow on-time alarms</button>'));
+      var sp=f.stepPerm, st=(state.steps||{})[ymd(new Date())];
+      var sNote = sp==='x'?'This phone has no step sensor.':(sp!=='1'?'Tap "Turn on reminders, steps and GPS" below and allow physical activity.':
+        (st!=null?'Counting since the app was set up. Last update '+(N&&N.ls?new Date(N.ls).toLocaleTimeString('en-GB',{hour:'numeric',minute:'2-digit'}):'just now')+'. Steps are added a few times a day, when a reminder rings and when you open the app.':'Allowed. Walk around for a few minutes, then reopen the app to see your first count.'));
+      h.push(crow('Step counter',sp==='x'?pill(null,'No sensor'):(sp==='1'?pill(true,st!=null?(+st).toLocaleString('en-GB')+' today':'Allowed'):pill(false,'Off')),sNote));
+      var lp=N?N.lp:null;
+      h.push(crow('Location for GPS',lp==='2'?pill(true,'Precise'):(lp==='1'?pill(false,'Approximate'):pill(false,'Off')),
+        lp==='2'?'Good. Use the test below outdoors.':(lp==='1'?'GPS cannot measure distance with approximate location. Open phone Settings, Apps, 31-Day Reset, Permissions, Location and switch on <b>Use precise location</b>.':'Tap "Turn on reminders, steps and GPS" below and choose <b>Precise</b> and <b>While using the app</b>.')));
+    }
+    h.push('<div style="border-top:1px solid var(--line);padding-top:10px"><b>GPS test</b><div class="note" id="gpsTestOut" style="margin:4px 0 8px">Go outside, away from tall buildings, then tap the button. It takes up to 30 seconds.</div><button class="btn full" type="button" id="gpsTest">Test GPS now</button></div>');
+    if(APK) h.push('<button class="btn grad full" type="button" id="ckFix" style="margin-top:10px">Turn on reminders, steps and GPS</button><button class="btn full" type="button" id="ckRef">Refresh this check</button>');
+    el.innerHTML=h.join('');
+    if($('ckFix')) $('ckFix').onclick=function(){ sessionStorage.removeItem('reset31-sent'); apkSetup(); };
+    if($('ckRef')) $('ckRef').onclick=function(){ sessionStorage.removeItem('reset31-sent'); apkSync(false,true); };
+    if($('ckAlarm')) $('ckAlarm').onclick=function(){ location.href='intent://sync?x=alarm#Intent;scheme=reset31;package=io.github.emperorwandy.reset31;end'; };
+    $('gpsTest').onclick=gpsTest;
+  }
+  function gpsTest(){
+    var out=$('gpsTestOut'), b=$('gpsTest');
+    if(!('geolocation' in navigator)){ out.textContent='This browser has no GPS support.'; return; }
+    b.disabled=true; out.textContent='Looking for satellites...'; var best=null, t0=Date.now(), id;
+    function end(msg){ try{ navigator.geolocation.clearWatch(id); }catch(e){} b.disabled=false; out.innerHTML=msg; }
+    id=navigator.geolocation.watchPosition(function(p){
+      var a=Math.round(p.coords.accuracy); if(best==null||a<best) best=a;
+      out.textContent='Signal found. Accuracy ±'+best+' m ('+Math.round((Date.now()-t0)/1000)+' s)...';
+      if(best<=20) end('<b style="color:#3ddc97">GPS works.</b> Accuracy ±'+best+' m. Distance will be measured on walks and runs.');
+    },function(e){
+      end(e.code===1?'<b style="color:#ff8a8a">Location is blocked for this app.</b> '+(APK?'Open phone Settings, Apps, 31-Day Reset, Permissions, Location, choose "Allow only while using the app" and switch on "Use precise location".':'Allow location for this site in your browser settings.')
+        :(e.code===2?'<b style="color:#ff8a8a">No position.</b> Check that Location is switched on in your phone\'s quick settings, then try again outside.'
+        :'<b style="color:#ffb13d">No GPS fix yet.</b> Move outside, away from buildings, and try again.'));
+    },{enableHighAccuracy:true,maximumAge:0,timeout:30000});
+    setTimeout(function(){ if(b.disabled){ end(best==null?'<b style="color:#ffb13d">No GPS fix after 30 seconds.</b> Move outside, away from buildings, and try again.'
+      :(best>100?'<b style="color:#ff8a8a">Only a rough position (±'+best+' m).</b> This usually means approximate location is on. Switch on "Use precise location" for 31-Day Reset in your phone settings.'
+      :'<b style="color:#ffb13d">Weak signal (±'+best+' m).</b> It should improve outside in the open. Distance is counted once accuracy is better than 50 m.')); } },30000);
+  }
+  function renderStepChip(){
+    var hero=document.querySelector('#main .hero'); if(!hero) return;
+    var c=$('stepChip'), st=(state.steps||{})[ymd(new Date())];
+    if(!APK||flags().stepPerm!=='1'||st==null){ if(c) c.remove(); return; }
+    if(!c){ c=document.createElement('div'); c.id='stepChip'; c.style.cssText='margin-top:10px;font-weight:600;cursor:pointer';
+      c.onclick=function(){ goTo('checkH'); }; var s2=hero.querySelector('.stats'); hero.insertBefore(c,s2?s2.nextSibling:null); }
+    c.textContent='👣 '+(+st).toLocaleString('en-GB')+' steps today';
   }
   function apkAfterBoot(){
     renderApkCard();
@@ -2235,6 +2296,7 @@ var PLAN = PLAN_GEN;
     setTimeout(function(){
       if(g==='workout'){ var n=curDay(); if(n>=1&&n<=31&&$('heroStart')) $('heroStart').click(); }
       else if(g==='meas'){ goTo('measH'); }
+      else if(g==='check'){ renderCheck(); goTo('checkH'); }
       else { sel=Math.min(31,Math.max(1,curDay())); openKey=null; renderAll(); window.scrollTo(0,0); }
     },400);
   }
