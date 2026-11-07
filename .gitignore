@@ -1,0 +1,10 @@
+# Never commit signing keys or secrets (this repository is public)
+*.keystore
+*.jks
+KEYSTORE-PASSWORD*
+keystore.properties
+.env
+android/.gradle/
+android/build/
+android/app/build/
+android/local.properties

@@ -1,0 +1,44 @@
+name: Build Android app
+
+# Builds a test APK in the cloud, so no Android SDK is needed on your computer.
+# Run it by hand: GitHub > Actions > "Build Android app" > Run workflow.
+# It also runs whenever something in the android folder changes.
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'android/**'
+      - '.github/workflows/android-build.yml'
+  pull_request:
+    paths:
+      - 'android/**'
+      - '.github/workflows/android-build.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: android
+    steps:
+      - name: Get the code
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Build test APK
+        run: chmod +x gradlew && ./gradlew assembleDebug
+
+      - name: Save the APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: 31-day-reset-test-apk
+          path: android/app/build/outputs/apk/debug/*.apk
+          if-no-files-found: error
