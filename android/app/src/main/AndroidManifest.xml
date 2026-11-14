@@ -20,7 +20,11 @@
      application, the package attribute will need to reflect the correct path in order to use
      the abbreviated format. -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="io.github.emperorwandy.reset31">
+
+    <!-- Health Connect's library needs Android 8; the app checks for Android 9+ before using it -->
+    <uses-sdk tools:overrideLibrary="androidx.health.connect.client" />
 
     
         <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
@@ -28,6 +32,12 @@
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
     <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION"/>
     <uses-feature android:name="android.hardware.sensor.stepcounter" android:required="false"/>
+    <!-- Health Connect: add finished workouts and their GPS distance. The app never reads health data. -->
+    <uses-permission android:name="android.permission.health.WRITE_EXERCISE"/>
+    <uses-permission android:name="android.permission.health.WRITE_DISTANCE"/>
+    <queries>
+        <package android:name="com.google.android.apps.healthdata" />
+    </queries>
     
 
     
@@ -180,6 +190,29 @@
                 <data android:scheme="reset31" android:host="sync"/>
             </intent-filter>
         </activity>
+        <activity android:name=".HealthAskActivity"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+        <!-- Health Connect shows the privacy policy from here (Android 13 and older) -->
+        <activity android:name=".HealthPrivacyActivity"
+            android:exported="true"
+            android:excludeFromRecents="true"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            <intent-filter>
+                <action android:name="androidx.health.ACTION_SHOW_PERMISSIONS_RATIONALE"/>
+            </intent-filter>
+        </activity>
+        <!-- ...and from here (Android 14 and newer) -->
+        <activity-alias android:name="ViewPermissionUsageActivity"
+            android:exported="true"
+            android:targetActivity=".HealthPrivacyActivity"
+            android:permission="android.permission.START_VIEW_PERMISSION_USAGE">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW_PERMISSION_USAGE"/>
+                <category android:name="android.intent.category.HEALTH_PERMISSIONS"/>
+            </intent-filter>
+        </activity-alias>
         <receiver android:name=".AlarmReceiver" android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>

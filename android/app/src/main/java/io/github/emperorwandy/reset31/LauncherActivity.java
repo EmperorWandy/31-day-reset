@@ -34,6 +34,7 @@ public class LauncherActivity
         final android.content.Context app = getApplicationContext();
         Reminders.scheduleAll(app);
         Steps.read(app, () -> TodayWidget.updateAll(app));
+        HealthSync.refreshAndWrite(app);
         // Setting an orientation crashes the app due to the transparent background on Android 8.0
         // Oreo and below. We only set the orientation on Oreo and above. This only affects the
         // splash screen and Chrome will still respect the orientation.
@@ -67,6 +68,7 @@ public class LauncherActivity
             String lp = checkSelfPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) == android.content.pm.PackageManager.PERMISSION_GRANTED ? "2"
                     : (checkSelfPermission(android.Manifest.permission.ACCESS_COARSE_LOCATION) == android.content.pm.PackageManager.PERMISSION_GRANTED ? "1" : "0");
             b.appendQueryParameter("lp", lp);
+            b.appendQueryParameter("hc", HealthSync.status(this));
             return b.build();
         } catch (Exception e) {
             return uri;
