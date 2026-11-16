@@ -71,6 +71,9 @@
   .brand{flex:1;min-width:0}
   .brand b{display:block;font-size:19px;font-weight:800;line-height:1.1}
   .brand small{color:var(--mute);font-size:11px}
+  .mode{display:inline-block;vertical-align:middle;font-size:10.5px;font-weight:700;letter-spacing:.3px;padding:2px 8px;border-radius:10px;margin-left:4px;color:#fff;background:#2eaee8;position:relative;top:-2px}
+  .mode.app{background:#22b864}
+  .mode.short{background:#9b5cff}
   .help{background:var(--card);border:1px solid var(--line);color:var(--ink);border-radius:20px;height:36px;padding:0 12px;font-weight:600;font-size:13px;flex:none}
 
   /* hero */
@@ -509,14 +512,15 @@
 <div class="wrap" id="app">
   <div class="hdr">
     <div class="logo">31</div>
-    <div class="brand"><b>31-Day Reset</b><small>by <span class="own"></span></small></div>
+    <div class="brand"><b>31-Day Reset <span class="mode hidden" id="modeTag"></span></b><small>by <span class="own"></span></small></div>
     <button class="help" id="helpBtn">? Help</button>
   </div>
 
   <div id="installCard" class="card hidden" style="margin-top:14px;border-color:#1dd1a1">
-    <b>Install this app</b>
+    <b id="installTitle">Install this app</b>
     <p class="sub" id="installText"></p>
     <button class="btn grad full hidden" id="installBtn">Install 31-Day Reset</button>
+    <a class="btn grad full hidden" id="installLink" rel="noopener"></a>
   </div>
 
   <div id="main" class="hidden">
@@ -684,7 +688,7 @@
     <p class="note" style="text-align:left">General fitness and wellness guidance only. It is not medical advice. Stop exercising and seek help if you feel chest pain, dizziness or unusual breathlessness.</p>
     <p class="note" style="text-align:left"><a href="get/" style="color:inherit;text-decoration:underline">Get the Android app</a> · <a href="privacy.html" style="color:inherit;text-decoration:underline">Privacy policy</a></p>
   </div>
-  <div class="foot">&copy; 2026 <span class="own"></span>. All rights reserved.<br>No part of this app may be copied, modified or redistributed without written permission.<br>Version 7.2</div>
+  <div class="foot">&copy; 2026 <span class="own"></span>. All rights reserved.<br>No part of this app may be copied, modified or redistributed without written permission.<br>Version 7.2<span id="modeFoot"></span></div>
 </div>
 
 <div class="modal hidden" id="help"><div class="card">
@@ -934,9 +938,10 @@ var PLAN = PLAN_GEN;
     var nm=state.cfg&&state.cfg.name; $('readyName').textContent=nm?', '+nm:'';
     var c=curDay();
     $('readyText').innerHTML = 'Your goal: <b>'+GOALS[goal()].n+'</b>. ' + (c<1 ? 'Your 31 days start on <b>'+dateLabel(1)+'</b>. Your first workout is at <b>'+fmt12(state.cfg.wt)+'</b>.' : 'Day '+Math.min(c,31)+' starts now. Your workout is at <b>'+fmt12(state.cfg.wt)+'</b> and your evening habit at <b>'+fmt12(state.cfg.et)+'</b>.');
-    if(STANDALONE){ $('obInstall').classList.add('hidden'); return; }
+    if(APK||(STANDALONE&&!ANDROID)){ $('obInstall').classList.add('hidden'); return; }
     $('obInstall').classList.remove('hidden');
-    if(IOS){ $('obInstallText').innerHTML='In <b>Safari</b>, tap <b>Share</b> (the square with an arrow), then <b>Add to Home Screen</b>. Open the app from your Home Screen from now on, so notifications can work.'; $('obInstallBtn').classList.add('hidden'); }
+    if(ANDROID){ $('obInstallText').innerHTML=RELATED?'You have the Android app. <a href="'+APP_INTENT+'" style="color:inherit;text-decoration:underline">Open it</a> for reminders that ring on time, the widget and step counting. Your progress is shared.':'For reminders that ring on time, a home screen widget and step counting, <a href="get/" style="color:inherit;text-decoration:underline">get the Android app</a>.'; $('obInstallBtn').classList.add('hidden'); }
+    else if(IOS){ $('obInstallText').innerHTML='In <b>Safari</b>, tap <b>Share</b> (the square with an arrow), then <b>Add to Home Screen</b>. Open the app from your Home Screen from now on, so notifications can work.'; $('obInstallBtn').classList.add('hidden'); }
     else if(deferredPrompt){ $('obInstallText').textContent='Open it like a normal app, use it offline, and get notifications.'; $('obInstallBtn').classList.remove('hidden'); }
     else { $('obInstallText').innerHTML='In Chrome, tap <b>&#8942;</b> then <b>Install app</b> or <b>Add to home screen</b>.'; $('obInstallBtn').classList.add('hidden'); }
   }
@@ -1053,7 +1058,7 @@ var PLAN = PLAN_GEN;
   function renderGS(){
     var f=flags();
     var items=[
-      [STANDALONE||f.inst,'Install the app on your home screen',function(){ f.inst=true; save(); renderInstall(); if($('installCard').classList.contains('hidden')) openHelp(); else goTo('installCard'); renderGS(); }],
+      [ANDROID?(APK||RELATED===true):(STANDALONE||f.inst),ANDROID?'Get the Android app':'Install the app on your home screen',function(){ if(!ANDROID){ f.inst=true; save(); } renderInstall(); if($('installCard').classList.contains('hidden')) openHelp(); else goTo('installCard'); renderGS(); }],
       [f.rem||notifOn(),'Turn on your daily reminders',function(){ goTo('remindH'); }],
       [!!(state.cfg&&state.cfg.plan),'Make your if-then plan',function(){ obOpen('plan'); }],
       [hasMeas(),'Record your Day 1 measurements',function(){ goTo('measH'); }],
@@ -1215,8 +1220,24 @@ var PLAN = PLAN_GEN;
 
   // install prompts
   function renderInstall(){
-    var card=$('installCard');
-    if(STANDALONE||!state.cfg){ card.classList.add('hidden'); return; }
+    var card=$('installCard'), lk=$('installLink');
+    $('installBtn').classList.add('hidden'); lk.classList.add('hidden');
+    if(APK||!state.cfg){ card.classList.add('hidden'); return; }
+    if(ANDROID){
+      // On Android the real app (reminders, widget, steps) is better than a website shortcut
+      if(RELATED){
+        $('installTitle').textContent='You have the Android app';
+        $('installText').textContent='Open it for reminders that ring on time, the home screen widget and step counting. Your progress is shared, so you can carry on there.'+(STANDALONE?' This icon is only a website shortcut, so you can remove it from your home screen.':'');
+        lk.textContent='Open the Android app'; lk.href=APP_INTENT; lk.removeAttribute('target');
+      } else {
+        $('installTitle').textContent='Get the Android app';
+        $('installText').textContent='You are using the website. The Android app adds reminders that ring on time, a home screen widget and step counting.'+(STANDALONE?' This icon is only a website shortcut.':'');
+        lk.textContent='Get the Android app'; lk.href='get/'; lk.removeAttribute('target');
+      }
+      lk.classList.remove('hidden'); card.classList.remove('hidden'); return;
+    }
+    $('installTitle').textContent='Install this app';
+    if(STANDALONE){ card.classList.add('hidden'); return; }
     if(IOS){
       $('installText').innerHTML='On iPhone: open this page in <b>Safari</b>, tap <b>Share</b> (square with an arrow), then <b>Add to Home Screen</b>. Notifications only work once it is installed.';
       card.classList.remove('hidden');
@@ -2540,6 +2561,22 @@ var PLAN = PLAN_GEN;
   // reads back ticks made from notifications or the widget, plus the day's steps.
   var APK=(function(){ try{ var q=new URLSearchParams(location.search); if(q.get('src')==='apk') sessionStorage.setItem('reset31-apk','1'); return sessionStorage.getItem('reset31-apk')==='1'||document.referrer.indexOf('android-app://io.github.emperorwandy.reset31')===0; }catch(e){ return false; } })();
   var apkGo=null;
+  // ---- website or Android app? Both run this same page and share saved progress, so say which one this is
+  var ANDROID=/Android/i.test(navigator.userAgent);
+  var RELATED=null; // true when the website (in Chrome on Android) can see the Android app is installed
+  var APP_INTENT='intent://emperorwandy.github.io/31-day-reset/#Intent;scheme=https;package=io.github.emperorwandy.reset31;S.browser_fallback_url='+encodeURIComponent('https://emperorwandy.github.io/31-day-reset/get/')+';end';
+  function renderModeTag(){
+    var t=$('modeTag'), k=APK?'app':(STANDALONE?'short':'web'), n=APK?'Android app':(STANDALONE?'Home screen shortcut':'Website');
+    t.textContent=n; t.className='mode'+(k==='app'?' app':(k==='short'?' short':'')); t.title=APK?'You are in the 31-Day Reset Android app':'You are using the 31-Day Reset website';
+    $('modeFoot').textContent=' \u00b7 '+n;
+  }
+  function checkRelated(){
+    if(APK||!ANDROID||!navigator.getInstalledRelatedApps) return;
+    navigator.getInstalledRelatedApps().then(function(l){
+      RELATED=(l||[]).some(function(a){ return a.id==='io.github.emperorwandy.reset31'||(a.url||'').indexOf('io.github.emperorwandy.reset31')>0; });
+      renderInstall(); if(state.cfg&&state.cfg.start){ renderGS(); renderCheck(); }
+    }).catch(function(){});
+  }
   function apkInit(){
     if(!APK) return;
     var q; try{ q=new URLSearchParams(location.search); }catch(e){ return; }
@@ -2621,7 +2658,8 @@ var PLAN = PLAN_GEN;
     var el=$('checkBox'); if(!el) return;
     var f=flags(), N=f.nat||null, h=[];
     if(!APK){
-      h.push(crow('Android app',pill(null,'Not in use'),'You are using the website. Reminders, the widget and step counting need the Android app. <a href="get/" style="color:inherit;text-decoration:underline">Get it here</a>.'));
+      if(RELATED) h.push(crow('Android app',pill(true,'Installed'),'You are using the website. The Android app on this phone has the reminders, widget and step counting, and shares your progress. <a href="'+APP_INTENT+'" style="color:inherit;text-decoration:underline">Open the Android app</a>.'));
+      else h.push(crow('Android app',pill(null,'Not in use'),'You are using the website. Reminders, the widget and step counting need the Android app. <a href="get/" style="color:inherit;text-decoration:underline">Get it here</a>.'));
     } else {
       h.push(crow('Android app',N&&N.av?pill(true,'Version '+(Math.floor(N.av/10))+'.'+(N.av%10)):pill(false,'Old version'),N&&N.av?'':'Download the latest version from the Get the app page and install it over this one.'));
       var np=N?N.np:null;
@@ -2690,7 +2728,7 @@ var PLAN = PLAN_GEN;
 
   // ---- start
   function boot(){
-    fillIcons(); apkInit(); cloudUi();
+    fillIcons(); apkInit(); renderModeTag(); checkRelated(); cloudUi();
     if(!state.cfg||!state.cfg.start){ $('main').classList.add('hidden'); obOpen('setup'); return; }
     $('main').classList.remove('hidden');
     setLevel();
