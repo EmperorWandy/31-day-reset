@@ -25,6 +25,7 @@
     --grad2:linear-gradient(135deg,#5f7cff 0%,#9b5cff 100%);
     --field:#0b0c18;--soft:#dcdef0;--soft2:#cfd1e8;--soft3:#c9cbe4;--dim:#555a80;--dots:#3a3d63;
     --warnbg:#3a1f26;--gpsbg:#16304a;--gpsink:#bfe3ff;--fixedink:#dfe3ff;--okink:#7ff0ad;--scheme:dark;
+    --good:#3ddc97;--bad:#ff8a8a;--warn:#ffb13d;
     color-scheme:dark;
   }
   /* Light look: chosen in Settings, or "Match my phone" when the phone is in light mode */
@@ -32,6 +33,7 @@
     --bg:#f3f4fa;--card:#ffffff;--card2:#eceef7;--line:#dcdfee;--ink:#17182b;--mute:#5b5e7e;
     --field:#ffffff;--soft:#2b2d44;--soft2:#3a3c56;--soft3:#45475f;--dim:#a3a6c2;--dots:#c8cbe0;
     --warnbg:#ffe9ec;--gpsbg:#e2f1ff;--gpsink:#0c4a7a;--fixedink:#27318a;--okink:#0f7d43;--scheme:light;
+    --good:#0f7d43;--bad:#c62a3a;--warn:#9a5600;
     color-scheme:light;
   }
   @media (prefers-color-scheme: light){
@@ -39,6 +41,7 @@
       --bg:#f3f4fa;--card:#ffffff;--card2:#eceef7;--line:#dcdfee;--ink:#17182b;--mute:#5b5e7e;
       --field:#ffffff;--soft:#2b2d44;--soft2:#3a3c56;--soft3:#45475f;--dim:#a3a6c2;--dots:#c8cbe0;
       --warnbg:#ffe9ec;--gpsbg:#e2f1ff;--gpsink:#0c4a7a;--fixedink:#27318a;--okink:#0f7d43;--scheme:light;
+    --good:#0f7d43;--bad:#c62a3a;--warn:#9a5600;
       color-scheme:light;
     }
   }
@@ -1395,7 +1398,7 @@ var PLAN = PLAN_GEN;
   function cFull(s){ var f=0, d=(s&&s.days)||{}; for(var n in d){ if(d[n]&&d[n].w&&d[n].e) f++; } return f; }
   function cBody(meta,content){ return '--r31b\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n'+JSON.stringify(meta)+'\r\n--r31b\r\nContent-Type: application/json\r\n\r\n'+content+'\r\n--r31b--'; }
   function cUpload(again){
-    var info=cInfo(), g=goal(), props={app:'31-day-reset',goal:g,round:String(state.round||1),full:String(cFull(state)),name:String((state.cfg&&state.cfg.name)||'').slice(0,40)};
+    var info=cInfo(), g=goal(), props={app:'31-day-reset',goal:g,round:String(state.round||1),full:String(cFull(state))};
     var body=JSON.stringify(state), type='multipart/related; boundary=r31b';
     var req= info.fid
       ? cApi('PATCH','https://www.googleapis.com/upload/drive/v3/files/'+encodeURIComponent(info.fid)+'?uploadType=multipart&fields=id,modifiedTime',cBody({appProperties:props},body),type)
@@ -2656,15 +2659,15 @@ var PLAN = PLAN_GEN;
     id=navigator.geolocation.watchPosition(function(p){
       var a=Math.round(p.coords.accuracy); if(best==null||a<best) best=a;
       out.textContent='Signal found. Accuracy ±'+best+' m ('+Math.round((Date.now()-t0)/1000)+' s)...';
-      if(best<=20) end('<b style="color:#3ddc97">GPS works.</b> Accuracy ±'+best+' m. Distance will be measured on walks and runs.');
+      if(best<=20) end('<b style="color:var(--good)">GPS works.</b> Accuracy ±'+best+' m. Distance will be measured on walks and runs.');
     },function(e){
-      end(e.code===1?'<b style="color:#ff8a8a">Location is blocked for this app.</b> '+(APK?'Open phone Settings, Apps, 31-Day Reset, Permissions, Location, choose "Allow only while using the app" and switch on "Use precise location".':'Allow location for this site in your browser settings.')
-        :(e.code===2?'<b style="color:#ff8a8a">No position.</b> Check that Location is switched on in your phone\'s quick settings, then try again outside.'
-        :'<b style="color:#ffb13d">No GPS fix yet.</b> Move outside, away from buildings, and try again.'));
+      end(e.code===1?'<b style="color:var(--bad)">Location is blocked for this app.</b> '+(APK?'Open phone Settings, Apps, 31-Day Reset, Permissions, Location, choose "Allow only while using the app" and switch on "Use precise location".':'Allow location for this site in your browser settings.')
+        :(e.code===2?'<b style="color:var(--bad)">No position.</b> Check that Location is switched on in your phone\'s quick settings, then try again outside.'
+        :'<b style="color:var(--warn)">No GPS fix yet.</b> Move outside, away from buildings, and try again.'));
     },{enableHighAccuracy:true,maximumAge:0,timeout:30000});
-    setTimeout(function(){ if(b.disabled){ end(best==null?'<b style="color:#ffb13d">No GPS fix after 30 seconds.</b> Move outside, away from buildings, and try again.'
-      :(best>100?'<b style="color:#ff8a8a">Only a rough position (±'+best+' m).</b> This usually means approximate location is on. Switch on "Use precise location" for 31-Day Reset in your phone settings.'
-      :'<b style="color:#ffb13d">Weak signal (±'+best+' m).</b> It should improve outside in the open. Distance is counted once accuracy is better than 50 m.')); } },30000);
+    setTimeout(function(){ if(b.disabled){ end(best==null?'<b style="color:var(--warn)">No GPS fix after 30 seconds.</b> Move outside, away from buildings, and try again.'
+      :(best>100?'<b style="color:var(--bad)">Only a rough position (±'+best+' m).</b> This usually means approximate location is on. Switch on "Use precise location" for 31-Day Reset in your phone settings.'
+      :'<b style="color:var(--warn)">Weak signal (±'+best+' m).</b> It should improve outside in the open. Distance is counted once accuracy is better than 50 m.')); } },30000);
   }
   function renderStepChip(){
     var hero=document.querySelector('#main .hero'); if(!hero) return;

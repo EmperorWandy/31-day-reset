@@ -36,6 +36,12 @@ jobs:
       - name: Build test APK
         run: chmod +x gradlew && ./gradlew assembleDebug
 
+      # The release version is shrunk the same way as the one you upload to Google Play.
+      # It is not signed here (your upload key never leaves your computer), but building it
+      # catches problems that only show up in the Play version.
+      - name: Check the release build
+        run: ./gradlew assembleRelease
+
       - name: Save the APK
         uses: actions/upload-artifact@v4
         with:
