@@ -18,6 +18,7 @@ import groovy.xml.MarkupBuilder
 
 plugins {
     id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
 }
 
 def twaManifest = [
@@ -57,8 +58,8 @@ android {
         applicationId "io.github.emperorwandy.reset31"
         minSdkVersion 24
         targetSdkVersion 36
-        versionCode 71
-        versionName "7.1"
+        versionCode 72
+        versionName "7.2"
 
         // The name for the application
         resValue "string", "appName", twaManifest.name
@@ -159,8 +160,8 @@ android {
         buildConfig true
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
     lintOptions {
         checkReleaseBuilds false
@@ -214,5 +215,14 @@ dependencies {
         implementation 'com.google.androidbrowserhelper:locationdelegation:1.1.2'
     
         implementation 'com.google.androidbrowserhelper:androidbrowserhelper:2.7.4'
-    
+
+    // Health Connect: adds finished workouts to Samsung Health, Google Fit, Fitbit and others
+    implementation 'androidx.health.connect:connect-client:1.1.0'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2'
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
+    }
 }

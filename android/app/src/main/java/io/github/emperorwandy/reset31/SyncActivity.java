@@ -17,6 +17,7 @@ import java.util.List;
  * Invisible screen the web app opens (reset31://sync?d=...) to pass its plan and ticks to Android.
  * It saves them, sets the reminders, refreshes the widget and closes straight away.
  * With p=1 it first asks for the notification and step-counting permissions.
+ * With h=1 it asks to add workouts to Health Connect (or opens the Play Store if Health Connect is missing).
  */
 public class SyncActivity extends Activity {
     private static final int REQ = 31;
@@ -26,6 +27,7 @@ public class SyncActivity extends Activity {
     protected void onCreate(Bundle b) {
         super.onCreate(b);
         boolean ask = false;
+        boolean hc = false;
         relaunch = false;
         try {
             Uri u = getIntent() == null ? null : getIntent().getData();
@@ -39,7 +41,8 @@ public class SyncActivity extends Activity {
                     s.saveCfg(o);
                 }
                 ask = "1".equals(u.getQueryParameter("p"));
-                relaunch = ask || "1".equals(u.getQueryParameter("r"));
+                hc = "1".equals(u.getQueryParameter("h"));
+                relaunch = ask || hc || "1".equals(u.getQueryParameter("r"));
                 if ("alarm".equals(u.getQueryParameter("x")) && Build.VERSION.SDK_INT >= 31) {
                     try {
                         startActivity(new android.content.Intent(android.provider.Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM,
@@ -50,6 +53,23 @@ public class SyncActivity extends Activity {
                 }
             }
         } catch (Exception ignored) { }
+
+        if (hc) {
+            String st = HealthSync.status(this);
+            if ("u".equals(st)) {
+                try { startActivity(HealthSync.installIntent()); } catch (Exception ignored) { }
+                relaunch = false;
+                done();
+                return;
+            }
+            if (HealthSync.available(this)) {
+                // This screen closes as soon as another opens, so a separate screen waits for the answer
+                try { startActivity(new android.content.Intent(this, HealthAskActivity.class)); } catch (Exception ignored) { }
+                relaunch = false;
+                done();
+                return;
+            }
+        }
 
         Store s = new Store(this);
         List<String> need = new ArrayList<>();
@@ -81,6 +101,7 @@ public class SyncActivity extends Activity {
         Reminders.scheduleAll(c);
         TodayWidget.updateAll(c);
         Steps.read(c, () -> TodayWidget.updateAll(c));
+        HealthSync.refreshAndWrite(c);
         if (relaunch) {
             // reopen the app straight away so it shows the new status
             try {

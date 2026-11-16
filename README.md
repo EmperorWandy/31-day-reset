@@ -4,7 +4,7 @@ A 31-day fitness and wellness app by **Akinwande Akinkunmi Adeniyi**, B.Sc. Ed.,
 
 - Five goals to choose from at setup: General Fitness, Fat Loss, Healthy Weight Gain, Heart and Stamina, and Gentle Start, each with its own fixed 31-day plan and a quick safety check
 - Automatic workout log: time, effort and GPS distance recorded when you finish a guided workout, with weekly active-minute totals
-- Android app (version 7.0): reminders that ring on time even when the app is closed, a home screen widget with tick buttons, all-day step counting and long-press shortcuts. Download: https://emperorwandy.github.io/31-day-reset/get/
+- Android app (version 7.2): reminders that ring on time even when the app is closed, a home screen widget with tick buttons, all-day step counting and long-press shortcuts. Download: https://emperorwandy.github.io/31-day-reset/get/
 - Tick tasks straight from the reminder notification (Android)
 - Two tasks a day: a workout and an evening wellness habit, in a fixed plan that gets harder each week and covers the whole body
 - Guided workouts with timers, a voice coach and animated pictures of every exercise, with easier and harder versions
@@ -13,6 +13,10 @@ A 31-day fitness and wellness app by **Akinwande Akinkunmi Adeniyi**, B.Sc. Ed.,
 - Badges, a shareable certificate and a WhatsApp workout buddy
 - Progress charts for sleep and Day 1 to Day 31 measurements
 - Round 2 and beyond: repeat your goal one level up, or switch to a new goal
+- Food and water log with a list of Nigerian foods, a six-point plate check and tips for each goal (no calorie counting)
+- Light or dark look, or match the phone's setting
+- Health Connect (Android 7.2): finished guided workouts appear in Samsung Health, Google Fit, Fitbit and other health apps
+- Google Drive backup in the user's own Drive, and "Used 31-Day Reset before?" restore on the welcome screen
 - Works offline, installs to the home screen, and keeps each user's progress private on their own phone
 
 General fitness guidance only, not medical advice.
