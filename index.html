@@ -2699,9 +2699,11 @@ var PLAN = PLAN_GEN;
       out.textContent='Signal found. Accuracy ±'+best+' m ('+Math.round((Date.now()-t0)/1000)+' s)...';
       if(best<=20) end('<b style="color:var(--good)">GPS works.</b> Accuracy ±'+best+' m. Distance will be measured on walks and runs.');
     },function(e){
-      end(e.code===1?'<b style="color:var(--bad)">Location is blocked for this app.</b> '+(APK?'Open phone Settings, Apps, 31-Day Reset, Permissions, Location, choose "Allow only while using the app" and switch on "Use precise location".':'Allow location for this site in your browser settings.')
+      var av=(flags().nat&&flags().nat.av)||0;
+      end(e.code===1?'<b style="color:var(--bad)">Location is blocked for this app.</b> '+(APK?(av&&av<73?'Version 7.2 and older cannot pass your location to the app on newer Android phones. <a href="get/" style="color:inherit;text-decoration:underline">Install the latest version</a> (7.2.1 or newer), then try again.':'Tap the button and allow location, choosing <b>While using the app</b> and <b>Precise</b>. If no prompt appears, open phone Settings, Apps, 31-Day Reset, Permissions, Location. <button class="btn full" type="button" id="gpsAllow" style="margin-top:8px">Allow location</button>'):'Allow location for this site in your browser settings.')
         :(e.code===2?'<b style="color:var(--bad)">No position.</b> Check that Location is switched on in your phone\'s quick settings, then try again outside.'
         :'<b style="color:var(--warn)">No GPS fix yet.</b> Move outside, away from buildings, and try again.'));
+      var ga=$('gpsAllow'); if(ga) ga.onclick=function(){ sessionStorage.removeItem('reset31-sent'); apkSetup(); };
     },{enableHighAccuracy:true,maximumAge:0,timeout:30000});
     setTimeout(function(){ if(b.disabled){ end(best==null?'<b style="color:var(--warn)">No GPS fix after 30 seconds.</b> Move outside, away from buildings, and try again.'
       :(best>100?'<b style="color:var(--bad)">Only a rough position (±'+best+' m).</b> This usually means approximate location is on. Switch on "Use precise location" for 31-Day Reset in your phone settings.'
