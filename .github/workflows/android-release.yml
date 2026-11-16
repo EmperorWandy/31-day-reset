@@ -68,6 +68,31 @@ jobs:
             echo "::error::The RESET31_KEYSTORE_PASSWORD secret is missing."
             exit 1
           fi
+
+          # Check the key before building, so a problem gets a plain explanation (no passwords are printed)
+          KS="$RESET31_KEYSTORE"; ALIAS="${RESET31_KEY_ALIAS:-upload}"
+          if ! keytool -list -keystore "$KS" -storepass "$RESET31_KEYSTORE_PASSWORD" >/dev/null 2>&1; then
+            echo "::error::The keystore password (RESET31_KEYSTORE_PASSWORD) does not open the keystore. Re-enter only the password itself."
+            exit 1
+          fi
+          echo "Keys inside this keystore:"
+          keytool -list -keystore "$KS" -storepass "$RESET31_KEYSTORE_PASSWORD" 2>/dev/null | grep -i 'PrivateKeyEntry' | cut -d, -f1 | sed 's/^/  - /'
+          if ! keytool -list -keystore "$KS" -storepass "$RESET31_KEYSTORE_PASSWORD" -alias "$ALIAS" >/dev/null 2>&1; then
+            echo "::error::There is no key called '$ALIAS' in this keystore. Add a secret RESET31_KEY_ALIAS with one of the names listed above."
+            exit 1
+          fi
+          KEYPASS="${RESET31_KEY_PASSWORD:-$RESET31_KEYSTORE_PASSWORD}"
+          if ! keytool -certreq -alias "$ALIAS" -keystore "$KS" -storepass "$RESET31_KEYSTORE_PASSWORD" -keypass "$KEYPASS" -file "$RUNNER_TEMP/check.csr" >/dev/null 2>&1; then
+            rm -f "$RUNNER_TEMP/check.csr"
+            if [ -n "$RESET31_KEY_PASSWORD" ]; then
+              echo "::error::The keystore password is right, but RESET31_KEY_PASSWORD does not unlock the key '$ALIAS'. Re-enter it, or delete that secret if the key uses the same password as the keystore."
+            else
+              echo "::error::The keystore password is right, but the key '$ALIAS' has a different password. Add a secret RESET31_KEY_PASSWORD with the key password from KEYSTORE-PASSWORD.txt."
+            fi
+            exit 1
+          fi
+          rm -f "$RUNNER_TEMP/check.csr"
+          echo "Keystore password and key password are both correct."
           chmod +x gradlew
           if ! ./gradlew assembleRelease bundleRelease; then
             echo "::error::Build failed. If the log says 'keystore password was incorrect', re-enter RESET31_KEYSTORE_PASSWORD with only the password itself (no label such as 'Password:'). If it says the key password or alias is wrong, add RESET31_KEY_PASSWORD."
