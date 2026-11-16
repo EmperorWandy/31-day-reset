@@ -15,7 +15,8 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  # write: lets the last step save the signed APK on an "apk/<version>" branch (see below)
+  contents: write
 
 jobs:
   release:
@@ -123,6 +124,7 @@ jobs:
             exit 1
           fi
           VER=$(grep -m1 'versionName' app/build.gradle | sed 's/.*"\(.*\)".*/\1/')
+          echo "APP_VERSION=$VER" >> "$GITHUB_ENV"
           mkdir -p "$RUNNER_TEMP/out"
           cp "$APK" "$RUNNER_TEMP/out/31-day-reset-$VER.apk"
           cp app/build/outputs/bundle/release/app-release.aab "$RUNNER_TEMP/out/31-day-reset-$VER.aab"
@@ -135,6 +137,21 @@ jobs:
           path: ${{ runner.temp }}/out/*
           if-no-files-found: error
           retention-days: 30
+
+      # Also save the signed APK on its own branch, apk/<version>, so it can be checked and put
+      # on the download page from GitHub directly (the files above expire after 30 days).
+      # It is only a branch: nothing changes on the website until a pull request is merged.
+      - name: Save the APK on a branch for the download page
+        working-directory: .
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -c "apk/$APP_VERSION"
+          cp "$RUNNER_TEMP/out/31-day-reset-$APP_VERSION.apk" get/31-day-reset.apk
+          git add get/31-day-reset.apk
+          git commit -m "Signed $APP_VERSION APK from Build signed release run $GITHUB_RUN_NUMBER"
+          git push -f origin "apk/$APP_VERSION"
+          echo "Saved on branch apk/$APP_VERSION"
 
       - name: Remove the key
         if: always()
