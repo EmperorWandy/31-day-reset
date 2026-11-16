@@ -104,6 +104,37 @@ Do not use a website for this: never upload your key anywhere except GitHub secr
 The build checks that it was signed with your real upload key (the one your website trusts). If the
 key or password is wrong, it stops with a clear message instead of making a file that cannot update 7.1.
 
+### If the build says the password is wrong: check it on your computer
+
+This check opens your key file with the password you type, on your own computer. Nothing is sent
+anywhere. Put `reset31-upload.keystore` in Downloads, open **Windows PowerShell** from the Start menu,
+paste all of this (right-click pastes) and press Enter, then type or paste the password when asked:
+
+    & {
+      $ks = Join-Path $HOME 'Downloads\reset31-upload.keystore'
+      if (-not (Test-Path $ks)) { Write-Host 'Key file not found in Downloads.' -ForegroundColor Red; return }
+      $size = (Get-Item $ks).Length
+      $code = (Get-FileHash $ks -Algorithm SHA256).Hash.Substring(0,16)
+      Write-Host "Key file: $size bytes, check code $code"
+      $sec = Read-Host 'Type or paste the keystore password (it stays on this computer)' -AsSecureString
+      $pw = [Runtime.InteropServices.Marshal]::PtrToStringBSTR([Runtime.InteropServices.Marshal]::SecureStringToBSTR($sec))
+      $col = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2Collection
+      try { $col.Import($ks, $pw, [System.Security.Cryptography.X509Certificates.X509KeyStorageFlags]::DefaultKeySet) }
+      catch { Write-Host 'PASSWORD IS WRONG for this key file.' -ForegroundColor Red; Write-Host ('Windows says: ' + $_.Exception.InnerException.Message); return }
+      $cert = $col | Where-Object { $_.HasPrivateKey } | Select-Object -First 1
+      if (-not $cert) { $cert = $col[0] }
+      $fp = ([Security.Cryptography.SHA256]::Create().ComputeHash($cert.RawData) | ForEach-Object { $_.ToString('X2') }) -join ':'
+      Write-Host 'PASSWORD IS CORRECT.' -ForegroundColor Green
+      Write-Host ('Key name (alias): ' + $cert.FriendlyName)
+      if ($fp -eq 'E7:88:2D:E8:BF:7A:00:C8:70:CD:27:F9:9C:7D:D8:E7:23:60:D6:39:63:7E:24:7E:2F:84:7F:AA:36:D4:31:AF') { Write-Host 'This is the right 31-Day Reset key.' -ForegroundColor Green }
+      else { Write-Host ('This is a DIFFERENT key. Its fingerprint is ' + $fp) -ForegroundColor Yellow }
+    }
+
+It tells you whether the password is correct, the key's name (alias), and whether it is the real
+31-Day Reset key. Compare the "check code" with the one in the GitHub build log: if they match, the
+key text reached GitHub undamaged. Use the password it confirms for `RESET31_KEYSTORE_PASSWORD`.
+This kind of key file (PKCS12) uses one password for everything, so `RESET31_KEY_PASSWORD` is not needed.
+
 ## How to test Health Connect on your phone
 
 1. Install the 7.2 test APK.
