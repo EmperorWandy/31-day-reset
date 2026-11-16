@@ -58,8 +58,8 @@ android {
         applicationId "io.github.emperorwandy.reset31"
         minSdkVersion 24
         targetSdkVersion 36
-        versionCode 72
-        versionName "7.2"
+        versionCode 73
+        versionName "7.2.1"
 
         // The name for the application
         resValue "string", "appName", twaManifest.name

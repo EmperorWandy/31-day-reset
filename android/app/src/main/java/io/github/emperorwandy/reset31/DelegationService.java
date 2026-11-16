@@ -11,6 +11,9 @@ public class DelegationService extends
         super.onCreate();
 
         
+            // Answer Chrome's location permission question first (see LocationPermissionHandler),
+            // then let the library provide the location updates.
+            registerExtraCommandHandler(new LocationPermissionHandler());
             registerExtraCommandHandler(new LocationDelegationExtraCommandHandler());
         
     }
