@@ -56,7 +56,23 @@ jobs:
           RESET31_KEYSTORE_PASSWORD: ${{ secrets.RESET31_KEYSTORE_PASSWORD }}
           RESET31_KEY_PASSWORD: ${{ secrets.RESET31_KEY_PASSWORD }}
           RESET31_KEY_ALIAS: ${{ secrets.RESET31_KEY_ALIAS }}
-        run: chmod +x gradlew && ./gradlew assembleRelease bundleRelease
+        run: |
+          # Ignore spaces and line breaks copied by accident around the passwords and alias
+          trim() { printf '%s' "$1" | tr -d '\r\n' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//'; }
+          export RESET31_KEYSTORE_PASSWORD="$(trim "$RESET31_KEYSTORE_PASSWORD")"
+          export RESET31_KEY_PASSWORD="$(trim "$RESET31_KEY_PASSWORD")"
+          export RESET31_KEY_ALIAS="$(trim "$RESET31_KEY_ALIAS")"
+          [ -n "$RESET31_KEY_PASSWORD" ] || unset RESET31_KEY_PASSWORD
+          [ -n "$RESET31_KEY_ALIAS" ] || unset RESET31_KEY_ALIAS
+          if [ -z "$RESET31_KEYSTORE_PASSWORD" ]; then
+            echo "::error::The RESET31_KEYSTORE_PASSWORD secret is missing."
+            exit 1
+          fi
+          chmod +x gradlew
+          if ! ./gradlew assembleRelease bundleRelease; then
+            echo "::error::Build failed. If the log says 'keystore password was incorrect', re-enter RESET31_KEYSTORE_PASSWORD with only the password itself (no label such as 'Password:'). If it says the key password or alias is wrong, add RESET31_KEY_PASSWORD."
+            exit 1
+          fi
 
       - name: Check it was signed with the right key
         run: |
