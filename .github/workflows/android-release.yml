@@ -1,0 +1,88 @@
+name: Build signed release
+
+# Builds the signed app files with your upload key:
+#   31-day-reset-<version>.apk  for the download page (get/)
+#   31-day-reset-<version>.aab  for Google Play
+# Run it by hand: GitHub > Actions > "Build signed release" > Run workflow.
+# It needs these repository secrets (Settings > Secrets and variables > Actions):
+#   RESET31_KEYSTORE_B64       the upload keystore file, base64-encoded
+#   RESET31_KEYSTORE_PASSWORD  the keystore password
+#   RESET31_KEY_PASSWORD       the key password (leave it out if it is the same)
+#   RESET31_KEY_ALIAS          the key alias (leave it out if it is "upload")
+# The key is written to a temporary file on GitHub's machine and deleted at the end.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: android
+    env:
+      # The fingerprint of the key the website trusts (.well-known/assetlinks.json).
+      # A file signed with any other key would show a browser bar and could not update 7.1.
+      EXPECTED_SHA256: "E7:88:2D:E8:BF:7A:00:C8:70:CD:27:F9:9C:7D:D8:E7:23:60:D6:39:63:7E:24:7E:2F:84:7F:AA:36:D4:31:AF"
+    steps:
+      - name: Get the code
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Put the upload key in place
+        env:
+          KEY_B64: ${{ secrets.RESET31_KEYSTORE_B64 }}
+        run: |
+          if [ -z "$KEY_B64" ]; then
+            echo "::error::The RESET31_KEYSTORE_B64 secret is missing. Add it under Settings > Secrets and variables > Actions."
+            exit 1
+          fi
+          printf '%s' "$KEY_B64" | tr -d ' \r\n' | base64 -d > "$RUNNER_TEMP/upload.keystore"
+          echo "RESET31_KEYSTORE=$RUNNER_TEMP/upload.keystore" >> "$GITHUB_ENV"
+
+      - name: Build the signed APK and app bundle
+        env:
+          RESET31_KEYSTORE_PASSWORD: ${{ secrets.RESET31_KEYSTORE_PASSWORD }}
+          RESET31_KEY_PASSWORD: ${{ secrets.RESET31_KEY_PASSWORD }}
+          RESET31_KEY_ALIAS: ${{ secrets.RESET31_KEY_ALIAS }}
+        run: chmod +x gradlew && ./gradlew assembleRelease bundleRelease
+
+      - name: Check it was signed with the right key
+        run: |
+          APKSIGNER=$(ls "$ANDROID_HOME"/build-tools/*/apksigner | sort -V | tail -1)
+          APK=app/build/outputs/apk/release/app-release.apk
+          if [ ! -f "$APK" ]; then echo "::error::No signed APK was made. Check the passwords and alias."; exit 1; fi
+          GOT=$("$APKSIGNER" verify --print-certs "$APK" | grep -m1 'SHA-256 digest' | sed 's/.*: //' | tr 'a-f' 'A-F' | sed 's/../&:/g;s/:$//')
+          echo "Signed with: $GOT"
+          if [ "$GOT" != "$EXPECTED_SHA256" ]; then
+            echo "::error::This is not the 31-Day Reset upload key. Expected $EXPECTED_SHA256"
+            exit 1
+          fi
+          VER=$(grep -m1 'versionName' app/build.gradle | sed 's/.*"\(.*\)".*/\1/')
+          mkdir -p "$RUNNER_TEMP/out"
+          cp "$APK" "$RUNNER_TEMP/out/31-day-reset-$VER.apk"
+          cp app/build/outputs/bundle/release/app-release.aab "$RUNNER_TEMP/out/31-day-reset-$VER.aab"
+          ls -la "$RUNNER_TEMP/out"
+
+      - name: Save the signed files
+        uses: actions/upload-artifact@v4
+        with:
+          name: 31-day-reset-signed
+          path: ${{ runner.temp }}/out/*
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Remove the key
+        if: always()
+        run: rm -f "$RUNNER_TEMP/upload.keystore"

@@ -60,14 +60,49 @@ version 7.2.
      optional, for app functionality (backup)**, **encrypted in transit**, and **deletable by the user**.
    Read each question carefully before answering. Google's wording changes from time to time.
 
-## Part 3: Build and upload 7.2
+## Part 3: Build the signed 7.2 (no Google Play account needed)
 
-The GitHub "Build Android app" action makes a test APK automatically. For Google Play:
+GitHub can build the signed app for you, using your upload key stored as an encrypted secret.
+Encrypted secrets cannot be read by anyone, including you, once saved, and they never appear in the
+public code. You do this setup once; every later version is one button press.
 
-1. On your computer, from the `android` folder, run `./gradlew bundleRelease` and sign the
-   file with your upload key, as before.
-2. Upload `app-release.aab` to your closed testing track.
-3. When you are happy, I will put the new APK on the download page (`get/`), which still offers 7.1.
+### Step A: turn the key file into text (once)
+
+GitHub secrets only take text, so the key file is converted to a long line of letters ("base64").
+Do this on your own computer, in the folder that holds `reset31-upload.keystore`.
+Do not use a website for this: never upload your key anywhere except GitHub secrets.
+
+- **Windows:** open the folder, click the address bar, type `powershell` and press Enter, then paste:
+
+      [Convert]::ToBase64String([IO.File]::ReadAllBytes("$PWD\reset31-upload.keystore")) | Set-Clipboard
+
+  The text is now copied, ready to paste in Step B.
+- **Mac:** open Terminal in that folder and paste:
+
+      base64 -i reset31-upload.keystore | pbcopy
+
+### Step B: add four secrets to GitHub (once)
+
+1. Open **github.com/EmperorWandy/31-day-reset**, then **Settings → Secrets and variables → Actions**.
+2. Click **New repository secret** for each of these:
+
+| Name | Value |
+|---|---|
+| `RESET31_KEYSTORE_B64` | Paste the text from Step A |
+| `RESET31_KEYSTORE_PASSWORD` | The keystore password from `KEYSTORE-PASSWORD.txt` |
+| `RESET31_KEY_PASSWORD` | The key password, if `KEYSTORE-PASSWORD.txt` lists a separate one (otherwise skip) |
+| `RESET31_KEY_ALIAS` | Skip this: the alias is `upload` |
+
+### Step C: build (every new version)
+
+1. Open the **Actions** tab, choose **Build signed release** on the left, then **Run workflow**.
+2. Wait about 3 minutes for the green tick.
+3. Open the run and download **31-day-reset-signed**. It contains:
+   - `31-day-reset-7.2.apk`: for your download page. Tell me when it is ready and I will put it on `get/`.
+   - `31-day-reset-7.2.aab`: for Google Play, when you open your developer account.
+
+The build checks that it was signed with your real upload key (the one your website trusts). If the
+key or password is wrong, it stops with a clear message instead of making a file that cannot update 7.1.
 
 ## How to test Health Connect on your phone
 

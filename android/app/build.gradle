@@ -151,9 +151,27 @@ android {
 
         
     }
+    // Signing with the upload key. The key is never in this repository: the "Build signed
+    // release" GitHub action writes it to a temporary file from an encrypted secret and passes
+    // its location and passwords in these environment variables. Without them, release builds
+    // are simply left unsigned (as in the normal test build).
+    def uploadKey = System.getenv("RESET31_KEYSTORE")
+    signingConfigs {
+        if (uploadKey != null && file(uploadKey).exists()) {
+            upload {
+                storeFile file(uploadKey)
+                storePassword System.getenv("RESET31_KEYSTORE_PASSWORD")
+                keyAlias(System.getenv("RESET31_KEY_ALIAS") ?: "upload")
+                keyPassword(System.getenv("RESET31_KEY_PASSWORD") ?: System.getenv("RESET31_KEYSTORE_PASSWORD"))
+            }
+        }
+    }
     buildTypes {
         release {
             minifyEnabled true
+            if (uploadKey != null && file(uploadKey).exists()) {
+                signingConfig signingConfigs.upload
+            }
         }
     }
     buildFeatures {
