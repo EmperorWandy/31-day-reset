@@ -71,8 +71,20 @@ jobs:
 
           # Check the key before building, so a problem gets a plain explanation (no passwords are printed)
           KS="$RESET31_KEYSTORE"; ALIAS="${RESET31_KEY_ALIAS:-upload}"
-          if ! keytool -list -keystore "$KS" -storepass "$RESET31_KEYSTORE_PASSWORD" >/dev/null 2>&1; then
-            echo "::error::The keystore password (RESET31_KEYSTORE_PASSWORD) does not open the keystore. Re-enter only the password itself."
+          # Compare these with the local check on your computer (the 31-Day Reset key file is 2744 bytes)
+          echo "Key file received: $(stat -c%s "$KS") bytes, check code $(sha256sum "$KS" | cut -c1-16 | tr 'a-f' 'A-F')"
+          case "$(head -c 2 "$KS" | od -An -tx1 | tr -d ' ')" in
+            3082) echo "Key file type: PKCS12 (one password for the keystore and the key)";;
+            feed) echo "Key file type: JKS";;
+            *) echo "::error::The key text in RESET31_KEYSTORE_B64 does not turn back into a keystore. Make the key text again with the Notepad method and replace the secret."; exit 1;;
+          esac
+          if ! OUT=$(keytool -list -keystore "$KS" -storepass "$RESET31_KEYSTORE_PASSWORD" 2>&1); then
+            echo "keytool says: $(printf '%s' "$OUT" | grep -m1 -i 'error' | sed 's/^keytool error: //')"
+            if printf '%s' "$OUT" | grep -qi 'password'; then
+              echo "::error::The keystore password (RESET31_KEYSTORE_PASSWORD) does not open the keystore. Run the local password check on your computer to confirm the right password."
+            else
+              echo "::error::The keystore could not be read. Make the key text again with the Notepad method and replace RESET31_KEYSTORE_B64."
+            fi
             exit 1
           fi
           echo "Keys inside this keystore:"
